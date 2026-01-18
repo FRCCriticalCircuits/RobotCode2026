@@ -7,6 +7,9 @@ date - post `commit ID (short version)`
 - Tune Swerve PID to solve noise issues
 - if `SignalLogger.start();` is needed
 
+## 2026/1/18 - post `74418fc`
+Removed Transcope Notation in comments
+
 ## 2026/1/18 - post `ace5ace`
 - Change MaxSpeed to actual MaxSpeed
 - Removed `Point` Request Stuff  
