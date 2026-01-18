@@ -67,6 +67,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     );
 
     /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
+    @SuppressWarnings("unused")
     private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
         new SysIdRoutine.Config(
             null,        // Use default ramp rate (1 V/s)
@@ -108,9 +109,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             this
         )
     );
-
-    /* The SysId routine to test */
-    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
@@ -205,8 +203,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * @param direction Direction of the SysId Quasistatic test
      * @return Command to run
      */
-    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return m_sysIdRoutineToApply.quasistatic(direction);
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction, Boolean isRotation) {
+        return (isRotation) 
+            ? m_sysIdRoutineRotation.quasistatic(direction)
+            : m_sysIdRoutineTranslation.quasistatic(direction);
     }
 
     /**
@@ -216,8 +216,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * @param direction Direction of the SysId Dynamic test
      * @return Command to run
      */
-    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return m_sysIdRoutineToApply.dynamic(direction);
+    public Command sysIdDynamic(SysIdRoutine.Direction direction, Boolean isRotation) {
+        return (isRotation) 
+            ? m_sysIdRoutineRotation.dynamic(direction)
+            : m_sysIdRoutineTranslation.dynamic(direction);
     }
 
     @Override
