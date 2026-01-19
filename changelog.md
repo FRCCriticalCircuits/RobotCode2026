@@ -2,10 +2,12 @@
 date - post `commit ID (short version)`
 
 # Todo
-- Rewrite Telemetry with AdvantageKit
 - Implement Pathplanner
 - Tune Swerve PID to solve noise issues
-- if `SignalLogger.start();` is needed
+- Later will set the default option of `autoChooser` to regular auto
+
+## 2026/1/18 - post `49291d6`
+Telemetry with AdvantageKit
 
 ## 2026/1/18 - post `74418fc`
 Removed Transcope Notation in comments
@@ -26,7 +28,6 @@ Removed Transcope Notation in comments
 - Removed template auto
 - Moved SysID routines into an AutoChooser
 Rotation by default for safety
-Later will set the default option of `autoChooser` to regular auto
 - marked `m_sysIdRoutineSteer` as unused 
 we only need chassis Rotation/Translation Ka/Kv for MOI estimate
 - Removed Replay (Using REV & AKit is better & Replay didnt work offseason)

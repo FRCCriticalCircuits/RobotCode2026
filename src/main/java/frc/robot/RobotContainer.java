@@ -16,7 +16,8 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.SwerveTelemetry;
 
 public class RobotContainer {
     //#region swerve
@@ -28,7 +29,7 @@ public class RobotContainer {
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
         .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    private final Telemetry swerveLogger = new Telemetry();
+    private final SwerveTelemetry swerveLogger = new SwerveTelemetry();
     private final SendableChooser<Boolean> rotationSysID = new SendableChooser<>();
     //#endregion
 
@@ -40,7 +41,7 @@ public class RobotContainer {
         rotationSysID.setDefaultOption("Rotation", true);
         rotationSysID.setDefaultOption("Translation", false);
 
-        autoChooser.addOption(
+        autoChooser.setDefaultOption(
             "SysID | Dynamic Forward", 
             drivetrain.sysIdDynamic(Direction.kForward, rotationSysID.getSelected())
         );

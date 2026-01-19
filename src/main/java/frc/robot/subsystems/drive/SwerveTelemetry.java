@@ -1,0 +1,22 @@
+package frc.robot.subsystems.drive;
+
+import org.littletonrobotics.junction.Logger;
+
+import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
+
+public class SwerveTelemetry {
+    /**
+     * Construct a telemetry object, with the specified max speed of the robot
+     * 
+     * @param maxSpeed Maximum speed in meters per second
+     */
+    public SwerveTelemetry() {}
+    
+    /** Accept the swerve drive state and telemeterize it to SmartDashboard and SignalLogger. */
+    public void telemeterize(SwerveDriveState state) {
+        Logger.recordOutput("Swerve/OdometryFreq", 1.0 / state.OdometryPeriod);
+        Logger.recordOutput("Swerve/OdometryPose", state.Pose);
+        Logger.recordOutput("Swerve/CurrentModuleStates", state.ModuleStates);
+        Logger.recordOutput("Swerve/TargetModuleStates", state.ModuleTargets);
+    }
+}
