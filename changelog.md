@@ -1,10 +1,21 @@
 # Format
 date - post `commit ID (short version)`
 
+# Circumstance
+Verified Telop Swerve/Simulation Swerve
+SysID Untested
+
 # Todo
 - Implement Pathplanner
-- Tune Swerve PID to solve noise issues
 - Later will set the default option of `autoChooser` to regular auto
+
+## 2026/1/22 - post `b61a4ca`
+`GlobalConstants.SYS_ID` to enable/disable SysID and  
+CTRE logging for SysID
+Publish autoChoosers to NT4
+
+## 2026/1/22 - post `69002c4`
+PID Tunning
 
 ## 2026/1/18 - post `49291d6`
 Telemetry with AdvantageKit

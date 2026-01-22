@@ -10,7 +10,9 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -37,31 +39,37 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
     public RobotContainer() {
+        autoChooser.setDefaultOption("null", Commands.print("default command"));
+
         //#region sysID
-        rotationSysID.setDefaultOption("Rotation", true);
-        rotationSysID.setDefaultOption("Translation", false);
+        if(GlobalConstants.SYS_ID){
+            rotationSysID.setDefaultOption("Rotation", true);
+            rotationSysID.addOption("Translation", false);
+            SmartDashboard.putData("SysID Option", rotationSysID);
 
-        autoChooser.setDefaultOption(
-            "SysID | Dynamic Forward", 
-            drivetrain.sysIdDynamic(Direction.kForward, rotationSysID.getSelected())
-        );
+            autoChooser.addOption(
+                "SysID | Dynamic Forward", 
+                drivetrain.sysIdDynamic(Direction.kForward, rotationSysID.getSelected())
+            );
 
-        autoChooser.addOption(
-            "SysID | Dynamic Reverse", 
-            drivetrain.sysIdDynamic(Direction.kReverse, rotationSysID.getSelected())
-        );
+            autoChooser.addOption(
+                "SysID | Dynamic Reverse", 
+                drivetrain.sysIdDynamic(Direction.kReverse, rotationSysID.getSelected())
+            );
 
-        autoChooser.addOption(
-            "SysID | Quasistatic Forward", 
-            drivetrain.sysIdQuasistatic(Direction.kForward, rotationSysID.getSelected())
-        );
+            autoChooser.addOption(
+                "SysID | Quasistatic Forward", 
+                drivetrain.sysIdQuasistatic(Direction.kForward, rotationSysID.getSelected())
+            );
 
-        autoChooser.addOption(
-            "SysID | Quasistatic Reverse", 
-            drivetrain.sysIdQuasistatic(Direction.kReverse, rotationSysID.getSelected())
-        );
+            autoChooser.addOption(
+                "SysID | Quasistatic Reverse", 
+                drivetrain.sysIdQuasistatic(Direction.kReverse, rotationSysID.getSelected())
+            );
+        }
         //#endregion
 
+        SmartDashboard.putData("Auto to Run", autoChooser);
         configureBindings();
     }
 
