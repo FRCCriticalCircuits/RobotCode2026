@@ -21,7 +21,10 @@ public class AutoDrive extends Command {
     private final Pose2d targetPose2d, tolorance;
     private final ChassisSpeeds speeds;
 
-    private final ProfiledPIDController rotation, translationX, translationY;
+    private final ProfiledPIDController omegaController, xController, yController;
+    private final State targetRotation = new State();
+    private final State targetX = new State();
+    private final State targetY = new State();
 
     public AutoDrive(CommandSwerveDrivetrain drive, Pose2d targetPose2d){
         this.drive = drive;
@@ -35,21 +38,21 @@ public class AutoDrive extends Command {
             Rotation2d.fromDegrees(1)
         );
 
-        rotation = new ProfiledPIDController(
+        omegaController = new ProfiledPIDController(
             5,
             0,
             0,
             new Constraints(2, 0.1)
         );
 
-        translationX = new ProfiledPIDController(
+        xController = new ProfiledPIDController(
             5,
             0,
             0,
             new Constraints(3, 1)
         );
 
-        translationY = new ProfiledPIDController(
+        yController = new ProfiledPIDController(
             5,
             0,
             0,
@@ -62,30 +65,40 @@ public class AutoDrive extends Command {
         this.curPose2d = drive.getStateCopy().Pose;
         ChassisSpeeds curChassisSpeeds = drive.getStateCopy().Speeds;
 
-        rotation.reset(curPose2d.getRotation().getRadians(), curChassisSpeeds.omegaRadiansPerSecond);
-        translationX.reset(curPose2d.getX(), curChassisSpeeds.vxMetersPerSecond);
-        translationY.reset(curPose2d.getY(), curChassisSpeeds.vyMetersPerSecond);
+        omegaController.reset(curPose2d.getRotation().getRadians(), curChassisSpeeds.omegaRadiansPerSecond);
+        xController.reset(curPose2d.getX(), curChassisSpeeds.vxMetersPerSecond);
+        yController.reset(curPose2d.getY(), curChassisSpeeds.vyMetersPerSecond);
+
+        this.targetRotation.velocity = 0;
+        this.targetX.velocity = 0;
+        this.targetY.velocity = 0;
 
         addRequirements(drive);
     }
 
     @Override
     public void execute() {
+        // getState() will not have GC issue
+        // but it changes
         this.curPose2d = drive.getStateCopy().Pose;
     
-        speeds.vxMetersPerSecond = translationX.calculate(
+        this.targetRotation.position = targetPose2d.getRotation().getRadians();
+        this.targetX.position = targetPose2d.getX();
+        this.targetY.position = targetPose2d.getY();
+
+        speeds.vxMetersPerSecond = xController.calculate(
             curPose2d.getX(),
-            new State(targetPose2d.getX(), 0)
+            targetX
         );
 
-        speeds.vyMetersPerSecond = translationY.calculate(
+        speeds.vyMetersPerSecond = yController.calculate(
             curPose2d.getY(),
-            new State(targetPose2d.getY(), 0)
+            targetY
         );
 
-        speeds.omegaRadiansPerSecond = rotation.calculate(
+        speeds.omegaRadiansPerSecond = omegaController.calculate(
             curPose2d.getRotation().getRadians(),
-            new State(targetPose2d.getRotation().getRadians(), 0)
+            targetRotation
         );
 
         drive.applyRequestUnsafe(
@@ -103,7 +116,5 @@ public class AutoDrive extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {
-
-    }
+    public void end(boolean interrupted) {}
 }

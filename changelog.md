@@ -1,7 +1,7 @@
 # Format
 date - post `commit ID (short version)`
 
-# Symbol for Circumstances
+# Symbols
 (?) -> TBD  
 (!) -> Untested Code  
 (+) -> Tested  
@@ -12,6 +12,9 @@ date - post `commit ID (short version)`
 - Implement Pathplanner
 - Later will set the default option of `autoChooser` to regular auto
 - Controller Speed Mapping for more percise control (?)
+
+## 2026/1/23 - post `708f62f`
+- Refine AutoDrive codes
 
 ## 2026/1/23 - post `b346901`
 - Singleton for `CommandSwerveDriveTrain`
