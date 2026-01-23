@@ -9,6 +9,11 @@ SysID Untested
 - Implement Pathplanner
 - Later will set the default option of `autoChooser` to regular auto
 
+## 2026/1/22 - post `365f8a1`
+- FF constants (temporary removed)
+- deadzone for a buggy Xbox controller  
+(Will write code to have speed mapping later)
+
 ## 2026/1/22 - post `b61a4ca`
 `GlobalConstants.SYS_ID` to enable/disable SysID and  
 CTRE logging for SysID

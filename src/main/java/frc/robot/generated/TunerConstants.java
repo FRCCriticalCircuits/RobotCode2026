@@ -5,7 +5,6 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.hardware.*;
-import com.ctre.phoenix6.signals.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
 
@@ -23,13 +22,10 @@ public class TunerConstants {
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
     private static final Slot0Configs steerGains = new Slot0Configs()
-        .withKP(100).withKI(0.0).withKD(0.5) // tune
-        .withKS(0.0).withKV(0.0).withKA(0.0)
-        .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+        .withKP(100).withKI(0.0).withKD(0.5);
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     private static final Slot0Configs driveGains = new Slot0Configs()
-        .withKP(0.0).withKI(0.0).withKD(0.0)
         .withKS(0.0).withKV(0.124); // tune
 
     // The closed-loop output type to use for the steer motors;
@@ -46,11 +42,11 @@ public class TunerConstants {
 
     // The remote sensor feedback type to use for the steer motors;
     // When not Pro-licensed, Fused*/Sync* automatically fall back to Remote*
-    private static final SteerFeedbackType kSteerFeedbackType = SteerFeedbackType.FusedCANcoder;
+    private static final SteerFeedbackType kSteerFeedbackType = SteerFeedbackType.TalonFXS_PulseWidth;
 
     // The stator current at which the wheels start to slip;
     // This needs to be tuned to your individual robot
-    private static final Current kSlipCurrent = Amps.of(120.0); // tune
+    private static final Current kSlipCurrent = Amps.of(120.0);
 
     // Initial configs for the drive and steer motors and the azimuth encoder; these cannot be null.
     // Some configs will be overwritten; check the `with*InitialConfigs()` API documentation.
@@ -80,7 +76,7 @@ public class TunerConstants {
      * which affects the accuracy of odometry and control. This ratio represents the number of rotations
      * of the drive motor caused by a rotation of the azimuth.
      */
-    private static final double kCoupleRatio = 3.857142857142857; // tune
+    private static final double kCoupleRatio = 3.857142857142857;
 
     private static final double kDriveGearRatio = 6.026785714285714;
     private static final double kSteerGearRatio = 26;
