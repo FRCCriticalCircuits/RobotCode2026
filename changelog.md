@@ -8,9 +8,13 @@ date - post `commit ID (short version)`
 (+ SIM) -> Tested in simulation
 
 # Todo
+- Single Drive Command File for robot-rel support 
 - Implement Pathplanner
 - Later will set the default option of `autoChooser` to regular auto
 - Controller Speed Mapping for more percise control (?)
+
+## 2026/1/23 - post `b346901`
+- Singleton for `CommandSwerveDriveTrain`
 
 ## 2026/1/23 - post `3b3162e`
 - Testing Auto Drive with in Simulated Environment

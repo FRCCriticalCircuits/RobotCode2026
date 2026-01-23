@@ -23,27 +23,25 @@ import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.SwerveTelemetry;
 
 public class RobotContainer {
-    //#region Swerve Constants
-    private double MaxSpeed = 0.2 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
-    private double MaxAngularRate = 0.2 * RotationsPerSecond.of(0.5).in(RadiansPerSecond);
+    //#region Swerve
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-        .withDeadband(MaxSpeed * 0.2).withRotationalDeadband(MaxAngularRate * 0.2); // Add a 10% deadband
-
     private final SwerveTelemetry swerveLogger = new SwerveTelemetry();
     private final SendableChooser<Boolean> rotationSysID = new SendableChooser<>();
+
+    private double MaxSpeed = 0.2 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+    private double MaxAngularRate = 0.2 * RotationsPerSecond.of(0.5).in(RadiansPerSecond);
+    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+        .withDeadband(MaxSpeed * 0.15).withRotationalDeadband(MaxAngularRate * 0.15); 
     //#endregion
 
     private final CommandXboxController driverController = new CommandXboxController(0);
     private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
     public RobotContainer() {
-        // swerve
         drivetrain.registerTelemetry(swerveLogger::telemeterize);
-        
         autoChooser.setDefaultOption("null", Commands.print("default command"));
 
-        //#region SysID Autos
+        //#region Autos - SysID
         if(GlobalConstants.SYS_ID){
             rotationSysID.setDefaultOption("Rotation", true);
             rotationSysID.addOption("Translation", false);
@@ -72,10 +70,8 @@ public class RobotContainer {
         //#endregion
 
         SmartDashboard.putData("Auto to Run", autoChooser);
-        configureBindings();
-    }
 
-    private void configureBindings() {
+        //#region Subsystem Commands
         drivetrain.setDefaultCommand(
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(-driverController.getLeftY() * MaxSpeed)
@@ -84,6 +80,11 @@ public class RobotContainer {
             )
         );
 
+        configureBindings();
+    }
+
+    private void configureBindings() {
+        //#region Bindings - drive
         final var idle = new SwerveRequest.Idle();
         RobotModeTriggers.disabled().whileTrue(
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
@@ -102,6 +103,7 @@ public class RobotContainer {
 
         // Reset the field-centric heading on left bumper press.
         driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        //#endregion
     }
 
     public Command getAutonomousCommand() {
