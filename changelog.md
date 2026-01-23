@@ -1,34 +1,40 @@
 # Format
 date - post `commit ID (short version)`
 
-# Circumstance
-Verified Telop Swerve/Simulation Swerve
-SysID Untested
+# Symbol for Circumstances
+(?) -> TBD  
+(!) -> Untested Code  
+(+) -> Tested
 
 # Todo
 - Implement Pathplanner
 - Later will set the default option of `autoChooser` to regular auto
+- Controller Speed Mapping for more percise control (?)
+
+## 2026/1/23 - post `af10dff`
+- refine changelog writing style
+- Auto Drive (!)
 
 ## 2026/1/22 - post `365f8a1`
-- FF constants (temporary removed)
+- FF constants (temporary removed) (+)
 - deadzone for a buggy Xbox controller  
-(Will write code to have speed mapping later)
+(Will write code to have speed mapping later) (+)
 
 ## 2026/1/22 - post `b61a4ca`
-`GlobalConstants.SYS_ID` to enable/disable SysID and  
+- `GlobalConstants.SYS_ID` to enable/disable SysID(!)  
 CTRE logging for SysID
-Publish autoChoosers to NT4
+Publish autoChoosers to NT4 (!)
 
 ## 2026/1/22 - post `69002c4`
-PID Tunning
+PID Tunning (+)
 
 ## 2026/1/18 - post `49291d6`
-Telemetry with AdvantageKit
+Telemetry with AdvantageKit (+)
 
 ## 2026/1/18 - post `74418fc`
-Removed Transcope Notation in comments
+Removed Transcope Notation in comments (+)
 
-## 2026/1/18 - post `ace5ace`
+## 2026/1/18 - post `ace5ace` 
 - Change MaxSpeed to actual MaxSpeed
 - Removed `Point` Request Stuff  
 (Making Modules facing the direction of joystick inputs) 
