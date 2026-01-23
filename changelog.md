@@ -4,16 +4,20 @@ date - post `commit ID (short version)`
 # Symbol for Circumstances
 (?) -> TBD  
 (!) -> Untested Code  
-(+) -> Tested
+(+) -> Tested  
+(+ SIM) -> Tested in simulation
 
 # Todo
 - Implement Pathplanner
 - Later will set the default option of `autoChooser` to regular auto
 - Controller Speed Mapping for more percise control (?)
 
+## 2026/1/23 - post `3b3162e`
+- Testing Auto Drive with in Simulated Environment
+
 ## 2026/1/23 - post `af10dff`
 - refine changelog writing style
-- Auto Drive (!)
+- Auto Drive (+ SIM)
 
 ## 2026/1/22 - post `365f8a1`
 - FF constants (temporary removed) (+)

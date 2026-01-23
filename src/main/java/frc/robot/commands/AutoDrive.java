@@ -2,79 +2,108 @@ package frc.robot.commands;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
-import edu.wpi.first.math.controller.HolonomicDriveController;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
 public class AutoDrive extends Command {
     private final CommandSwerveDrivetrain drive;
     private final SwerveRequest.ApplyFieldSpeeds controlRequest;
-    private final Pose2d targetPose2d; 
-    private final HolonomicDriveController swerveController;
+
+    private Pose2d curPose2d = new Pose2d();
+
+    private final Pose2d targetPose2d, tolorance;
+    private final ChassisSpeeds speeds;
+
+    private final ProfiledPIDController rotation, translationX, translationY;
 
     public AutoDrive(CommandSwerveDrivetrain drive, Pose2d targetPose2d){
         this.drive = drive;
         this.controlRequest = new SwerveRequest.ApplyFieldSpeeds()
             .withDesaturateWheelSpeeds(true);
         this.targetPose2d = targetPose2d;
+        this.speeds = new ChassisSpeeds();
 
-        swerveController = new HolonomicDriveController(
-            new PIDController(
-                0,
-                0,
-                0
-            ),
-            new PIDController(
-                0,
-                0,
-                0
-            ),
-            new ProfiledPIDController(
-                0,
-                0,
-                0,
-                new Constraints(6, 3)
-            )
+        this.tolorance = new Pose2d(
+            new Translation2d(0.05, 0.05),
+            Rotation2d.fromDegrees(1)
+        );
+
+        rotation = new ProfiledPIDController(
+            5,
+            0,
+            0,
+            new Constraints(2, 0.1)
+        );
+
+        translationX = new ProfiledPIDController(
+            5,
+            0,
+            0,
+            new Constraints(3, 1)
+        );
+
+        translationY = new ProfiledPIDController(
+            5,
+            0,
+            0,
+            new Constraints(3, 1)
         );
     }
 
     @Override
     public void initialize() {
-        swerveController.setTolerance(
-            new Pose2d(
-                new Translation2d(0.05, 0.05),
-                Rotation2d.fromDegrees(1)
-            )
-        );
+        this.curPose2d = drive.getStateCopy().Pose;
+        ChassisSpeeds curChassisSpeeds = drive.getStateCopy().Speeds;
+
+        rotation.reset(curPose2d.getRotation().getRadians(), curChassisSpeeds.omegaRadiansPerSecond);
+        translationX.reset(curPose2d.getX(), curChassisSpeeds.vxMetersPerSecond);
+        translationY.reset(curPose2d.getY(), curChassisSpeeds.vyMetersPerSecond);
 
         addRequirements(drive);
     }
 
     @Override
     public void execute() {
+        this.curPose2d = drive.getStateCopy().Pose;
+    
+        speeds.vxMetersPerSecond = translationX.calculate(
+            curPose2d.getX(),
+            new State(targetPose2d.getX(), 0)
+        );
+
+        speeds.vyMetersPerSecond = translationY.calculate(
+            curPose2d.getY(),
+            new State(targetPose2d.getY(), 0)
+        );
+
+        speeds.omegaRadiansPerSecond = rotation.calculate(
+            curPose2d.getRotation().getRadians(),
+            new State(targetPose2d.getRotation().getRadians(), 0)
+        );
+
         drive.applyRequestUnsafe(
             () -> controlRequest.withSpeeds(
-                swerveController.calculate(
-                    drive.getStateCopy().Pose,
-                    targetPose2d,
-                    0,
-                    targetPose2d.getRotation()
-                )
+                this.speeds
             )
         );
     }
 
     @Override
     public boolean isFinished() {
-        return swerveController.atReference();
+        return Math.abs(curPose2d.getX() - targetPose2d.getX()) < tolorance.getX()
+        && Math.abs(curPose2d.getY() - targetPose2d.getY()) < tolorance.getY()
+        && Math.abs(curPose2d.getRotation().getRadians()) < tolorance.getRotation().getRadians();
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+
+    }
 }
