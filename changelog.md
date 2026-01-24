@@ -11,6 +11,10 @@ date - post `commit ID (short version)`
 - Single Drive Command File for robot-rel support 
 with trigger for more percise velocity control
 
+## 2026/1/24 - post `74848db`
+- Test Auto (+ SIM) 
+- Add Orientation stuff back
+
 ## 2026/1/23 - post `dad2cb9`
 - Implement Pathplanner (+ SIM)
 
