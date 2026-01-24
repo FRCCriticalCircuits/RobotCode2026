@@ -4,16 +4,15 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.ChassisConstants;
+import frc.robot.subsystems.drive.Drive;
 
 public class AutoDrive extends Command {
-    private final CommandSwerveDrivetrain drive;
+    private final Drive drive;
     private final SwerveRequest.ApplyFieldSpeeds controlRequest;
 
     private Pose2d curPose2d = new Pose2d();
@@ -26,36 +25,33 @@ public class AutoDrive extends Command {
     private final State targetX = new State();
     private final State targetY = new State();
 
-    public AutoDrive(CommandSwerveDrivetrain drive, Pose2d targetPose2d){
+    public AutoDrive(Drive drive, Pose2d targetPose2d){
         this.drive = drive;
         this.controlRequest = new SwerveRequest.ApplyFieldSpeeds()
             .withDesaturateWheelSpeeds(true);
         this.targetPose2d = targetPose2d;
         this.speeds = new ChassisSpeeds();
 
-        this.tolorance = new Pose2d(
-            new Translation2d(0.05, 0.05),
-            Rotation2d.fromDegrees(1)
-        );
+        this.tolorance = ChassisConstants.TOLORANCE_AUTO_DRIVE;
 
         omegaController = new ProfiledPIDController(
-            5,
+            ChassisConstants.ROTATION_PID_P,
             0,
-            0,
+            ChassisConstants.ROTATION_PID_D,
             new Constraints(2, 0.1)
         );
 
         xController = new ProfiledPIDController(
-            5,
+            ChassisConstants.TRANSLATION_PID_P,
             0,
-            0,
+            ChassisConstants.TRANSLATION_PID_D,
             new Constraints(3, 1)
         );
 
         yController = new ProfiledPIDController(
-            5,
+            ChassisConstants.TRANSLATION_PID_P,
             0,
-            0,
+            ChassisConstants.TRANSLATION_PID_D,
             new Constraints(3, 1)
         );
     }

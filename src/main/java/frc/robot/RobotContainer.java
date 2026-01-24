@@ -7,24 +7,24 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoDrive;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.SwerveTelemetry;
 
 public class RobotContainer {
     //#region Swerve
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final Drive drivetrain = TunerConstants.createDrivetrain();
     private final SwerveTelemetry swerveLogger = new SwerveTelemetry();
     private final SendableChooser<Boolean> rotationSysID = new SendableChooser<>();
 
@@ -35,13 +35,20 @@ public class RobotContainer {
     //#endregion
 
     private final CommandXboxController driverController = new CommandXboxController(0);
-    private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+    private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
         drivetrain.registerTelemetry(swerveLogger::telemeterize);
-        autoChooser.setDefaultOption("null", Commands.print("default command"));
 
-        //#region Autos - SysID
+        // This will use Commands.none() as the default option.
+        // Displayed as "None"
+        autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+            (stream) -> GlobalConstants.COMP
+                ? stream.filter(auto -> auto.getName().startsWith("comp_"))
+                : stream
+        );
+
+        //#region SysID
         if(GlobalConstants.SYS_ID){
             rotationSysID.setDefaultOption("Rotation", true);
             rotationSysID.addOption("Translation", false);
@@ -69,8 +76,6 @@ public class RobotContainer {
         }
         //#endregion
 
-        SmartDashboard.putData("Auto to Run", autoChooser);
-
         //#region Subsystem Commands
         drivetrain.setDefaultCommand(
             drivetrain.applyRequest(() ->
@@ -80,6 +85,7 @@ public class RobotContainer {
             )
         );
 
+        SmartDashboard.putData("Auto to Run", autoChooser);
         configureBindings();
     }
 

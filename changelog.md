@@ -9,9 +9,10 @@ date - post `commit ID (short version)`
 
 # Todo
 - Single Drive Command File for robot-rel support 
-- Implement Pathplanner
-- Later will set the default option of `autoChooser` to regular auto
-- Controller Speed Mapping for more percise control (?)
+with trigger for more percise velocity control
+
+## 2026/1/23 - post `dad2cb9`
+- Implement Pathplanner (+ SIM)
 
 ## 2026/1/23 - post `708f62f`
 - Refine AutoDrive codes
