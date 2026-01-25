@@ -21,6 +21,12 @@ public class TunerConstants {
 
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
+
+    /*==================================IMPORTANT===============================================================
+     These values were tuned according to the test drivetrain on CiC carpet.
+    This PID must be tuned once the main robot assembly is added to the drivetrain due to weight changes.
+    Preferrably after cleaning the swerve wheels and using official competition carpet as well.
+    ============================================================================================================*/
     private static final Slot0Configs steerGains = new Slot0Configs()
         .withKP(59.5).withKI(0.0).withKD(0.075);
     // When using closed-loop control, the drive motor uses the control
