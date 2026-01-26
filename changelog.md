@@ -8,8 +8,13 @@ date - post `commit ID (short version)`
 (+ SIM) -> Tested in simulation
 
 # Todo
-- Single Drive Command File for robot-rel support 
-with trigger for more percise velocity control
+
+Not maintaining this for this branch
+
+
+## Updates
+IntakeSim
+
 
 ## 2026/1/25 - post `7412eb0`
 Separate Drive Command WIP (!)
