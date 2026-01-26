@@ -11,6 +11,9 @@ date - post `commit ID (short version)`
 - Single Drive Command File for robot-rel support 
 with trigger for more percise velocity control
 
+## 2026/1/25 - post `7412eb0`
+Separate Drive Command WIP (!)
+
 ## 2026/1/24 - post `74848db`
 - Test Auto (+ SIM) 
 - Add Orientation stuff back
@@ -37,9 +40,9 @@ with trigger for more percise velocity control
 (Will write code to have speed mapping later) (+)
 
 ## 2026/1/22 - post `b61a4ca`
-- `GlobalConstants.SYS_ID` to enable/disable SysID(!)  
+- `GlobalConstants.SYS_ID` to enable/disable SysID (+)  
 CTRE logging for SysID
-Publish autoChoosers to NT4 (!)
+Publish autoChoosers to NT4 (+)
 
 ## 2026/1/22 - post `69002c4`
 PID Tunning (+)

@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
-
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -18,24 +16,33 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoDrive;
+import frc.robot.commands.DriveCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.SwerveTelemetry;
 
 public class RobotContainer {
-    //#region Swerve
-    public final Drive drivetrain = TunerConstants.createDrivetrain();
-    private final SwerveTelemetry swerveLogger = new SwerveTelemetry();
-    private final SendableChooser<Boolean> rotationSysID = new SendableChooser<>();
-
-    private double MaxSpeed = 0.2 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
-    private double MaxAngularRate = 0.2 * RotationsPerSecond.of(0.5).in(RadiansPerSecond);
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-        .withDeadband(MaxSpeed * 0.15).withRotationalDeadband(MaxAngularRate * 0.15); 
-    //#endregion
-
     private final CommandXboxController driverController = new CommandXboxController(0);
     private final SendableChooser<Command> autoChooser;
+    private final SendableChooser<Boolean> rotationSysID = new SendableChooser<>();
+
+    //#region Swerve
+    private final Drive drivetrain = TunerConstants.createDrivetrain();
+    private final SwerveTelemetry swerveLogger = new SwerveTelemetry();     
+    private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
+
+    private final AutoDrive autoDriveCommand = new AutoDrive(drivetrain);
+    private final DriveCommand teleDrive = new DriveCommand(
+        drivetrain,
+        () -> -driverController.getLeftY(),
+        () -> -driverController.getLeftX(),
+        () -> -driverController.getRightX(),
+        () -> driverController.button(0)
+            .debounce(0.04)
+            .getAsBoolean()
+    );
+
+    //#endregion
 
     public RobotContainer() {
         drivetrain.registerTelemetry(swerveLogger::telemeterize);
@@ -77,13 +84,7 @@ public class RobotContainer {
         //#endregion
 
         //#region Subsystem Commands
-        drivetrain.setDefaultCommand(
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(-driverController.getLeftY() * MaxSpeed)
-                    .withVelocityY(-driverController.getLeftX() * MaxSpeed)
-                    .withRotationalRate(-driverController.getRightX() * MaxAngularRate)
-            )
-        );
+        drivetrain.setDefaultCommand(teleDrive);
 
         SmartDashboard.putData("Auto to Run", autoChooser);
         configureBindings();
@@ -91,19 +92,13 @@ public class RobotContainer {
 
     private void configureBindings() {
         //#region Bindings - drive
-        final var idle = new SwerveRequest.Idle();
         RobotModeTriggers.disabled().whileTrue(
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        driverController.a().debounce(0.02).onTrue(
-            new AutoDrive(
-                drivetrain, 
-                new Pose2d(
-                    5,
-                    5,
-                    Rotation2d.kZero
-                )
+        driverController.a().debounce(0.04).whileTrue(
+            autoDriveCommand.withTarget(
+                new Pose2d(5, 5, Rotation2d.fromDegrees(0))
             )
         );
 

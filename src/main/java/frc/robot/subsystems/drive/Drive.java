@@ -242,16 +242,6 @@ public class Drive extends TunerSwerveDrivetrain implements Subsystem {
     }
 
     /**
-     * @apiNote make sure not called by different code at the same time
-     * Run the specified control request to this swerve drivetrain.
-     *
-     * @param request Function returning the request to apply
-     */
-    public void applyRequestUnsafe(Supplier<SwerveRequest> request) {
-        this.setControl(request.get());
-    }
-
-    /**
      * Runs the SysId Quasistatic test in the given direction for the routine
      * specified by {@link #m_sysIdRoutineToApply}.
      *

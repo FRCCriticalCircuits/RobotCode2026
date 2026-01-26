@@ -13,28 +13,23 @@ import frc.robot.subsystems.drive.Drive;
 
 public class AutoDrive extends Command {
     private final Drive drive;
-    private final SwerveRequest.ApplyFieldSpeeds controlRequest;
+    private final SwerveRequest.ApplyFieldSpeeds controlRequest = new SwerveRequest.ApplyFieldSpeeds()
+        .withDesaturateWheelSpeeds(true);
 
-    private Pose2d curPose2d = new Pose2d();
+    private Pose2d curPose2d, targetPose2d;
 
-    private final Pose2d targetPose2d, tolorance;
-    private final ChassisSpeeds speeds;
+    private final Pose2d tolorance = ChassisConstants.TOLORANCE_AUTO_DRIVE;
+    private final ChassisSpeeds speeds = new ChassisSpeeds();
 
-    private final ProfiledPIDController omegaController, xController, yController;
+    private final ProfiledPIDController rotationController, xController, yController;
     private final State targetRotation = new State();
     private final State targetX = new State();
     private final State targetY = new State();
 
-    public AutoDrive(Drive drive, Pose2d targetPose2d){
+    public AutoDrive(Drive drive){
         this.drive = drive;
-        this.controlRequest = new SwerveRequest.ApplyFieldSpeeds()
-            .withDesaturateWheelSpeeds(true);
-        this.targetPose2d = targetPose2d;
-        this.speeds = new ChassisSpeeds();
 
-        this.tolorance = ChassisConstants.TOLORANCE_AUTO_DRIVE;
-
-        omegaController = new ProfiledPIDController(
+        rotationController = new ProfiledPIDController(
             ChassisConstants.ROTATION_PID_P,
             0,
             ChassisConstants.ROTATION_PID_D,
@@ -54,28 +49,34 @@ public class AutoDrive extends Command {
             ChassisConstants.TRANSLATION_PID_D,
             new Constraints(3, 1)
         );
-    }
-
-    @Override
-    public void initialize() {
-        this.curPose2d = drive.getStateCopy().Pose;
-        ChassisSpeeds curChassisSpeeds = drive.getStateCopy().Speeds;
-
-        omegaController.reset(curPose2d.getRotation().getRadians(), curChassisSpeeds.omegaRadiansPerSecond);
-        xController.reset(curPose2d.getX(), curChassisSpeeds.vxMetersPerSecond);
-        yController.reset(curPose2d.getY(), curChassisSpeeds.vyMetersPerSecond);
 
         this.targetRotation.velocity = 0;
         this.targetX.velocity = 0;
         this.targetY.velocity = 0;
+    }
+
+    public AutoDrive withTarget(Pose2d targetPose2d){
+        this.targetPose2d = targetPose2d;
+        return this;
+    }
+
+    @Override
+    public void initialize() {
+        if(this.targetPose2d == null) this.cancel();
+
+        this.curPose2d = drive.getStateCopy().Pose;
+        ChassisSpeeds curChassisSpeeds = drive.getStateCopy().Speeds;
+
+        rotationController.reset(curPose2d.getRotation().getRadians(), curChassisSpeeds.omegaRadiansPerSecond);
+        xController.reset(curPose2d.getX(), curChassisSpeeds.vxMetersPerSecond);
+        yController.reset(curPose2d.getY(), curChassisSpeeds.vyMetersPerSecond);
 
         addRequirements(drive);
     }
 
     @Override
     public void execute() {
-        // getState() will not have GC issue
-        // but it changes
+        // getState() will not have GC issue, but it changes every loop
         this.curPose2d = drive.getStateCopy().Pose;
     
         this.targetRotation.position = targetPose2d.getRotation().getRadians();
@@ -92,15 +93,13 @@ public class AutoDrive extends Command {
             targetY
         );
 
-        speeds.omegaRadiansPerSecond = omegaController.calculate(
+        speeds.omegaRadiansPerSecond = rotationController.calculate(
             curPose2d.getRotation().getRadians(),
             targetRotation
         );
 
-        drive.applyRequestUnsafe(
-            () -> controlRequest.withSpeeds(
-                this.speeds
-            )
+        drive.setControl(
+            controlRequest.withSpeeds(this.speeds)
         );
     }
 
