@@ -27,14 +27,14 @@
                 },
                 {
                     "axis": "y",
-                    "degrees": 0
+                    "degrees": -20
                 },
                 {
                     "axis": "z",
                     "degrees": 0
                 }
             ],
-            "position": [0, 0, 0],
+            "position": [0.3341, 0.0820, 0.4291],
             "resolution": [1280, 800],
             "fov": 80
         }
