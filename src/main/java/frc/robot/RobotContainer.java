@@ -12,14 +12,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoDrive;
 import frc.robot.commands.DriveCommand;
-import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.SwerveTelemetry;
+import frc.robot.subsystems.shooter.ShooterTest;
 
 public class RobotContainer {
     private final CommandXboxController driverController = new CommandXboxController(0);
@@ -41,8 +43,9 @@ public class RobotContainer {
             .debounce(0.04)
             .getAsBoolean()
     );
-
     //#endregion
+
+    private final ShooterTest shooter = new ShooterTest();
 
     public RobotContainer() {
         drivetrain.registerTelemetry(swerveLogger::telemeterize);
@@ -96,7 +99,7 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        driverController.a().debounce(0.04).whileTrue(
+        driverController.a().debounce(0.04).onTrue(
             autoDriveCommand.withTarget(
                 new Pose2d(5, 5, Rotation2d.fromDegrees(0))
             )
@@ -105,6 +108,24 @@ public class RobotContainer {
         // Reset the field-centric heading on left bumper press.
         driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
         //#endregion
+
+        driverController.b().debounce(0.04).onTrue(
+            new InstantCommand(
+                () -> {
+                    shooter.setPitch(0);
+                    shooter.runVelocity(0);
+                }
+            )
+        );
+
+        driverController.x().debounce(0.04).onTrue(
+            new InstantCommand(
+                () -> {
+                    shooter.setPitch(0.5);
+                    shooter.runVelocity(0.3);
+                }
+            )
+        );
     }
 
     public Command getAutonomousCommand() {
