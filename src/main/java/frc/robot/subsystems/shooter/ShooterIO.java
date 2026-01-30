@@ -8,6 +8,17 @@ public interface ShooterIO {
         public double hoodPosition = 0;
         public double shooterVelocity = 0;
 
+        public double appliedVoltsHood = 0;
+        public double supplyCurrentHood = 0;
+        public double torqueCurrentHood = 0;
+
+        public double appliedVoltsShooter = 0;
+        public double supplyCurrentShooter = 0;
+        public double torqueCurrentShooter = 0;
+
+        public double tempHood = 0;
+        public double tempShooter = 0;
+
         public boolean hoodConnected = false;
         public boolean shooterConnected = false;
     }

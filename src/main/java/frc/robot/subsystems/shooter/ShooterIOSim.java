@@ -2,9 +2,7 @@ package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import frc.robot.subsystems.shooter.ShooterConstants.HAL;
 
 public class ShooterIOSim implements ShooterIO {
     private final DCMotorSim hood, shooter;
@@ -12,22 +10,16 @@ public class ShooterIOSim implements ShooterIO {
     private final PIDController hoodController = new PIDController(10, 0, 0);
     private final PIDController shooterController = new PIDController(1, 0, 0);
 
+    private double appliedVoltsHood, appliedVoltsShooter;
+
     public ShooterIOSim() {
         hood = new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(
-                ShooterConstants.HOOD_GEARBOX,
-                ShooterConstants.HOOD_MOI,
-                HAL.HOOD_GEARING
-            ),
+            ShooterConstants.HOOD_STATE_SPACE,
             ShooterConstants.HOOD_GEARBOX
         );
 
         shooter = new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(
-                ShooterConstants.SHOOTER_GEARBOX,
-                ShooterConstants.SHOOTER_MOI,
-                HAL.SHOOTER_GEARING
-            ),
+            ShooterConstants.SHOOTER_STATE_SPACE,
             ShooterConstants.SHOOTER_GEARBOX
         );
     }
@@ -39,6 +31,12 @@ public class ShooterIOSim implements ShooterIO {
         
         inputs.hoodPosition = hood.getAngularPositionRad();
         inputs.shooterVelocity = shooter.getAngularVelocityRadPerSec();
+
+        inputs.appliedVoltsHood = this.appliedVoltsHood;
+        inputs.supplyCurrentHood = hood.getCurrentDrawAmps();
+
+        inputs.appliedVoltsShooter = this.appliedVoltsShooter;
+        inputs.supplyCurrentShooter = shooter.getCurrentDrawAmps();
 
         inputs.hoodConnected = true;
         inputs.shooterConnected = true;
