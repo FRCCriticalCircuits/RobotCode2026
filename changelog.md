@@ -11,6 +11,9 @@ date - post `commit ID (short version)`
 - Single Drive Command File for robot-rel support 
 with trigger for more percise velocity control
 
+## 2026/1/30 - post `80238d7`
+Subsystem Draft
+
 ## 2026/1/29 - post `1616386`(main) at `d8cde9f`
 - Simulation Implements(Intake/Hopper/Shooter)
 
