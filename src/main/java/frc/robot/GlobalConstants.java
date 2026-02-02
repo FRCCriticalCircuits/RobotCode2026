@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.ctre.phoenix6.CANBus;
+
 public class GlobalConstants {
     // Comp
     public static final Boolean COMP = false;
@@ -7,6 +9,8 @@ public class GlobalConstants {
     // System Identification
     public static final Boolean SYS_ID = false;
     public static final String CTRE_LOG_PATH = "/media/sda1/ctre-logs/";
+
+    public static final CANBus CARNIVORE = new CANBus("*");
 
     // Driver Preferences
     public static final double VEL_CONTROL_BASE = 0.2;

@@ -68,25 +68,32 @@ public class SuperStructure extends SubsystemBase{
 
     private void run(){
         switch(robotState){
-            //hood.position()
-
             case IDLE, INTAKING:
                 // shooter.NeutralOut(Coast)
                 // pivot.position(usrInput) (joystick-input)
                 // roller.velocity(0 or intake) (joystick-input)
                 // hopper.NeutralOut(Break)
+
+                // hood.NeutralOut(Break)
                 break;
             case SHOOTING:
                 // shooter.velocity(shooting)
+                
                 // pivot.position() TODO
                 // roller.velocity() TODO
+                
                 // if(ready) hopper.velocity(feed)
+
+                // swerve stuff()
+                // hood.position()
                 break;
             default:
                 // shooter.neutralOut(Coast)
                 // pivot.position(up)
                 // roller.velocity(reverse)
                 // hopper.velocity(reverse)
+
+                // hood.NeutralOut(Break)
         }
     }
 
