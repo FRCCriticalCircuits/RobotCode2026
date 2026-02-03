@@ -18,6 +18,7 @@ public interface ShooterIO {
 
         public double tempHood = 0;
         public double tempShooter = 0;
+        public double tempSecondaryShooter = 0;
 
         public boolean hoodConnected = false;
         public boolean shooterConnected = false;

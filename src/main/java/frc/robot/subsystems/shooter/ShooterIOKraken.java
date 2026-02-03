@@ -5,18 +5,20 @@ import edu.wpi.first.units.measure.*;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.GlobalConstants;
 import frc.robot.subsystems.shooter.ShooterConstants.HAL;
 
 public class ShooterIOKraken implements ShooterIO{
-    private final TalonFX hoodMotor, shooterMotor;
+    private final TalonFX hoodMotor, shooter, secondaryShooter;
 
     // Status Signals
     private final StatusSignal<Angle> hoodPosition;
@@ -29,6 +31,7 @@ public class ShooterIOKraken implements ShooterIO{
     private final StatusSignal<Current> torqueCurrentShooter;
     private final StatusSignal<Temperature> tempHood;
     private final StatusSignal<Temperature> tempShooter;
+    private final StatusSignal<Temperature> tempSecondaryShooter;
 
     // Configuration
     private final TalonFXConfiguration hoodConfig;
@@ -41,7 +44,8 @@ public class ShooterIOKraken implements ShooterIO{
 
     public ShooterIOKraken(){
         this.hoodMotor = new TalonFX(41, GlobalConstants.CARNIVORE);
-        this.shooterMotor = new TalonFX(42, GlobalConstants.CARNIVORE);
+        this.shooter = new TalonFX(42, GlobalConstants.CARNIVORE);
+        this.secondaryShooter = new TalonFX(43, GlobalConstants.CARNIVORE);
 
         // Configuration
         this.hoodConfig = new TalonFXConfiguration();
@@ -50,8 +54,6 @@ public class ShooterIOKraken implements ShooterIO{
         this.hoodConfig.Slot0.kP = HAL.HOOD_PID_P;
         this.hoodConfig.Slot0.kI = HAL.HOOD_PID_I;
         this.hoodConfig.Slot0.kD = HAL.HOOD_PID_D;
-        this.hoodConfig.TorqueCurrent.PeakForwardTorqueCurrent = 30.0;
-        this.hoodConfig.TorqueCurrent.PeakReverseTorqueCurrent = -30.0;
         this.hoodConfig.MotorOutput.Inverted =
             HAL.HOOD_INVERT
                 ? InvertedValue.Clockwise_Positive
@@ -63,8 +65,6 @@ public class ShooterIOKraken implements ShooterIO{
         this.shooterConfig.Slot0.kP = HAL.SHOOTER_PID_P;
         this.shooterConfig.Slot0.kI = HAL.SHOOTER_PID_I;
         this.shooterConfig.Slot0.kD = HAL.SHOOTER_PID_D;
-        this.shooterConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
-        this.shooterConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
         this.shooterConfig.MotorOutput.Inverted =
             HAL.SHOOTER_INVERT
                 ? InvertedValue.Clockwise_Positive
@@ -73,20 +73,25 @@ public class ShooterIOKraken implements ShooterIO{
         this.shooterConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         this.shooterConfig.Feedback.RotorToSensorRatio = HAL.SHOOTER_GEARING;
 
+        /* Default Supply Limit: 70A(1.0s) -> 40A TODO */
+        this.hoodConfig.TorqueCurrent.PeakForwardTorqueCurrent = 30.0;
+        this.hoodConfig.TorqueCurrent.PeakReverseTorqueCurrent = -30.0;
+
         // Status Signals
         this.hoodPosition = hoodMotor.getPosition();
-        this.shooterVelocity = shooterMotor.getVelocity();
+        this.shooterVelocity = shooter.getVelocity();
 
         this.appliedVoltsHood = hoodMotor.getMotorVoltage();
         this.supplyCurrentHood = hoodMotor.getSupplyCurrent();
         this.torqueCurrentHood = hoodMotor.getTorqueCurrent();
 
-        this.appliedVoltsShooter = shooterMotor.getMotorVoltage();
-        this.supplyCurrentShooter = shooterMotor.getSupplyCurrent();
-        this.torqueCurrentShooter = shooterMotor.getTorqueCurrent();
+        this.appliedVoltsShooter = shooter.getMotorVoltage();
+        this.supplyCurrentShooter = shooter.getSupplyCurrent();
+        this.torqueCurrentShooter = shooter.getTorqueCurrent();
 
         this.tempHood = hoodMotor.getDeviceTemp();
-        this.tempShooter = shooterMotor.getDeviceTemp();
+        this.tempShooter = shooter.getDeviceTemp();
+        this.tempSecondaryShooter = secondaryShooter.getDeviceTemp();
 
         BaseStatusSignal.setUpdateFrequencyForAll(
             100.0,
@@ -99,11 +104,21 @@ public class ShooterIOKraken implements ShooterIO{
             this.supplyCurrentShooter,
             this.torqueCurrentShooter,
             this.tempHood,
-            this.tempShooter
+            this.tempShooter,
+            this.tempSecondaryShooter
         );
 
-        shooterMotor.optimizeBusUtilization(1.0);
+        shooter.optimizeBusUtilization(1.0);
+        secondaryShooter.optimizeBusUtilization(1.0);
         hoodMotor.optimizeBusUtilization(1.0);
+
+        hoodMotor.getConfigurator().apply(hoodConfig);
+        shooter.getConfigurator().apply(shooterConfig);
+        secondaryShooter.getConfigurator().apply(shooterConfig);
+
+        secondaryShooter.setControl(
+            new Follower(shooter.getDeviceID(), MotorAlignmentValue.Opposed)
+        );
     }
 
     @Override
@@ -121,7 +136,8 @@ public class ShooterIOKraken implements ShooterIO{
             this.appliedVoltsShooter,
             this.supplyCurrentShooter,
             this.torqueCurrentShooter,
-            this.tempShooter
+            this.tempShooter,
+            this.tempSecondaryShooter
         ).isOK();
 
         inputs.hoodPosition = this.hoodPosition.getValueAsDouble() * Math.PI * 2;
@@ -135,6 +151,7 @@ public class ShooterIOKraken implements ShooterIO{
         inputs.torqueCurrentShooter = this.torqueCurrentShooter.getValueAsDouble();
         inputs.tempHood = this.tempHood.getValueAsDouble();
         inputs.tempShooter = this.tempShooter.getValueAsDouble();
+        inputs.tempSecondaryShooter = this.tempSecondaryShooter.getValueAsDouble();
     }
 
     @Override
@@ -146,7 +163,7 @@ public class ShooterIOKraken implements ShooterIO{
 
     @Override
     public void runShooter(double velocity) {
-        shooterMotor.setControl(
+        shooter.setControl(
             velocityVoltage.withVelocity(velocity)
         );
     }
