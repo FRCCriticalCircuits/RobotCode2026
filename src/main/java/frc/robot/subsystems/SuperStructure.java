@@ -5,7 +5,6 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.enums.UpperStructureStates;
 import frc.robot.subsystems.hopper.HopperIO;
 import frc.robot.subsystems.hopper.HopperIOInputsAutoLogged;
 import frc.robot.subsystems.intake.IntakeIO;
@@ -14,8 +13,6 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOInputsAutoLogged;
 
 public class SuperStructure extends SubsystemBase{
-    private final UpperStructureStates robotState = UpperStructureStates.IDLE;
-
     private final ShooterIO shooterIO; 
     private final ShooterIOInputsAutoLogged shooterInputs = new ShooterIOInputsAutoLogged();
     private final Debouncer hoodConnectedDebouncer = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
@@ -62,39 +59,6 @@ public class SuperStructure extends SubsystemBase{
         pivotDisconnected.set(!pivotConnectedDebouncer.calculate(intakeInputs.pivotConnected));
         rollerDisconnected.set(!rollerConnectedDebouncer.calculate(intakeInputs.rollerConnected));
         hopperDisconnected.set(!hopperConnectedDebouncer.calculate(hopperInputs.hopperConnected));
-
-        run();
-    }
-
-    private void run(){
-        switch(robotState){
-            case IDLE, INTAKING:
-                // shooter.NeutralOut(Coast)
-                // pivot.position(usrInput) (joystick-input)
-                // roller.velocity(0 or intake) (joystick-input)
-                // hopper.NeutralOut(Break)
-
-                // hood.NeutralOut(Break)
-                break;
-            case SHOOTING:
-                // shooter.velocity(shooting)
-                
-                // pivot.position() TODO
-                // roller.velocity() TODO
-                
-                // if(ready) hopper.velocity(feed)
-
-                // swerve stuff()
-                // hood.position()
-                break;
-            default:
-                // shooter.neutralOut(Coast)
-                // pivot.position(up)
-                // roller.velocity(reverse)
-                // hopper.velocity(reverse)
-
-                // hood.NeutralOut(Break)
-        }
     }
 
     public void setPivot(double positionRad){
