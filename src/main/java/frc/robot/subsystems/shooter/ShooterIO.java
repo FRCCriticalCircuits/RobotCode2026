@@ -2,6 +2,9 @@ package frc.robot.subsystems.shooter;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+
 public interface ShooterIO {
     @AutoLog
     public class ShooterIOInputs {
@@ -26,6 +29,6 @@ public interface ShooterIO {
 
     default void updateInputs(ShooterIOInputs inputs) {}
     
-    default void runHood(double positionRad) {}
-    default void runShooter(double velocity) {}
+    default Command runHood(double positionRad) {return Commands.none();}
+    default Command runShooter(double velocity) {return Commands.none();}
 }

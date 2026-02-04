@@ -3,6 +3,8 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 
 public class IntakeIOSim implements IntakeIO {
     private final DCMotorSim pivot, roller;
@@ -43,31 +45,39 @@ public class IntakeIOSim implements IntakeIO {
     }
 
     @Override
-    public void runRoller(double velocity) {
-        roller.setInputVoltage(
-            MathUtil.clamp(
-                rollerController.calculate(
-                    roller.getAngularVelocityRadPerSec(),
-                    velocity
-                ),
-                -12.0,
-                12.0
-            )
-        );
+    public Command runRoller(double velocity) {
+        return Commands.runOnce(
+            () -> {
+                roller.setInputVoltage(
+                    MathUtil.clamp(
+                        rollerController.calculate(
+                            roller.getAngularVelocityRadPerSec(),
+                            velocity
+                        ),
+                        -12.0,
+                        12.0
+                    )
+                );
+            }
+        ).withName("intake.runRollerVelocity");
     }
 
     @Override
-    public void runPivot(double positionRad) {
-        pivot.setInputVoltage(
-            MathUtil.clamp(
-                pivotController.calculate(
-                    pivot.getAngularPositionRad(),
-                    positionRad
-                ),
-                -12.0,
-                12.0
-            )
-        );
+    public Command runPivot(double positionRad) {
+        return Commands.runOnce(
+            () -> {
+                pivot.setInputVoltage(
+                    MathUtil.clamp(
+                        pivotController.calculate(
+                            pivot.getAngularPositionRad(),
+                            positionRad
+                        ),
+                        -12.0,
+                        12.0
+                    )
+                );
+            }
+        ).withName("intake.runPivotPosition");
     }
 }
 

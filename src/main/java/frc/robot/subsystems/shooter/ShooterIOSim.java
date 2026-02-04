@@ -3,6 +3,8 @@ package frc.robot.subsystems.shooter;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 
 public class ShooterIOSim implements ShooterIO {
     private final DCMotorSim hood, shooter;
@@ -43,30 +45,38 @@ public class ShooterIOSim implements ShooterIO {
     }
 
     @Override
-    public void runShooter(double velocity) {
-        shooter.setInputVoltage(
-            MathUtil.clamp(
-                shooterController.calculate(
-                    shooter.getAngularVelocityRadPerSec(),
-                    velocity
-                ),
-                -12.0,
-                12.0
-            )
-        );
+    public Command runHood(double positionRad) {
+        return Commands.runOnce(
+            () -> {
+                hood.setInputVoltage(
+                    MathUtil.clamp(
+                        hoodController.calculate(
+                            hood.getAngularPositionRad(),
+                            positionRad
+                        ),
+                        -12.0,
+                        12.0
+                    )
+                );
+            }
+        ).withName("shooter.runHoodPosition");
     }
 
     @Override
-    public void runHood(double positionRad) {
-        hood.setInputVoltage(
-            MathUtil.clamp(
-                hoodController.calculate(
-                    hood.getAngularPositionRad(),
-                    positionRad
-                ),
-                -12.0,
-                12.0
-            )
-        );
+    public Command runShooter(double velocity) {
+        return Commands.runOnce(
+            () -> {
+                shooter.setInputVoltage(
+                    MathUtil.clamp(
+                        shooterController.calculate(
+                            shooter.getAngularVelocityRadPerSec(),
+                            velocity
+                        ),
+                        -12.0,
+                        12.0
+                    )
+                );
+            }
+        ).withName("shooter.runShooterVelocity"); 
     }
 }

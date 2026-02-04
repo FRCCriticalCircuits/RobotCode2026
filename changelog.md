@@ -11,6 +11,9 @@ date - post `commit ID (short version)`
 - Single Drive Command File for robot-rel support 
 with trigger for more percise velocity control
 
+## 2026/2/03 - post `397b6af`
+rewrite functions to return WPILib Command
+
 ## 2026/2/03 - post `22a624b`
 - update Changelog
 - Remove State Machine

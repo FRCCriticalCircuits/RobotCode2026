@@ -60,16 +60,4 @@ public class SuperStructure extends SubsystemBase{
         rollerDisconnected.set(!rollerConnectedDebouncer.calculate(intakeInputs.rollerConnected));
         hopperDisconnected.set(!hopperConnectedDebouncer.calculate(hopperInputs.hopperConnected));
     }
-
-    public void setPivot(double positionRad){
-        intakeIO.runPivot(positionRad);
-    }
-
-    public void setIntakeRoller(double velocity){
-        intakeIO.runRoller(velocity);
-    }
-
-    public void setHopper(double velocity){
-        hopperIO.runHopper(velocity);
-    }
 }

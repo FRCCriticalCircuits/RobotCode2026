@@ -1,6 +1,8 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
@@ -155,16 +157,24 @@ public class ShooterIOKraken implements ShooterIO{
     }
 
     @Override
-    public void runHood(double positionRad) {
-        hoodMotor.setControl(
-            positionFOC.withPosition(positionRad)
-        );
+    public Command runHood(double positionRad) {
+        return Commands.runOnce(
+            () -> {
+                hoodMotor.setControl(
+                    positionFOC.withPosition(positionRad)
+                );
+            }
+        ).withName("shooter.runHoodPosition");
     }
 
     @Override
-    public void runShooter(double velocity) {
-        shooter.setControl(
-            velocityVoltage.withVelocity(velocity)
-        );
+    public Command runShooter(double velocity) {
+        return Commands.runOnce(
+            () -> {
+                shooter.setControl(
+                    velocityVoltage.withVelocity(velocity)
+                );
+            }
+        ).withName("shooter.runShooterVelocity");
     }
 }
