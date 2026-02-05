@@ -86,7 +86,7 @@ public class SuperStructure extends SubsystemBase{
         return Commands.parallel(
             shooterIO.runShooter(1000),
             new RepeatCommand(shooterIO.runHood(hoodPosition.getAsDouble())),
-            Commands.waitUntil(shooterIO::isStable).andThen(hopperIO.runHopper(100)),
+            Commands.waitUntil(shooterIO::isStable).andThen(hopperIO.runHopper(100))
         ).finallyDo(
             (interrupted) -> {
                 shooterIO.stopMotors();
