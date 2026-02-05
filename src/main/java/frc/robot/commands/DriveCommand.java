@@ -61,9 +61,9 @@ public class DriveCommand extends Command{
             );
         }else{
             drive.setControl(
-                fieldCentric.withVelocityX(velocityX.get())
-                    .withVelocityY(velocityY.get())
-                    .withRotationalRate(rotationalRate.get())
+                fieldCentric.withVelocityX(velocityX.get() * MaxSpeed)
+                    .withVelocityY(velocityY.get() * MaxSpeed)
+                    .withRotationalRate(rotationalRate.get() * MaxAngularRate)
             );
         }
     }

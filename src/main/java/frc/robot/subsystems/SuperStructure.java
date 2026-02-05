@@ -1,16 +1,23 @@
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.hopper.HopperIO;
 import frc.robot.subsystems.hopper.HopperIOInputsAutoLogged;
+import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOInputsAutoLogged;
+import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOInputsAutoLogged;
 
@@ -59,29 +66,61 @@ public class SuperStructure extends SubsystemBase{
         armDisconnected.set(!armConnectedDebouncer.calculate(intakeInputs.armConnected));
         rollerDisconnected.set(!rollerConnectedDebouncer.calculate(intakeInputs.rollerConnected));
         hopperDisconnected.set(!hopperConnectedDebouncer.calculate(hopperInputs.hopperConnected));
+
+        visualize();
     }
 
     // TODO test to find actual values & implement calculation later
-    public Command runIntake(double userInput){
+    public Command runIntake(){
         return Commands.parallel(
-            intakeIO.runArm(userInput),
-            intakeIO.runRoller(10)
+            intakeIO.runArm(0.3),
+            intakeIO.runRoller(10),
+            Commands.waitSeconds(999) // dont want this to end until interrupted (button unpressed)
         ).finallyDo(
             (interrupted) -> intakeIO.stopMotors()
         ).withName("SuperStructure.runIntake");
     }
 
     // TODO maybe move intake up and down?
-    public Command runShooter(){
+    public Command runShooter(DoubleSupplier hoodPosition){
         return Commands.parallel(
             shooterIO.runShooter(1000),
-            shooterIO.runHood(Math.toRadians(30)),
-            Commands.waitUntil(shooterIO::isStable).andThen(hopperIO.runHopper(100))
+            new RepeatCommand(shooterIO.runHood(hoodPosition.getAsDouble())),
+            Commands.waitUntil(shooterIO::isStable).andThen(hopperIO.runHopper(100)),
         ).finallyDo(
             (interrupted) -> {
                 shooterIO.stopMotors();
                 hopperIO.stopMotors();
             }
         ).withName("SuperStructure.runShooter");
+    }
+
+    private void visualize(){
+        Logger.recordOutput("Visualization/Hood", 
+            new Pose3d(
+                ShooterConstants.CAD.ORIGIN_OFFSET_X,
+                ShooterConstants.CAD.ORIGIN_OFFSET_Y, 
+                ShooterConstants.CAD.ORIGIN_OFFSET_Z,
+                new Rotation3d(
+                    0,
+                    shooterInputs.hoodPosition + ShooterConstants.CAD.PITCH_OFFSET,
+                    0
+                )
+            )
+        );
+
+        
+        Logger.recordOutput("Visualization/Intake", 
+            new Pose3d(
+                IntakeConstants.CAD.ORIGIN_OFFSET_X, 
+                IntakeConstants.CAD.ORIGIN_OFFSET_Y, 
+                IntakeConstants.CAD.ORIGIN_OFFSET_Z,
+                new Rotation3d(
+                    0,
+                    -intakeInputs.armPosition,
+                    0
+                )
+            )
+        );
     }
 }

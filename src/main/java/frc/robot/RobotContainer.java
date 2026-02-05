@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -25,7 +27,6 @@ import frc.robot.subsystems.hopper.HopperIOSim;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.shooter.ShooterIO;
-import frc.robot.subsystems.shooter.ShooterIOKraken;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 
 public class RobotContainer {
@@ -48,9 +49,9 @@ public class RobotContainer {
         () -> autoAim.getAsBoolean()
     );
     //#endregion
-    private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOKraken();
-    private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : null;
-    private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : null;
+    private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOSim();
+    private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOSim();
+    private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : new HopperIOSim();
     private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO);
 
     public RobotContainer() {
@@ -109,12 +110,16 @@ public class RobotContainer {
         // Reset the field-centric heading on left bumper press.
         driverController.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
-        driverController.axisGreaterThan(0, 0.15).whileTrue(
-            upperParts.runIntake(driverController.getLeftTriggerAxis())
+        driverController.leftTrigger(0.15).whileTrue(
+            upperParts.runIntake()
         );
 
         autoAim.whileTrue(
-            upperParts.runShooter()
+            upperParts.runShooter(
+                () -> {
+                    return driverController.getLeftTriggerAxis();
+                }
+            )
         );
         //#endregion
     }
