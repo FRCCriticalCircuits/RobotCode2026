@@ -10,13 +10,16 @@ git clone https://github.com/FRCCriticalCircuits/RobotCode2026.git
 disable `detect indentation`
 enable `git: auto fetch`
 
+# Controls
+RT -> Swerve Velocity
+
+LT -> Intake Arm, Roller
+RB -> Aim & Shoot
+
+Y -> gyro Reverse
+A -> reverse (outtake)
+
 # CAN IDs
-41,42 -> hood,shooter
-
-
-Drive
-Turn
-
 Cancoder
 3, 6, 9, 12
 Drive

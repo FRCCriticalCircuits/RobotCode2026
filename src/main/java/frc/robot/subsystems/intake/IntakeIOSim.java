@@ -7,17 +7,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 public class IntakeIOSim implements IntakeIO {
-    private final DCMotorSim pivot, roller;
+    private final DCMotorSim arm, roller;
 
-    private final PIDController pivotController = new PIDController(10, 0, 0);
+    private final PIDController armController = new PIDController(10, 0, 0);
     private final PIDController rollerController = new PIDController(1, 0, 0);
 
-    private double appliedVoltsPivot, appliedVoltsRoller;
+    private double appliedVoltsArm, appliedVoltsRoller;
 
     public IntakeIOSim() {
-        pivot = new DCMotorSim(
-            IntakeConstants.PIVOT_STATE_SPACE,
-            IntakeConstants.PIVOT_GEARBOX
+        arm = new DCMotorSim(
+            IntakeConstants.ARM_STATE_SPACE,
+            IntakeConstants.ARM_GEARBOX
         );
 
         roller = new DCMotorSim(
@@ -28,19 +28,19 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public void updateInputs(IntakeIOInputs inputs) {
-        pivot.update(0.02);
+        arm.update(0.02);
         roller.update(0.02);
         
-        inputs.pivotPosition = pivot.getAngularPositionRad();
+        inputs.armPosition = arm.getAngularPositionRad();
         inputs.rollerVelocity = roller.getAngularVelocityRadPerSec();
 
-        inputs.appliedVoltsPivot = this.appliedVoltsPivot;
-        inputs.supplyCurrentPivot = pivot.getCurrentDrawAmps();
+        inputs.appliedVoltsArm = this.appliedVoltsArm;
+        inputs.supplyCurrentArm = arm.getCurrentDrawAmps();
 
         inputs.appliedVoltsRoller = this.appliedVoltsRoller;
         inputs.supplyCurrentRoller = roller.getCurrentDrawAmps();
 
-        inputs.pivotConnected = true;
+        inputs.armConnected = true;
         inputs.rollerConnected = true;
     }
 
@@ -59,17 +59,17 @@ public class IntakeIOSim implements IntakeIO {
                     )
                 );
             }
-        ).withName("intake.runRollerVelocity");
+        ).withName("Intake.runRollerVelocity");
     }
 
     @Override
-    public Command runPivot(double positionRad) {
+    public Command runArm(double positionRad) {
         return Commands.runOnce(
             () -> {
-                pivot.setInputVoltage(
+                arm.setInputVoltage(
                     MathUtil.clamp(
-                        pivotController.calculate(
-                            pivot.getAngularPositionRad(),
+                        armController.calculate(
+                            arm.getAngularPositionRad(),
                             positionRad
                         ),
                         -12.0,
@@ -77,7 +77,13 @@ public class IntakeIOSim implements IntakeIO {
                     )
                 );
             }
-        ).withName("intake.runPivotPosition");
+        ).withName("Intake.runArmPosition");
+    }
+
+    @Override
+    public void stopMotors() {
+        arm.setInputVoltage(0.0);
+        roller.setInputVoltage(0.0);
     }
 }
 

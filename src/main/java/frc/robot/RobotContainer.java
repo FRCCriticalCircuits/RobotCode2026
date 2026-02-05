@@ -4,22 +4,29 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.commands.AutoDrive;
 import frc.robot.commands.DriveCommand;
+import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.SwerveTelemetry;
+import frc.robot.subsystems.hopper.HopperIO;
+import frc.robot.subsystems.hopper.HopperIOSim;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.ShooterIOKraken;
+import frc.robot.subsystems.shooter.ShooterIOSim;
 
 public class RobotContainer {
     private final CommandXboxController driverController = new CommandXboxController(0);
@@ -31,17 +38,20 @@ public class RobotContainer {
     private final SwerveTelemetry swerveLogger = new SwerveTelemetry();     
     private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
 
-    private final AutoDrive autoDriveCommand = new AutoDrive(drivetrain);
+    private final Trigger autoAim = driverController.rightBumper().debounce(0.02);
+
     private final DriveCommand teleDrive = new DriveCommand(
         drivetrain,
         () -> -driverController.getLeftY(),
         () -> -driverController.getLeftX(),
         () -> -driverController.getRightX(),
-        () -> driverController.button(0)
-            .debounce(0.04)
-            .getAsBoolean()
+        () -> autoAim.getAsBoolean()
     );
     //#endregion
+    private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOKraken();
+    private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : null;
+    private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : null;
+    private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO);
 
     public RobotContainer() {
         drivetrain.registerTelemetry(swerveLogger::telemeterize);
@@ -84,25 +94,28 @@ public class RobotContainer {
 
         //#region Subsystem Commands
         drivetrain.setDefaultCommand(teleDrive);
+        //#endregion
 
         SmartDashboard.putData("Auto to Run", autoChooser);
         configureBindings();
     }
 
     private void configureBindings() {
-        //#region Bindings - drive
+        //#region Bindings
         RobotModeTriggers.disabled().whileTrue(
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        driverController.a().debounce(0.04).onTrue(
-            autoDriveCommand.withTarget(
-                new Pose2d(5, 5, Rotation2d.fromDegrees(0))
-            )
+        // Reset the field-centric heading on left bumper press.
+        driverController.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+
+        driverController.axisGreaterThan(0, 0.15).whileTrue(
+            upperParts.runIntake(driverController.getLeftTriggerAxis())
         );
 
-        // Reset the field-centric heading on left bumper press.
-        driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        autoAim.whileTrue(
+            upperParts.runShooter()
+        );
         //#endregion
     }
 

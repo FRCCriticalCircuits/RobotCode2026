@@ -59,7 +59,7 @@ public class ShooterIOSim implements ShooterIO {
                     )
                 );
             }
-        ).withName("shooter.runHoodPosition");
+        ).withName("Shooter.runHoodPosition");
     }
 
     @Override
@@ -77,6 +77,12 @@ public class ShooterIOSim implements ShooterIO {
                     )
                 );
             }
-        ).withName("shooter.runShooterVelocity"); 
+        ).withName("Shooter.runShooterVelocity"); 
+    }
+
+    @Override
+    public void stopMotors() {
+        hood.setInputVoltage(0.0);
+        shooter.setInputVoltage(0.0);
     }
 }

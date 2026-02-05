@@ -49,4 +49,9 @@ public class HopperIOSim implements HopperIO{
             }
         ).withName("hopper.runRollerVelocity");
     }
+
+    @Override
+    public void stopMotors() {
+        hopper.setInputVoltage(0.0);
+    }
 }

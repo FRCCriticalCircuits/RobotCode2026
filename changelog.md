@@ -11,6 +11,9 @@ date - post `commit ID (short version)`
 - Single Drive Command File for robot-rel support 
 with trigger for more percise velocity control
 
+## 2026/2/05 - post `7345c23`
+command-based joystick controls 
+
 ## 2026/2/03 - post `397b6af`
 rewrite functions to return WPILib Command
 

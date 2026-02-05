@@ -8,26 +8,28 @@ import edu.wpi.first.wpilibj2.command.Commands;
 public interface IntakeIO {
     @AutoLog
     public class IntakeIOInputs {
-        public double pivotPosition = 0;
+        public double armPosition = 0;
         public double rollerVelocity = 0;
 
-        public double appliedVoltsPivot = 0;
-        public double supplyCurrentPivot = 0;
-        public double torqueCurrentPivot = 0;
+        public double appliedVoltsArm = 0;
+        public double supplyCurrentArm = 0;
+        public double torqueCurrentArm = 0;
 
         public double appliedVoltsRoller = 0;
         public double supplyCurrentRoller = 0;
         public double torqueCurrentRoller = 0;
 
-        public double tempPivot = 0;
+        public double tempArm = 0;
         public double tempRoller = 0;
 
-        public boolean pivotConnected = false;
+        public boolean armConnected = false;
         public boolean rollerConnected = false;
     }
 
     default void updateInputs(IntakeIOInputs inputs) {}
     
-    default Command runPivot(double positionRad) {return Commands.none();}
+    default Command runArm(double positionRad) {return Commands.none();}
     default Command runRoller(double velocity) {return Commands.none();}
+
+    default void stopMotors() {}
 }

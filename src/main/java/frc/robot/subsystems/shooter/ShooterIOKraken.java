@@ -8,6 +8,7 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -164,7 +165,7 @@ public class ShooterIOKraken implements ShooterIO{
                     positionFOC.withPosition(positionRad)
                 );
             }
-        ).withName("shooter.runHoodPosition");
+        ).withName("Shooter.runHoodPosition");
     }
 
     @Override
@@ -175,6 +176,12 @@ public class ShooterIOKraken implements ShooterIO{
                     velocityVoltage.withVelocity(velocity)
                 );
             }
-        ).withName("shooter.runShooterVelocity");
+        ).withName("Shooter.runShooterVelocity");
+    }
+    
+    @Override
+    public void stopMotors() {
+        hoodMotor.setControl(new NeutralOut());
+        shooter.setControl(new NeutralOut());
     }
 }

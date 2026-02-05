@@ -31,4 +31,7 @@ public interface ShooterIO {
     
     default Command runHood(double positionRad) {return Commands.none();}
     default Command runShooter(double velocity) {return Commands.none();}
+
+    default Boolean isStable() {return false;}
+    default void stopMotors() {}
 }
