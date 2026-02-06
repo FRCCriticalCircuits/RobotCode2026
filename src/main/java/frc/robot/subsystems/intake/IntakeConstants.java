@@ -28,6 +28,15 @@ public class IntakeConstants {
     public class HAL{
         public static final double ARM_GEARING = 23.0 * 1.2587890624;
         public static final double ROLLER_GEARING = 1.0; // TODO
+
+        public static final double ARM_PID_P = 0;
+        public static final double ARM_PID_I = 0;
+        public static final double ARM_PID_D = 0;
+
+        public static final double ROLLER_PID_P = 0;
+        public static final double ROLLER_PID_I = 0;
+        public static final double ROLLER_PID_D = 0;
+
     }
 
     public class CAD{
