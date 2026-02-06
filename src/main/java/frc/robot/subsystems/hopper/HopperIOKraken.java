@@ -93,17 +93,13 @@ public class HopperIOKraken implements HopperIO{
 
     @Override
     public Command runHopper(double velocity){
-        return Commands.startEnd(
-            () -> hopperMotor.setControl(voltageRequest.withOutput(velocity).withEnableFOC(true)),
-            () -> hopperMotor.setControl(voltageRequest.withOutput(0).withEnableFOC(true))
-            ).withName("Hopper.runHopperVelocity");
-    }
-    @Override
-    public Command runHopperBackwards(double velocity){
-        return Commands.startEnd(
-            () -> hopperMotor.setControl(voltageRequest.withOutput(-velocity).withEnableFOC(true)),
-            () -> hopperMotor.setControl(voltageRequest.withOutput(0).withEnableFOC(true))
-            ).withName("Hopper.runHopperBackwards");
+        return Commands.runOnce(
+            () -> {
+                hopperMotor.setControl(
+                    voltageRequest.withOutput(velocity).withEnableFOC(true)
+                );
+            }
+        ).withName("Hopper.runHopperVelocity");
     }
 
     @Override
