@@ -28,3 +28,5 @@ Turn
 2, 5, 8, 11
 
 FL, FR, RL, RR
+
+Hopper: 60
