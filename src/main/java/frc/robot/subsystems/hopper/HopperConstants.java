@@ -12,5 +12,10 @@ public class HopperConstants {
 
     public class HAL{
         public static final double HOPPER_GEARING = 1.0; // TODO
+
+        public static final boolean HOPPER_INVERT = false;
+        public static final double HOPPER_PID_P = 0;
+        public static final double HOPPER_PID_I = 0;
+        public static final double HOPPER_PID_D = 0;
     }
 }

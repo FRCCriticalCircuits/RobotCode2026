@@ -22,6 +22,7 @@ public interface HopperIO {
     default void updateInputs(HopperIOInputs inputs) {}
     
     default Command runHopper(double velocity) {return Commands.none();}
+    default Command runHopperBackwards(double velocity) {return Commands.none();}
     
     default void stopMotors() {}
 }
