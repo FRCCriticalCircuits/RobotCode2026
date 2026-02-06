@@ -8,8 +8,6 @@ date - post `commit ID (short version)`
 (+ SIM) -> Tested in simulation
 
 # Todo
-- Single Drive Command File for robot-rel support 
-with trigger for more percise velocity control
 
 ## 2026/2/05 - post `7345c23`
 command-based joystick controls 

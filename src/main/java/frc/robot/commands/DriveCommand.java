@@ -19,8 +19,8 @@ public class DriveCommand extends Command{
     private final double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond);
     
     private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric()
-        .withDeadband(MaxSpeed * GlobalConstants.VEL_CONTROL_BASE * GlobalConstants.DEADBAND_TRANSLATION)
-        .withRotationalDeadband(MaxAngularRate * GlobalConstants.VEL_CONTROL_BASE * GlobalConstants.DEADBAND_ROTATION)
+        .withDeadband(MaxSpeed * GlobalConstants.DEADBAND_TRANSLATION)
+        .withRotationalDeadband(MaxAngularRate * GlobalConstants.DEADBAND_ROTATION)
         .withDesaturateWheelSpeeds(true);
 
     private final SwerveRequest.ApplyFieldSpeeds customFieldCentric = new SwerveRequest.ApplyFieldSpeeds()

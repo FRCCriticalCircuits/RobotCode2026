@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.hopper.HopperIO;
@@ -70,10 +71,9 @@ public class SuperStructure extends SubsystemBase{
         visualize();
     }
 
-    // TODO test to find actual values & implement calculation later
     public Command runIntake(){
         return Commands.parallel(
-            intakeIO.runArm(0.3),
+            intakeIO.runArm(Math.toRadians(50)),
             intakeIO.runRoller(10),
             Commands.waitSeconds(999) // dont want this to end until interrupted (button unpressed)
         ).finallyDo(
@@ -81,11 +81,11 @@ public class SuperStructure extends SubsystemBase{
         ).withName("SuperStructure.runIntake");
     }
 
-    // TODO maybe move intake up and down?
+    // TODO test to find actual values & implement calculation later
     public Command runShooter(DoubleSupplier hoodPosition){
-        return Commands.parallel(
-            shooterIO.runShooter(1000),
-            new RepeatCommand(shooterIO.runHood(hoodPosition.getAsDouble())),
+        return new ParallelCommandGroup(
+            shooterIO.runShooter(300),
+            new RepeatCommand(shooterIO.runHood(hoodPosition)),
             Commands.waitUntil(shooterIO::isStable).andThen(hopperIO.runHopper(100))
         ).finallyDo(
             (interrupted) -> {
@@ -108,7 +108,6 @@ public class SuperStructure extends SubsystemBase{
                 )
             )
         );
-
         
         Logger.recordOutput("Visualization/Intake", 
             new Pose3d(
@@ -117,7 +116,7 @@ public class SuperStructure extends SubsystemBase{
                 IntakeConstants.CAD.ORIGIN_OFFSET_Z,
                 new Rotation3d(
                     0,
-                    -intakeInputs.armPosition,
+                    IntakeConstants.CAD.PITCH_OFFSET + intakeInputs.armPosition,
                     0
                 )
             )

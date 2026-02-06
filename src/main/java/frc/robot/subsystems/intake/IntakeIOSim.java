@@ -10,7 +10,7 @@ public class IntakeIOSim implements IntakeIO {
     private final DCMotorSim arm, roller;
 
     private final PIDController armController = new PIDController(10, 0, 0);
-    private final PIDController rollerController = new PIDController(0.1, 0, 0);
+    private final PIDController rollerController = new PIDController(0.5, 0, 0);
 
     private double appliedVoltsArm, appliedVoltsRoller;
     private double armPosition = 0, rollerVelocity = 0;

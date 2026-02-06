@@ -4,6 +4,8 @@ import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -43,7 +45,8 @@ public class ShooterIOKraken implements ShooterIO{
     // Control Requests
     private final PositionTorqueCurrentFOC positionFOC = new PositionTorqueCurrentFOC(0)
         .withUpdateFreqHz(0.0);
-    private final VelocityVoltage velocityVoltage = new VelocityVoltage(0);
+    private final VelocityVoltage velocityVoltage = new VelocityVoltage(0)
+        .withUpdateFreqHz(0.0);
 
     public ShooterIOKraken(){
         this.hoodMotor = new TalonFX(41, GlobalConstants.CARNIVORE);
@@ -158,11 +161,11 @@ public class ShooterIOKraken implements ShooterIO{
     }
 
     @Override
-    public Command runHood(double positionRad) {
+    public Command runHood(DoubleSupplier positionRad) {
         return Commands.runOnce(
             () -> {
                 hoodMotor.setControl(
-                    positionFOC.withPosition(positionRad)
+                    positionFOC.withPosition(positionRad.getAsDouble())
                 );
             }
         ).withName("Shooter.runHoodPosition");

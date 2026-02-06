@@ -35,6 +35,6 @@ public class IntakeConstants {
         public static final double ORIGIN_OFFSET_Y = -0.349; 
         public static final double ORIGIN_OFFSET_Z = 0.194;
 
-        public static final double PITCH_OFFSET = Math.toRadians(0);
+        public static final double PITCH_OFFSET = Math.toRadians(-50);
     }
 }

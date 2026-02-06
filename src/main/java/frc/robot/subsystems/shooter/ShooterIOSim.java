@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
@@ -10,7 +12,7 @@ public class ShooterIOSim implements ShooterIO {
     private final DCMotorSim hood, shooter;
 
     private final PIDController hoodController = new PIDController(10, 0, 0);
-    private final PIDController shooterController = new PIDController(1, 0, 0);
+    private final PIDController shooterController = new PIDController(0.5, 0, 0);
 
     private double appliedVoltsHood, appliedVoltsShooter;
     private double hoodPosition = 0, shooterVelocity = 0;
@@ -72,11 +74,11 @@ public class ShooterIOSim implements ShooterIO {
     }
 
     @Override
-    public Command runHood(double positionRad) {
+    public Command runHood(DoubleSupplier positionRad) {
         return Commands.runOnce(
             () -> {
                 this.motorStopped = false;
-                this.hoodPosition = positionRad;
+                this.hoodPosition = positionRad.getAsDouble();
             }
         ).withName("Shooter.runHoodPosition");
     }

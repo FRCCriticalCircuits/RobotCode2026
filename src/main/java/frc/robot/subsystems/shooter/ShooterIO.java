@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,7 +31,7 @@ public interface ShooterIO {
 
     default void updateInputs(ShooterIOInputs inputs) {}
     
-    default Command runHood(double positionRad) {return Commands.none();}
+    default Command runHood(DoubleSupplier positionRad) {return Commands.none();}
     default Command runShooter(double velocity) {return Commands.none();}
 
     default Boolean isStable() {return false;}

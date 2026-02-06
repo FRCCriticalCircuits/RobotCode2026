@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
