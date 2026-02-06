@@ -30,3 +30,5 @@ Turn
 FL, FR, RL, RR
 
 Hopper: 60
+Roller: 62
+Arm: 61

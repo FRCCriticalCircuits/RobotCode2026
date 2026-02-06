@@ -4,7 +4,7 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -33,7 +33,7 @@ public class HopperIOKraken implements HopperIO{
     private final TalonFXConfiguration hopperConfig;
 
     //Control Requests
-    private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(true);
+    private final VelocityVoltage voltageRequest = new VelocityVoltage(0.0).withEnableFOC(true);
 
     public HopperIOKraken(){
         this.hopperMotor = new TalonFX(60, GlobalConstants.CARNIVORE); //Need to set a new ID for hopper
@@ -96,7 +96,7 @@ public class HopperIOKraken implements HopperIO{
         return Commands.runOnce(
             () -> {
                 hopperMotor.setControl(
-                    voltageRequest.withOutput(velocity).withEnableFOC(true)
+                    voltageRequest.withVelocity(velocity)
                 );
             }
         ).withName("Hopper.runHopperVelocity");

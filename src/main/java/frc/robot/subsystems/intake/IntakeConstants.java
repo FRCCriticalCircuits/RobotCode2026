@@ -29,6 +29,9 @@ public class IntakeConstants {
         public static final double ARM_GEARING = 23.0 * 1.2587890624;
         public static final double ROLLER_GEARING = 1.0; // TODO
 
+        public static final boolean ROLLER_INVERT = true;
+        public static final boolean ARM_INVERT = true;
+
         public static final double ARM_PID_P = 0;
         public static final double ARM_PID_I = 0;
         public static final double ARM_PID_D = 0;
