@@ -39,13 +39,12 @@ public class ShooterIOKraken implements ShooterIO{
     private final StatusSignal<Temperature> tempSecondaryShooter;
 
     // Configuration
-    private final TalonFXConfiguration hoodConfig;
-    private final TalonFXConfiguration shooterConfig;
+    private final TalonFXConfiguration hoodConfig, shooterConfig;
 
     // Control Requests
     private final PositionTorqueCurrentFOC positionFOC = new PositionTorqueCurrentFOC(0)
         .withUpdateFreqHz(0.0);
-    private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withEnableFOC(true)
+    private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withEnableFOC(false)
         .withUpdateFreqHz(0.0);
 
     public ShooterIOKraken(){

@@ -33,7 +33,9 @@ public class HopperIOKraken implements HopperIO{
     private final TalonFXConfiguration hopperConfig;
 
     //Control Requests
-    private final VelocityVoltage voltageRequest = new VelocityVoltage(0.0).withEnableFOC(true);
+    private final VelocityVoltage velocityVoltage = new VelocityVoltage(0.0)
+        .withEnableFOC(false)
+        .withUpdateFreqHz(0.0);
 
     public HopperIOKraken(){
         this.hopperMotor = new TalonFX(60, GlobalConstants.CARNIVORE); //Need to set a new ID for hopper
@@ -96,7 +98,7 @@ public class HopperIOKraken implements HopperIO{
         return Commands.runOnce(
             () -> {
                 hopperMotor.setControl(
-                    voltageRequest.withVelocity(velocity)
+                    velocityVoltage.withVelocity(velocity)
                 );
             }
         ).withName("Hopper.runHopperVelocity");

@@ -23,16 +23,13 @@ import frc.robot.subsystems.intake.IntakeConstants.HAL;
 
 public class IntakeIOKraken implements IntakeIO{
     private final TalonFX armMotor, rollerMotor;
-    private final TalonFXConfiguration armConfig, rollerConfig;
+    
     // Status Signals
-
-    // Arm
     private final StatusSignal<Angle> armPosition; 
     private final StatusSignal<Voltage> appliedVoltsArm;
     private final StatusSignal<Current> supplyCurrentArm;
     private final StatusSignal<Current> torqueCurrentArm;
     private final StatusSignal<Temperature> tempArm;
-
 
     // Roller
     private final StatusSignal<AngularVelocity> rollerVelocity;
@@ -41,36 +38,27 @@ public class IntakeIOKraken implements IntakeIO{
     private final StatusSignal<Current> torqueCurrentRoller;
     private final StatusSignal<Temperature> tempRoller;
 
+    // Configuration
+     private final TalonFXConfiguration armConfig, rollerConfig;
+
     // Control Requests
-    private final PositionTorqueCurrentFOC armPostionFOC = new PositionTorqueCurrentFOC(0).withUpdateFreqHz(0.0);
-    private final VelocityVoltage rollerVelocityVoltage = new VelocityVoltage(0.0).withEnableFOC(true);
+    private final PositionTorqueCurrentFOC armPostionFOC = new PositionTorqueCurrentFOC(0)
+        .withUpdateFreqHz(0.0);
+    private final VelocityVoltage rollerVelocityVoltage = new VelocityVoltage(0.0)
+        .withEnableFOC(true)
+        .withUpdateFreqHz(0.0);
 
     public IntakeIOKraken(){
         this.armMotor = new TalonFX(61, GlobalConstants.CARNIVORE); // Temp ID
         this.rollerMotor = new TalonFX(62, GlobalConstants.CARNIVORE); // Temp ID
 
+        // Configuration
         this.armConfig = new TalonFXConfiguration();
         this.rollerConfig = new TalonFXConfiguration();
-        //Roller Config
-        this.rollerConfig.Slot0.kP = HAL.ROLLER_PID_P;
-        this.rollerConfig.Slot0.kI = HAL.ROLLER_PID_I;
-        this.rollerConfig.Slot0.kD = HAL.ROLLER_PID_D;
-
-        this.rollerConfig.MotorOutput.Inverted =
-            HAL.ROLLER_INVERT
-                ? InvertedValue.Clockwise_Positive
-                : InvertedValue.CounterClockwise_Positive;
-        this.rollerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        this.rollerConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-        this.rollerConfig.Feedback.RotorToSensorRatio = HAL.ROLLER_GEARING;
-
-
-        //Arm Config
+    
         this.armConfig.Slot0.kP = HAL.ARM_PID_P;
         this.armConfig.Slot0.kI = HAL.ARM_PID_I;
         this.armConfig.Slot0.kD = HAL.ARM_PID_D;
-
-
         this.armConfig.MotorOutput.Inverted = 
             HAL.ARM_INVERT
                 ? InvertedValue.Clockwise_Positive
@@ -78,6 +66,17 @@ public class IntakeIOKraken implements IntakeIO{
         this.armConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         this.armConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         this.armConfig.Feedback.RotorToSensorRatio = HAL.ARM_GEARING;
+
+        this.rollerConfig.Slot0.kP = HAL.ROLLER_PID_P;
+        this.rollerConfig.Slot0.kI = HAL.ROLLER_PID_I;
+        this.rollerConfig.Slot0.kD = HAL.ROLLER_PID_D;
+        this.rollerConfig.MotorOutput.Inverted =
+            HAL.ROLLER_INVERT
+                ? InvertedValue.Clockwise_Positive
+                : InvertedValue.CounterClockwise_Positive;
+        this.rollerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        this.rollerConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+        this.rollerConfig.Feedback.RotorToSensorRatio = HAL.ROLLER_GEARING;
 
         /* Default Supply Limit */
         this.armConfig.TorqueCurrent.PeakForwardTorqueCurrent = 30.0;
@@ -96,7 +95,8 @@ public class IntakeIOKraken implements IntakeIO{
         this.torqueCurrentRoller = rollerMotor.getSupplyCurrent();
         this.tempRoller = rollerMotor.getDeviceTemp();
 
-        BaseStatusSignal.setUpdateFrequencyForAll(100.0, 
+        BaseStatusSignal.setUpdateFrequencyForAll(
+            100.0, 
             this.armPosition,
             this.appliedVoltsArm,
             this.supplyCurrentArm,
@@ -164,7 +164,7 @@ public class IntakeIOKraken implements IntakeIO{
         return Commands.runOnce(
             () -> {
                 rollerMotor.setControl(
-                  rollerVelocityVoltage.withVelocity(velocity)  
+                    rollerVelocityVoltage.withVelocity(velocity)  
                 );
             }
         );
