@@ -23,8 +23,8 @@ public class HopperIOKraken implements HopperIO{
     private final TalonFX hopperMotor;
 
     //Status Signals
-    private StatusSignal<AngularVelocity> hopperVelocity;
-    private StatusSignal<Voltage> appliedVoltsHopper;
+    private final StatusSignal<AngularVelocity> hopperVelocity;
+    private final StatusSignal<Voltage> appliedVoltsHopper;
     private final StatusSignal<Current> supplyCurrentHopper;
     private final StatusSignal<Current> torqueCurrentHopper;
     private final StatusSignal<Temperature> tempHopper;
