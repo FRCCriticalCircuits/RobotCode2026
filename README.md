@@ -30,5 +30,7 @@ Turn
 FL, FR, RL, RR
 
 Hopper: 60
-Roller: 62
-Arm: 61
+Intake:
+    Roller: 62
+    Arm: 61
+Climber: 63
