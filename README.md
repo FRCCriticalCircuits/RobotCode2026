@@ -34,3 +34,6 @@ Intake:
     Roller: 62
     Arm: 61
 Climber: 63
+
+# ZSH in VSCode
+add ``MesloLGS NF` to `Editor:Font Family`
