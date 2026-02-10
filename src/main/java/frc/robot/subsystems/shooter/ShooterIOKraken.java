@@ -59,6 +59,7 @@ public class ShooterIOKraken implements ShooterIO{
         this.hoodConfig.Slot0.kP = HAL.HOOD_PID_P;
         this.hoodConfig.Slot0.kI = HAL.HOOD_PID_I;
         this.hoodConfig.Slot0.kD = HAL.HOOD_PID_D;
+        
         this.hoodConfig.MotorOutput.Inverted =
             HAL.HOOD_INVERT
                 ? InvertedValue.Clockwise_Positive
@@ -124,9 +125,9 @@ public class ShooterIOKraken implements ShooterIO{
         secondaryShooter.setControl(
             new Follower(
                 shooter.getDeviceID(), 
-                HAL.SECONDARY_SHOOTER_INVERT ?
-                    MotorAlignmentValue.Opposed :    
-                    MotorAlignmentValue.Opposed
+                HAL.SECONDARY_SHOOTER_INVERT 
+                    ? MotorAlignmentValue.Opposed
+                    : MotorAlignmentValue.Aligned
             )
         );
     }
@@ -156,9 +157,11 @@ public class ShooterIOKraken implements ShooterIO{
         inputs.appliedVoltsHood = this.appliedVoltsHood.getValueAsDouble();
         inputs.supplyCurrentHood = this.supplyCurrentHood.getValueAsDouble();
         inputs.torqueCurrentHood = this.torqueCurrentHood.getValueAsDouble();
+        
         inputs.appliedVoltsShooter = this.appliedVoltsShooter.getValueAsDouble();
         inputs.supplyCurrentShooter = this.supplyCurrentShooter.getValueAsDouble();
         inputs.torqueCurrentShooter = this.torqueCurrentShooter.getValueAsDouble();
+        
         inputs.tempHood = this.tempHood.getValueAsDouble();
         inputs.tempShooter = this.tempShooter.getValueAsDouble();
         inputs.tempSecondaryShooter = this.tempSecondaryShooter.getValueAsDouble();

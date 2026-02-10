@@ -27,28 +27,25 @@ public class IntakeIOKraken implements IntakeIO{
     private final TalonFX armMotor, rollerMotor, secondaryArmMotor;
     
     // Status Signals
-    private final StatusSignal<Angle> armPosition; 
+    private final StatusSignal<Angle> armPosition;
+    private final StatusSignal<AngularVelocity> rollerVelocity;
     private final StatusSignal<Voltage> appliedVoltsArm;
     private final StatusSignal<Current> supplyCurrentArm;
     private final StatusSignal<Current> torqueCurrentArm;
-    private final StatusSignal<Temperature> tempArm;
-    private final StatusSignal<Temperature> tempSecondaryArm;
-
-    // Roller
-    private final StatusSignal<AngularVelocity> rollerVelocity;
     private final StatusSignal<Voltage> appliedVoltsRoller;
     private final StatusSignal<Current> supplyCurrentRoller;
     private final StatusSignal<Current> torqueCurrentRoller;
+    private final StatusSignal<Temperature> tempArm;
+    private final StatusSignal<Temperature> tempSecondaryArm;
     private final StatusSignal<Temperature> tempRoller;
 
     // Configuration
-     private final TalonFXConfiguration armConfig, rollerConfig;
+    private final TalonFXConfiguration armConfig, rollerConfig;
 
     // Control Requests
     private final PositionTorqueCurrentFOC armPostionFOC = new PositionTorqueCurrentFOC(0)
         .withUpdateFreqHz(0.0);
     private final VelocityVoltage rollerVelocityVoltage = new VelocityVoltage(0.0)
-        .withEnableFOC(true)
         .withUpdateFreqHz(0.0);
 
     public IntakeIOKraken(){
@@ -75,6 +72,7 @@ public class IntakeIOKraken implements IntakeIO{
         this.rollerConfig.Slot0.kP = HAL.ROLLER_PID_P;
         this.rollerConfig.Slot0.kI = HAL.ROLLER_PID_I;
         this.rollerConfig.Slot0.kD = HAL.ROLLER_PID_D;
+
         this.rollerConfig.MotorOutput.Inverted =
             HAL.ROLLER_INVERT
                 ? InvertedValue.Clockwise_Positive
@@ -89,43 +87,50 @@ public class IntakeIOKraken implements IntakeIO{
 
         // Status Signals
         this.armPosition = armMotor.getPosition();
+        this.rollerVelocity = rollerMotor.getVelocity();
+
         this.appliedVoltsArm = armMotor.getMotorVoltage();
         this.supplyCurrentArm = armMotor.getSupplyCurrent();
         this.torqueCurrentArm = armMotor.getTorqueCurrent();
-        this.tempArm = armMotor.getDeviceTemp();
-        this.tempSecondaryArm = secondaryArmMotor.getDeviceTemp();
 
-        this.rollerVelocity = rollerMotor.getVelocity();
         this.appliedVoltsRoller = rollerMotor.getMotorVoltage();
         this.supplyCurrentRoller = rollerMotor.getSupplyCurrent();
         this.torqueCurrentRoller = rollerMotor.getSupplyCurrent();
+        
+        this.tempArm = armMotor.getDeviceTemp();
+        this.tempSecondaryArm = secondaryArmMotor.getDeviceTemp();
         this.tempRoller = rollerMotor.getDeviceTemp();
 
         BaseStatusSignal.setUpdateFrequencyForAll(
             100.0, 
             this.armPosition,
+            this.rollerVelocity,
             this.appliedVoltsArm,
             this.supplyCurrentArm,
             this.torqueCurrentArm,
-            this.tempArm,
-            this.rollerVelocity,
             this.appliedVoltsRoller,
             this.supplyCurrentRoller,
             this.torqueCurrentRoller,
-            this.tempRoller,
-            this.tempSecondaryArm
+            this.tempArm,
+            this.tempSecondaryArm,
+            this.tempRoller
         );
         
-        rollerMotor.optimizeBusUtilization(1.0);
         armMotor.optimizeBusUtilization(1.0);
         secondaryArmMotor.optimizeBusUtilization(1.0);
+        rollerMotor.optimizeBusUtilization(1.0);
 
-        rollerMotor.getConfigurator().apply(rollerConfig);
         armMotor.getConfigurator().apply(armConfig);
         secondaryArmMotor.getConfigurator().apply(armConfig);
+        rollerMotor.getConfigurator().apply(rollerConfig);
 
         secondaryArmMotor.setControl(
-            new Follower(armMotor.getDeviceID(), MotorAlignmentValue.Aligned) //TODO
+            new Follower(
+                armMotor.getDeviceID(),
+                HAL.SECONDARY_ARM_INVERT 
+                    ? MotorAlignmentValue.Opposed
+                    : MotorAlignmentValue.Aligned
+            )
         );
     }
 
@@ -154,13 +159,14 @@ public class IntakeIOKraken implements IntakeIO{
         inputs.appliedVoltsRoller = this.appliedVoltsRoller.getValueAsDouble();
         inputs.supplyCurrentRoller = this.supplyCurrentRoller.getValueAsDouble();
         inputs.torqueCurrentRoller = this.torqueCurrentRoller.getValueAsDouble();
-        inputs.tempRoller = this.tempRoller.getValueAsDouble();
 
         inputs.appliedVoltsArm = this.appliedVoltsArm.getValueAsDouble();
         inputs.supplyCurrentArm = this.supplyCurrentArm.getValueAsDouble();
         inputs.torqueCurrentArm = this.torqueCurrentArm.getValueAsDouble();
+        
         inputs.tempArm = this.tempArm.getValueAsDouble();
         inputs.tempSecondaryArm = this.tempSecondaryArm.getValueAsDouble();
+        inputs.tempRoller = this.tempRoller.getValueAsDouble();
     }
 
     @Override
@@ -171,7 +177,7 @@ public class IntakeIOKraken implements IntakeIO{
                     armPostionFOC.withPosition(positionRad)
                 );
             }
-        ).withName("Intake.runArm");
+        ).withName("Intake.runArmPosition");
     }
 
     @Override
@@ -182,7 +188,7 @@ public class IntakeIOKraken implements IntakeIO{
                     rollerVelocityVoltage.withVelocity(velocity)  
                 );
             }
-        ).withName("Intake.runRoller");
+        ).withName("Intake.runRollerVelocity");
     }
 
     @Override
