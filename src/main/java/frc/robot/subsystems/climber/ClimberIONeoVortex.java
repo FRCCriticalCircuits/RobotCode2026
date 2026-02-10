@@ -17,8 +17,10 @@ public class ClimberIONeoVortex implements ClimberIO{
     private final SparkFlex climberNeoMotor;
     private final RelativeEncoder climberEncoder;
 
+    @SuppressWarnings("unused")
     private double appliedVoltsClimber = 0;
 
+    @SuppressWarnings("unused")
     private double tempClimber = 0;
 
     //Configuration
