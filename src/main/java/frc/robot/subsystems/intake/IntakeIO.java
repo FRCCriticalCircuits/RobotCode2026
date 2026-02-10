@@ -20,6 +20,7 @@ public interface IntakeIO {
         public double torqueCurrentRoller = 0;
 
         public double tempArm = 0;
+        public double tempSecondaryArm = 0;
         public double tempRoller = 0;
 
         public boolean armConnected = false;

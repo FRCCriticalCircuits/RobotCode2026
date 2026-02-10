@@ -33,6 +33,7 @@ Hopper: 60
 Intake:
     Roller: 62
     Arm: 61
+    Secondary Arm: 64
 Climber: 63
 
 # ZSH in VSCode
