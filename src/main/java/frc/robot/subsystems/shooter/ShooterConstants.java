@@ -36,7 +36,7 @@ public class ShooterConstants {
         public static final double HOOD_GEARING = 40;
         public static final double SHOOTER_GEARING = 24.0 / 18.0;
 
-        public static final Boolean HOOD_INVERT = false;
+        public static final Boolean HOOD_INVERT = true;
         public static final double HOOD_PID_P = 0;
         public static final double HOOD_PID_I = 0;
         public static final double HOOD_PID_D = 0;
@@ -45,6 +45,8 @@ public class ShooterConstants {
         public static final double SHOOTER_PID_P = 0;
         public static final double SHOOTER_PID_I = 0;
         public static final double SHOOTER_PID_D = 0;
+
+        public static final Boolean SECONDARY_SHOOTER_INVERT = true;
     }
 
     public class CAD{

@@ -122,7 +122,12 @@ public class ShooterIOKraken implements ShooterIO{
         secondaryShooter.getConfigurator().apply(shooterConfig);
 
         secondaryShooter.setControl(
-            new Follower(shooter.getDeviceID(), MotorAlignmentValue.Opposed)
+            new Follower(
+                shooter.getDeviceID(), 
+                HAL.SECONDARY_SHOOTER_INVERT ?
+                    MotorAlignmentValue.Opposed :    
+                    MotorAlignmentValue.Opposed
+            )
         );
     }
 
