@@ -27,8 +27,6 @@ public interface ShooterIO {
 
         public boolean hoodConnected = false;
         public boolean shooterConnected = false;
-
-        
     }
 
     default void updateInputs(ShooterIOInputs inputs) {}

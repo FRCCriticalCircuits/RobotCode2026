@@ -44,7 +44,7 @@ public class ShooterIOKraken implements ShooterIO{
     // Control Requests
     private final PositionTorqueCurrentFOC positionFOC = new PositionTorqueCurrentFOC(0)
         .withUpdateFreqHz(0.0);
-    private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withEnableFOC(false)
+    private final VelocityVoltage velocityVoltage = new VelocityVoltage(0)
         .withUpdateFreqHz(0.0);
 
     public ShooterIOKraken(){
