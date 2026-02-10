@@ -71,6 +71,7 @@ public class SuperStructure extends SubsystemBase{
         visualize();
     }
 
+    // TODO test to find actual values
     public Command runIntake(){
         return Commands.parallel(
             intakeIO.runArm(Math.toRadians(50)),

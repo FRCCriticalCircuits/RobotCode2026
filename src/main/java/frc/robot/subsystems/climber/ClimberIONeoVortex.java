@@ -36,8 +36,8 @@ public class ClimberIONeoVortex implements ClimberIO{
         climberConfig.voltageCompensation(HAL.NOMINAL_VOLTAGE);
         climberConfig.smartCurrentLimit(HAL.CLIMBER_CURRENT_LIMIT);
 
-        climberConfig.encoder.positionConversionFactor((1/HAL.CLIMBER_GEARING) * Math.PI * 2); //TODO
-        climberConfig.encoder.velocityConversionFactor((60.0/HAL.CLIMBER_GEARING) * Math.PI * 2); //TODO
+        climberConfig.encoder.positionConversionFactor((1/HAL.CLIMBER_GEARING) * Math.PI * 2);
+        climberConfig.encoder.velocityConversionFactor((60.0/HAL.CLIMBER_GEARING) * Math.PI * 2);
 
         climberConfig
             .signals
