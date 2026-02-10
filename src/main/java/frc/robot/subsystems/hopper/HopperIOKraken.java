@@ -22,19 +22,18 @@ import frc.robot.subsystems.hopper.HopperConstants.HAL;
 public class HopperIOKraken implements HopperIO{
     private final TalonFX hopperMotor;
 
-    //Status Signals
+    // Status Signals
     private final StatusSignal<AngularVelocity> hopperVelocity;
     private final StatusSignal<Voltage> appliedVoltsHopper;
     private final StatusSignal<Current> supplyCurrentHopper;
     private final StatusSignal<Current> torqueCurrentHopper;
     private final StatusSignal<Temperature> tempHopper;
         
-    //Configuration
+    // Configuration
     private final TalonFXConfiguration hopperConfig;
 
-    //Control Requests
+    // Control Requests
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0.0)
-        .withEnableFOC(false)
         .withUpdateFreqHz(0.0);
 
     public HopperIOKraken(){
@@ -54,7 +53,7 @@ public class HopperIOKraken implements HopperIO{
         this.hopperConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         this.hopperConfig.Feedback.RotorToSensorRatio = HAL.HOPPER_GEARING;
 
-        //Status Signals
+        // Status Signals
         this.hopperVelocity = hopperMotor.getVelocity();
         this.appliedVoltsHopper = hopperMotor.getMotorVoltage();
 
@@ -73,6 +72,7 @@ public class HopperIOKraken implements HopperIO{
         );
 
         hopperMotor.optimizeBusUtilization(1.0);
+        
         hopperMotor.getConfigurator().apply(hopperConfig);
     }
 

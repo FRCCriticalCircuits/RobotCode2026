@@ -11,9 +11,10 @@ public class HopperConstants {
     public static final LinearSystem<N2, N1, N2> HOPPER_STATE_SPACE = LinearSystemId.createDCMotorSystem(0.1, 0.01);
 
     public class HAL{
-        public static final double HOPPER_GEARING = 1.0; // TODO
+        public static final double HOPPER_GEARING = 1.0;
 
         public static final boolean HOPPER_INVERT = false;
+
         public static final double HOPPER_PID_P = 0;
         public static final double HOPPER_PID_I = 0;
         public static final double HOPPER_PID_D = 0;
