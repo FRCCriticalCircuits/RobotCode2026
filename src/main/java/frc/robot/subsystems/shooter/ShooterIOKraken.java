@@ -190,6 +190,12 @@ public class ShooterIOKraken implements ShooterIO{
     }
     
     @Override
+    public Boolean isStable() {
+        // TODO implement a stability check
+        return false;
+    }
+
+    @Override
     public void stopMotors() {
         hoodMotor.setControl(new NeutralOut());
         shooter.setControl(new NeutralOut());

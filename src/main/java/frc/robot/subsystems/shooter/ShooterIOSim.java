@@ -94,6 +94,12 @@ public class ShooterIOSim implements ShooterIO {
     }
 
     @Override
+    public Boolean isStable() {
+        // TODO implement a stability check
+        return false;
+    }
+
+    @Override
     public void stopMotors() {
         this.motorStopped = true;
         this.hoodPosition = 0.0;

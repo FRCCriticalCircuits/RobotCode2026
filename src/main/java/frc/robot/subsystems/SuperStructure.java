@@ -74,8 +74,8 @@ public class SuperStructure extends SubsystemBase{
     // TODO test to find actual values
     public Command runIntake(){
         return Commands.parallel(
-            intakeIO.runArm(Math.toRadians(50)),
-            intakeIO.runRoller(10),
+            intakeIO.runArm(SuperStructureConstants.INTAKE_ARM_POS),
+            intakeIO.runRoller(SuperStructureConstants.INTAKE_ROLLER_VEL),
             Commands.waitSeconds(999) // dont want this to end until interrupted (button unpressed)
         ).finallyDo(
             (interrupted) -> intakeIO.stopMotors()
@@ -85,9 +85,9 @@ public class SuperStructure extends SubsystemBase{
     // TODO test to find actual values & implement calculation later
     public Command runShooter(DoubleSupplier hoodPosition){
         return new ParallelCommandGroup(
-            shooterIO.runShooter(300),
+            shooterIO.runShooter(SuperStructureConstants.SHOOT_FLYWHEEL_VEL),
             new RepeatCommand(shooterIO.runHood(hoodPosition)),
-            Commands.waitUntil(shooterIO::isStable).andThen(hopperIO.runHopper(100))
+            Commands.waitUntil(shooterIO::isStable).andThen(hopperIO.runHopper(SuperStructureConstants.SHOOT_SEQUENCER_VEL))
         ).finallyDo(
             (interrupted) -> {
                 shooterIO.stopMotors();
