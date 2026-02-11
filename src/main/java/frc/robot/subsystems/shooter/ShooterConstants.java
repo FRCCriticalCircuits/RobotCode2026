@@ -38,7 +38,7 @@ public class ShooterConstants {
 
         public static final Boolean HOOD_INVERT = true;
         public static final Boolean SHOOTER_INVERT = false;
-        public static final Boolean SECONDARY_SHOOTER_INVERT = true;
+        public static final Boolean SECONDARY_SHOOTER_INVERT = false;
 
         public static final double HOOD_PID_P = 0;
         public static final double HOOD_PID_I = 0;
