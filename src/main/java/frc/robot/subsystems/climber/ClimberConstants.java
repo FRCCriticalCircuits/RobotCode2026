@@ -5,9 +5,7 @@ public class ClimberConstants {
         public static final double CLIMBER_GEARING = 1.0; //TODO
 
         public static final boolean CLIMBER_INVERT = false;
-        public static final double NOMINAL_VOLTAGE = 12.0;
         public static final int CLIMBER_CURRENT_LIMIT = 30;
-        public static final double FREQUENCY = 100.0;
 
         public static final double CLIMBER_PID_P = 0;
         public static final double CLIMBER_PID_I = 0;

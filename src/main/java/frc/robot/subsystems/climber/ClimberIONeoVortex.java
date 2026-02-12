@@ -36,7 +36,7 @@ public class ClimberIONeoVortex implements ClimberIO{
         // Configuration
         climberConfig = new SparkFlexConfig();
 
-        climberConfig.voltageCompensation(HAL.NOMINAL_VOLTAGE);
+        climberConfig.voltageCompensation(12.0);
         climberConfig.smartCurrentLimit(HAL.CLIMBER_CURRENT_LIMIT);
 
         climberConfig.encoder.positionConversionFactor((1/HAL.CLIMBER_GEARING) * Math.PI * 2);
@@ -45,13 +45,11 @@ public class ClimberIONeoVortex implements ClimberIO{
         climberConfig
             .signals
             .primaryEncoderPositionAlwaysOn(true)
-            .primaryEncoderPositionPeriodMs((int) (1000.0 / HAL.FREQUENCY))
+            .primaryEncoderPositionPeriodMs(10)
             .primaryEncoderVelocityAlwaysOn(true)
-            .primaryEncoderVelocityPeriodMs(20)
+            .primaryEncoderVelocityPeriodMs(10)
             .appliedOutputPeriodMs(20)
-            .busVoltagePeriodMs(20)
-            .outputCurrentPeriodMs(20
-        );
+            .outputCurrentPeriodMs(20);
         
         climberConfig.idleMode(IdleMode.kBrake);
         climberConfig.inverted(HAL.CLIMBER_INVERT);
@@ -74,12 +72,12 @@ public class ClimberIONeoVortex implements ClimberIO{
 
     @Override
     public void updateInputs(ClimberIOInputs inputs) {
-        climberEncoder.getPosition();
-        climberEncoder.getVelocity();
-        climberNeoMotor.getOutputCurrent();
+        inputs.climberPosition = climberEncoder.getPosition();
+
+        inputs.appliedVoltsClimber = climberNeoMotor.getAppliedOutput();
+        inputs.torqueCurrentClimber = climberNeoMotor.getOutputCurrent();
 
         inputs.tempClimber = climberNeoMotor.getMotorTemperature();
-        inputs.appliedVoltsClimber = climberNeoMotor.getAppliedOutput();
     }
 
     @Override
@@ -93,6 +91,6 @@ public class ClimberIONeoVortex implements ClimberIO{
     
     @Override
     public void stopMotors() {
-        climberNeoMotor.setVoltage(0);
+        climberNeoMotor.stopMotor();
     }
 }
