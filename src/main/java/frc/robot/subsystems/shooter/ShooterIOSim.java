@@ -95,8 +95,11 @@ public class ShooterIOSim implements ShooterIO {
 
     @Override
     public Boolean isStable() {
-        // TODO implement a stability check
-        return false;
+        // Match Kraken readiness behavior in sim so sequencing logic is testable.
+        double hoodErrorRad = Math.abs(hood.getAngularPositionRad() - hoodPosition);
+        double shooterErrorRadPerSec = Math.abs(shooter.getAngularVelocityRadPerSec() - shooterVelocity);
+        return hoodErrorRad <= ShooterConstants.Tuning.HOOD_STABLE_TOLERANCE_RAD
+            && shooterErrorRadPerSec <= ShooterConstants.Tuning.SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC;
     }
 
     @Override

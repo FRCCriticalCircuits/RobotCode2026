@@ -46,6 +46,9 @@ public class ShooterIOKraken implements ShooterIO{
         .withUpdateFreqHz(0.0);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0)
         .withUpdateFreqHz(0.0);
+    // Cached last commanded targets, used by isStable() feed gating.
+    private double hoodSetpointRad = 0.0;
+    private double shooterSetpointRadPerSec = 0.0;
 
     public ShooterIOKraken(){
         this.hoodMotor = new TalonFX(41, GlobalConstants.CARNIVORE);
@@ -79,9 +82,11 @@ public class ShooterIOKraken implements ShooterIO{
         this.shooterConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         this.shooterConfig.Feedback.RotorToSensorRatio = HAL.SHOOTER_GEARING;
 
-        /* Default Supply Limit: 70A(1.0s) -> 40A TODO */
-        this.hoodConfig.TorqueCurrent.PeakForwardTorqueCurrent = 30.0;
-        this.hoodConfig.TorqueCurrent.PeakReverseTorqueCurrent = -30.0;
+        // Pull torque limits from constants so real+sim tuning stays centralized.
+        this.hoodConfig.TorqueCurrent.PeakForwardTorqueCurrent =
+            ShooterConstants.Tuning.HOOD_PEAK_FORWARD_TORQUE_CURRENT;
+        this.hoodConfig.TorqueCurrent.PeakReverseTorqueCurrent =
+            ShooterConstants.Tuning.HOOD_PEAK_REVERSE_TORQUE_CURRENT;
 
         // Status Signals
         this.hoodPosition = hoodMotor.getPosition();
@@ -171,8 +176,10 @@ public class ShooterIOKraken implements ShooterIO{
     public Command runHood(DoubleSupplier positionRad) {
         return Commands.runOnce(
             () -> {
+                // Track target locally so readiness logic can compare measured error.
+                hoodSetpointRad = positionRad.getAsDouble();
                 hoodMotor.setControl(
-                    positionFOC.withPosition(positionRad.getAsDouble())
+                    positionFOC.withPosition(hoodSetpointRad)
                 );
             }
         ).withName("Shooter.runHoodPosition");
@@ -182,8 +189,10 @@ public class ShooterIOKraken implements ShooterIO{
     public Command runShooter(double velocity) {
         return Commands.runOnce(
             () -> {
+                // Track target locally so readiness logic can compare measured error.
+                shooterSetpointRadPerSec = velocity;
                 shooter.setControl(
-                    velocityVoltage.withVelocity(velocity)
+                    velocityVoltage.withVelocity(shooterSetpointRadPerSec)
                 );
             }
         ).withName("Shooter.runShooterVelocity");
@@ -191,8 +200,12 @@ public class ShooterIOKraken implements ShooterIO{
     
     @Override
     public Boolean isStable() {
-        // TODO implement a stability check
-        return false;
+        // Convert CTRE rotations to radians, then check against tunable tolerances.
+        double hoodErrorRad = Math.abs((hoodPosition.getValueAsDouble() * Math.PI * 2.0) - hoodSetpointRad);
+        double shooterErrorRadPerSec =
+            Math.abs((shooterVelocity.getValueAsDouble() * Math.PI * 2.0) - shooterSetpointRadPerSec);
+        return hoodErrorRad <= ShooterConstants.Tuning.HOOD_STABLE_TOLERANCE_RAD
+            && shooterErrorRadPerSec <= ShooterConstants.Tuning.SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC;
     }
 
     @Override
