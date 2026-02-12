@@ -23,11 +23,12 @@ public class ClimberIONeoVortex implements ClimberIO{
     @SuppressWarnings("unused")
     private double tempClimber = 0;
 
-    //Configuration
+    // Configuration
     private final SparkFlexConfig climberConfig;
+    @SuppressWarnings("unused")
     private PIDController climberPID;
     
-    //Control Requests
+    // Control Requests
     public ClimberIONeoVortex(){
         climberNeoMotor = new SparkFlex(63, MotorType.kBrushless);        
         climberEncoder = climberNeoMotor.getEncoder();
@@ -49,7 +50,8 @@ public class ClimberIONeoVortex implements ClimberIO{
             .primaryEncoderVelocityPeriodMs(20)
             .appliedOutputPeriodMs(20)
             .busVoltagePeriodMs(20)
-            .outputCurrentPeriodMs(20);
+            .outputCurrentPeriodMs(20
+        );
         
         climberConfig.idleMode(IdleMode.kBrake);
         climberConfig.inverted(HAL.CLIMBER_INVERT);
@@ -57,13 +59,13 @@ public class ClimberIONeoVortex implements ClimberIO{
         this.tempClimber = climberNeoMotor.getMotorTemperature();
         this.appliedVoltsClimber = climberNeoMotor.getAppliedOutput();
 
-        //PID
+        // PID
         climberPID = new PIDController(
             HAL.CLIMBER_PID_P,
             HAL.CLIMBER_PID_I,
-            HAL.CLIMBER_PID_D);
+            HAL.CLIMBER_PID_D
+        );
         
-        climberPID.enableContinuousInput(-Math.PI, Math.PI);
         // Encoder Position
         climberEncoder.setPosition(HAL.ENCODER_POSTION);
 
@@ -82,18 +84,13 @@ public class ClimberIONeoVortex implements ClimberIO{
 
     @Override
     public Command runClimber(double voltage) {
-        return Commands.runEnd(
+        return Commands.runOnce(
             () -> {
-                Commands.waitSeconds(5);
                 climberNeoMotor.setVoltage(voltage);
-            }
-            ,
-            () -> {
-                climberNeoMotor.setVoltage(-voltage);
             }
         );
     }
-
+    
     @Override
     public void stopMotors() {
         climberNeoMotor.setVoltage(0);
