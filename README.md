@@ -11,6 +11,9 @@ disable `detect indentation`
 enable `git: auto fetch`
 
 # Controls
+Create Joystick Axis Config with `./AxisConfigTool/AxisProfile.html`
+and save files to `./src/main/deploy/axis_configs`
+
 RT -> Swerve Velocity
 
 LT -> Intake Arm, Roller
