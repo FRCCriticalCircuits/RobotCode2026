@@ -13,7 +13,7 @@ public class GlobalConstants {
     public static final CANBus CARNIVORE = new CANBus("*");
 
     // Driver Preferences
-    public static final double VEL_CONTROL_BASE = 0.2;
-    public static final double DEADBAND_TRANSLATION = 0.15;
-    public static final double DEADBAND_ROTATION = 0.15;
+    // not tanh(x) just because upper part of it looks like tanh(x)
+    public static final String LEFT_AXIS_CONFIG = "tanh";
+    public static final String RIGHT_AXIS_CONFIG = "tanhRightAxis";
 }

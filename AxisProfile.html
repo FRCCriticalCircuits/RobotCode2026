@@ -25,10 +25,12 @@ canvas {
 }
 
 #panel {
-    width: 220px;
+    width: 260px;
     background: #1a1a1a;
     padding: 15px;
     border: 1px solid #444;
+    overflow-y: auto;
+    max-height: 600px;
 }
 
 input {
@@ -43,8 +45,25 @@ button {
     margin-bottom: 8px;
 }
 
-.selectedLabel {
-    color: #00ff88;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    border: 1px solid #444;
+    padding: 4px;
+    text-align: center;
+}
+
+tr:hover {
+    background: #333;
+    cursor: pointer;
+}
+
+.selectedRow {
+    background: #005f3f;
 }
 </style>
 </head>
@@ -54,9 +73,10 @@ button {
     <div>
         <canvas id="graph" width="600" height="400"></canvas>
         <br>
-        <button onclick="addPoint()">Add Point</button>
+        <input type="text" id="filenameInput" placeholder="Enter filename">
         <button onclick="exportJSON()">Export JSON</button>
         <input type="file" accept=".json" onchange="loadJSON(event)">
+        <button onclick="addPoint()">Add Point</button>
     </div>
 
     <div id="panel">
@@ -71,6 +91,18 @@ button {
 
         <button onclick="updatePoint()">Apply</button>
         <button onclick="deletePoint()">Delete</button>
+
+        <h3>All Points</h3>
+        <table id="pointsTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>X</th>
+                    <th>Y</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
 </div>
 
@@ -91,9 +123,8 @@ function sortPoints(){
 }
 
 function draw(){
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    // Grid
     ctx.strokeStyle="#333";
     for(let i=0;i<=10;i++){
         let x=i*canvas.width/10;
@@ -102,7 +133,6 @@ function draw(){
         ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke();
     }
 
-    // Curve
     ctx.strokeStyle="#00ff88";
     ctx.beginPath();
     for(let i=0;i<points.length;i++){
@@ -113,27 +143,46 @@ function draw(){
     }
     ctx.stroke();
 
-    // Points
     for(let p of points){
         let px=p.x/100*canvas.width;
         let py=canvas.height-(p.y/100*canvas.height);
 
         ctx.beginPath();
         ctx.arc(px,py,6,0,Math.PI*2);
-
-        if(p===selectedPoint){
-            ctx.fillStyle="#00ff88";
-        } else {
-            ctx.fillStyle="#ff5555";
-        }
-
+        ctx.fillStyle=(p===selectedPoint)?"#00ff88":"#ff5555";
         ctx.fill();
     }
+}
+
+function updateTable(){
+    const tbody=document.querySelector("#pointsTable tbody");
+    tbody.innerHTML="";
+
+    points.forEach((p,index)=>{
+        const row=document.createElement("tr");
+        if(p===selectedPoint) row.classList.add("selectedRow");
+
+        row.innerHTML=`
+            <td>${index}</td>
+            <td>${p.x.toFixed(2)}</td>
+            <td>${p.y.toFixed(2)}</td>
+        `;
+
+        row.onclick=()=>{
+            selectedPoint=p;
+            updatePanel();
+            draw();
+            updateTable();
+        };
+
+        tbody.appendChild(row);
+    });
 }
 
 function addPoint(){
     points.push({x:50,y:50});
     sortPoints();
+    updateTable();
     draw();
 }
 
@@ -149,6 +198,7 @@ canvas.addEventListener("mousedown", e=>{
             selectedPoint=p;
             draggingPoint=p;
             updatePanel();
+            updateTable();
             draw();
             return;
         }
@@ -156,6 +206,7 @@ canvas.addEventListener("mousedown", e=>{
 
     selectedPoint=null;
     updatePanel();
+    updateTable();
     draw();
 });
 
@@ -171,6 +222,7 @@ canvas.addEventListener("mousemove", e=>{
 
     sortPoints();
     updatePanel();
+    updateTable();
     draw();
 });
 
@@ -186,7 +238,7 @@ function updatePanel(){
     }
 
     document.getElementById("pointInfo").innerText=
-        `X: ${selectedPoint.x.toFixed(2)}\nY: ${selectedPoint.y.toFixed(2)}`;
+        `X: ${selectedPoint.x.toFixed(2)} | Y: ${selectedPoint.y.toFixed(2)}`;
 
     document.getElementById("xInput").value=selectedPoint.x.toFixed(2);
     document.getElementById("yInput").value=selectedPoint.y.toFixed(2);
@@ -197,37 +249,49 @@ function updatePoint(){
 
     let x=parseFloat(document.getElementById("xInput").value);
     let y=parseFloat(document.getElementById("yInput").value);
-
     if(isNaN(x)||isNaN(y)) return;
 
     selectedPoint.x=Math.max(0,Math.min(100,x));
     selectedPoint.y=Math.max(0,Math.min(100,y));
 
     sortPoints();
-    draw();
     updatePanel();
+    updateTable();
+    draw();
 }
 
 function deletePoint(){
     if(!selectedPoint) return;
-
     if(points.length<=2) return;
     if(selectedPoint===points[0]||selectedPoint===points[points.length-1]) return;
 
     points=points.filter(p=>p!==selectedPoint);
     selectedPoint=null;
     updatePanel();
+    updateTable();
     draw();
 }
 
+function sanitizeFilename(name){
+    return name.replace(/[^a-z0-9_\-]/gi,"");
+}
+
 function exportJSON(){
+    let userInput=document.getElementById("filenameInput").value.trim();
+    if(userInput==="") userInput="Default";
+
+    userInput=sanitizeFilename(userInput);
+    let finalName="AxisConfig_"+userInput+".json";
+
     const data={axisProfile:points};
     const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
     const url=URL.createObjectURL(blob);
+
     const a=document.createElement("a");
     a.href=url;
-    a.download="axis_profile.json";
+    a.download=finalName;
     a.click();
+
     URL.revokeObjectURL(url);
 }
 
@@ -244,6 +308,7 @@ function loadJSON(event){
                 sortPoints();
                 selectedPoint=null;
                 updatePanel();
+                updateTable();
                 draw();
             }
         }catch(err){
@@ -253,6 +318,7 @@ function loadJSON(event){
     reader.readAsText(file);
 }
 
+updateTable();
 draw();
 </script>
 

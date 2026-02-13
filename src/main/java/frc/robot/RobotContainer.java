@@ -26,6 +26,7 @@ import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.utils.AxisConfigLoader;
 
 public class RobotContainer {
     private final CommandXboxController driverController = new CommandXboxController(0);
@@ -44,7 +45,9 @@ public class RobotContainer {
         () -> -driverController.getLeftY(),
         () -> -driverController.getLeftX(),
         () -> -driverController.getRightX(),
-        () -> autoAim.getAsBoolean()
+        () -> autoAim.getAsBoolean(),
+        AxisConfigLoader.loadTable(GlobalConstants.LEFT_AXIS_CONFIG),
+        AxisConfigLoader.loadTable(GlobalConstants.RIGHT_AXIS_CONFIG)
     );
     //#endregion
     private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOSim();
