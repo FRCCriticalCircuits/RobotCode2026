@@ -19,7 +19,7 @@
     function draw() {
         ctx.clearRect(0,0,canvas.width,canvas.height);
 
-        // 绘制网格
+        // Draw Grids
         ctx.strokeStyle = "#333";
         for (let i = 0; i <= 10; i++) {
             let x = i * canvas.width / 10;
@@ -28,7 +28,7 @@
             ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke();
         }
 
-        // 绘制曲线
+        // Draw Lines
         ctx.strokeStyle = "#00ff88";
         ctx.beginPath();
         for (let i = 0; i < points.length; i++) {
@@ -39,7 +39,7 @@
         }
         ctx.stroke();
 
-        // 绘制控制点
+        // Draw Points
         for (let p of points) {
             let px = p.x / 100 * canvas.width;
             let py = canvas.height - (p.y / 100 * canvas.height);
@@ -246,7 +246,7 @@
         reader.readAsText(file);
     }
 
-    // 暴露给 HTML 按钮调用
+    // Expose to HTML File
     window.addPoint = addPoint;
     window.updatePoint = updatePoint;
     window.deletePoint = deletePoint;
@@ -254,7 +254,7 @@
     window.exportJSONWithSave = exportJSONWithSave;
     window.loadJSON = loadJSON;
 
-    // 初始化
+    // Init
     updateTable();
     draw();
 })();
