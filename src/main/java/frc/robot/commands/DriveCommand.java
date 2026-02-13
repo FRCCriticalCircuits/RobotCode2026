@@ -6,11 +6,11 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.utils.AxisMappingTable;
 
 public class DriveCommand extends Command{
     private final Drive drive;
@@ -19,8 +19,6 @@ public class DriveCommand extends Command{
     private final double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond);
     
     private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric()
-        .withDeadband(MaxSpeed)
-        .withRotationalDeadband(MaxAngularRate)
         .withDesaturateWheelSpeeds(true);
 
     private final SwerveRequest.ApplyFieldSpeeds customFieldCentric = new SwerveRequest.ApplyFieldSpeeds()
@@ -31,7 +29,7 @@ public class DriveCommand extends Command{
     private final Supplier<Double> velocityY;
     private final Supplier<Double> rotationalRate;
     private final Supplier<Boolean> aiming;
-    private final InterpolatingDoubleTreeMap leftAxisTable, rightAxisTable;
+    private final AxisMappingTable leftAxisTable, rightAxisTable;
 
     public DriveCommand(
         Drive drive,
@@ -39,8 +37,8 @@ public class DriveCommand extends Command{
         Supplier<Double> velocityY,
         Supplier<Double> rotationalRate,
         Supplier<Boolean> aiming,
-        InterpolatingDoubleTreeMap leftAxisTable,
-        InterpolatingDoubleTreeMap rightAxisTable
+        AxisMappingTable leftAxisTable,
+        AxisMappingTable rightAxisTable
     ){
         this.drive = drive;
 
@@ -69,11 +67,11 @@ public class DriveCommand extends Command{
             drive.setControl(
                 fieldCentric
                     .withVelocityX(
-                        leftAxisTable.get(velocityX.get() * MaxSpeed)
+                        leftAxisTable.get(velocityX.get()) * MaxSpeed
                     ).withVelocityY(
-                        leftAxisTable.get(velocityY.get() * MaxSpeed)
+                        leftAxisTable.get((velocityY.get())) * MaxSpeed
                     ).withRotationalRate(
-                        rightAxisTable.get(rotationalRate.get() * MaxAngularRate)
+                        rightAxisTable.get(rotationalRate.get()) * MaxAngularRate
                     )
             );
         }

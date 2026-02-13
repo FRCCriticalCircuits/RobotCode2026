@@ -3,7 +3,6 @@ package frc.robot.utils;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.Filesystem;
 
 import java.io.File;
@@ -11,12 +10,12 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class AxisConfigLoader {
-    private static final HashMap<String, InterpolatingDoubleTreeMap> map = new HashMap<>();
+    private static final HashMap<String, AxisMappingTable> map = new HashMap<>();
 
-    private static InterpolatingDoubleTreeMap loadFromFile(String configName) throws IOException {
+    private static AxisMappingTable loadFromFile(String configName) throws IOException {
         String path = "axis_configs/" + "AxisConfig_" + configName + ".json";
 
-        InterpolatingDoubleTreeMap tableBuffer = new InterpolatingDoubleTreeMap();
+        AxisMappingTable tableBuffer = new AxisMappingTable();
         
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new File(Filesystem.getDeployDirectory(), path));
@@ -37,7 +36,7 @@ public class AxisConfigLoader {
                     y = parser.getDoubleValue();
 
                     // Insert into interpolation table
-                    tableBuffer.put(x, y);
+                    tableBuffer.put(x / 100, y / 100);
                 }
             }
         }
@@ -48,7 +47,7 @@ public class AxisConfigLoader {
         return tableBuffer;
     }
     
-    public static InterpolatingDoubleTreeMap loadTable(String configName){
+    public static AxisMappingTable loadTable(String configName){
         if(map.get(configName) != null) return map.get(configName);
 
         try {
@@ -56,7 +55,13 @@ public class AxisConfigLoader {
         } catch (IOException e) {
             System.err.println("Failed to load axis config: " + configName);
             e.printStackTrace();
-            return null;
+
+            AxisMappingTable tempTable = new AxisMappingTable();
+            tempTable.put(0.0, 0.0);
+            tempTable.put(0.2, 0.0);
+            tempTable.put(1.0, 0.2);
+
+            return tempTable;
         }        
     }
 }
