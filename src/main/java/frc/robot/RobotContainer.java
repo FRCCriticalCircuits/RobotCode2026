@@ -33,7 +33,7 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
     private final SendableChooser<Boolean> rotationSysID = new SendableChooser<>();
 
-    //#region Swerve
+    // Swerve
     private final Drive drivetrain = TunerConstants.createDrivetrain();
     private final SwerveTelemetry swerveLogger = new SwerveTelemetry();     
     private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
@@ -49,11 +49,15 @@ public class RobotContainer {
         AxisConfigLoader.loadTable(GlobalConstants.LEFT_AXIS_CONFIG),
         AxisConfigLoader.loadTable(GlobalConstants.RIGHT_AXIS_CONFIG)
     );
-    //#endregion
+
+    // SuperStructure    
     private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOSim();
     private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOSim();
     private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : new HopperIOSim();
     private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO);
+
+    // Auto Aim Calculation
+    
 
     public RobotContainer() {
         drivetrain.registerTelemetry(swerveLogger::telemeterize);

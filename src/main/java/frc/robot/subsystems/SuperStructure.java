@@ -8,6 +8,7 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -23,6 +24,8 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOInputsAutoLogged;
 
 public class SuperStructure extends SubsystemBase{
+    public final Notifier notifier = new Notifier(this::run);
+
     public final ShooterIO shooterIO; 
     private final ShooterIOInputsAutoLogged shooterInputs = new ShooterIOInputsAutoLogged();
     private final Debouncer hoodConnectedDebouncer = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
@@ -50,10 +53,12 @@ public class SuperStructure extends SubsystemBase{
         armDisconnected = new Alert("arm motor disconnected!", Alert.AlertType.kWarning);
         rollerDisconnected = new Alert("roller motor disconnected!", Alert.AlertType.kWarning);
         hopperDisconnected = new Alert("hopper motor disconnected!", Alert.AlertType.kWarning);
+
+        notifier.startPeriodic(100);
+        notifier.setName("SuperStructure");
     }
 
-    @Override
-    public void periodic() {
+    public void run() {
         shooterIO.updateInputs(shooterInputs);
         intakeIO.updateInputs(intakeInputs);
         hopperIO.updateInputs(hopperInputs);
@@ -71,7 +76,6 @@ public class SuperStructure extends SubsystemBase{
         visualize();
     }
 
-    // TODO test to find actual values
     public Command runIntake(){
         return Commands.parallel(
             intakeIO.runArm(SuperStructureConstants.INTAKE_ARM_POS),
@@ -82,7 +86,6 @@ public class SuperStructure extends SubsystemBase{
         ).withName("SuperStructure.runIntake");
     }
 
-    // TODO test to find actual values & implement calculation later
     public Command runShooter(DoubleSupplier hoodPosition){
         return new ParallelCommandGroup(
             shooterIO.runShooter(SuperStructureConstants.SHOOT_FLYWHEEL_VEL),
