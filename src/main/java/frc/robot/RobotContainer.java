@@ -98,9 +98,7 @@ public class RobotContainer {
         }
         //#endregion
 
-        //#region Subsystem Commands
         drivetrain.setDefaultCommand(teleDrive);
-        //#endregion
 
         SmartDashboard.putData("Auto to Run", autoChooser);
         configureBindings();

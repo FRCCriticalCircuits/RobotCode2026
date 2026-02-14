@@ -76,8 +76,7 @@ public class AutoDrive extends Command {
 
     @Override
     public void execute() {
-        // getState() will not have GC issue, but it changes every loop
-        this.curPose2d = drive.getStateCopy().Pose;
+        this.curPose2d = drive.getState().Pose;
     
         this.targetRotation.position = targetPose2d.getRotation().getRadians();
         this.targetX.position = targetPose2d.getX();
