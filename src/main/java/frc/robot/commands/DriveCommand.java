@@ -8,7 +8,6 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.ChassisConstants;
@@ -19,14 +18,10 @@ public class DriveCommand extends Command{
     private final Drive drive;
 
     private final double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
-    private final double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond);
+    private final double MaxAngularRate = RotationsPerSecond.of(1).in(RadiansPerSecond);
     
     private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric()
         .withDesaturateWheelSpeeds(true);
-
-    private final SwerveRequest.ApplyFieldSpeeds customFieldCentric = new SwerveRequest.ApplyFieldSpeeds()
-            .withDesaturateWheelSpeeds(true);
-    private final ChassisSpeeds speeds = new ChassisSpeeds();
 
     private final Supplier<Double> velocityX;
     private final Supplier<Double> velocityY;
@@ -38,6 +33,7 @@ public class DriveCommand extends Command{
     private final PIDController rotationController;
 
     private SwerveDriveState state;
+    private double rotationSpeed;
 
     public DriveCommand(
         Drive drive,
@@ -82,27 +78,23 @@ public class DriveCommand extends Command{
     @Override
     public void execute() {
         if(aiming.get() == true){
-            speeds.vxMetersPerSecond = leftAxisTable.get(velocityX.get()) * MaxSpeed;
-            speeds.vyMetersPerSecond = leftAxisTable.get(velocityY.get()) * MaxSpeed;
-
-            speeds.omegaRadiansPerSecond = rotationController.calculate(
+            rotationSpeed = rotationController.calculate(
                 state.Pose.getRotation().getRadians(),
                 yawSupplier.get()
             );
-            
-            drive.setControl(customFieldCentric.withSpeeds(this.speeds));
         }else{
-            drive.setControl(
-                fieldCentric
-                    .withVelocityX(
-                        leftAxisTable.get(velocityX.get()) * MaxSpeed
-                    ).withVelocityY(
-                        leftAxisTable.get(velocityY.get()) * MaxSpeed
-                    ).withRotationalRate(
-                        rightAxisTable.get(rotationalRate.get()) * MaxAngularRate
-                    )
-            );
+            rotationSpeed = rightAxisTable.get(rotationalRate.get()) * MaxAngularRate;
         }
+        drive.setControl(
+            fieldCentric
+                .withVelocityX(
+                    leftAxisTable.get(velocityX.get()) * MaxSpeed
+                ).withVelocityY(
+                    leftAxisTable.get(velocityY.get()) * MaxSpeed
+                ).withRotationalRate(
+                    rotationSpeed
+                )
+        );
     }
 
     @Override

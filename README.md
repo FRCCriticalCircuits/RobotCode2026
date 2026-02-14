@@ -14,6 +14,10 @@ enable `git: auto fetch`
 Create Joystick Axis Config with `./AxisConfigTool/AxisProfile.html`
 and save files to `./src/main/deploy/axis_configs`
 
+# Pathplanner Autos
+Dot is the intake side
+Intake against the hub
+
 # CAN IDs
 
 Cancoder

@@ -8,8 +8,6 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.commands.AutoDrive;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.drive.Drive;
@@ -53,7 +50,7 @@ public class RobotContainer {
         () -> autoAim.getAsBoolean(),
         AxisConfigLoader.loadTable(GlobalConstants.LEFT_AXIS_CONFIG),
         AxisConfigLoader.loadTable(GlobalConstants.RIGHT_AXIS_CONFIG),
-        () -> calculationUtil.getAimParams(new Pose2d(0, 0, Rotation2d.fromDegrees(0))).getFirst()
+        () -> calculationUtil.getAimParams().getFirst()
     );
 
     // SuperStructure    
