@@ -8,7 +8,6 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.Alert;
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -24,7 +23,6 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOInputsAutoLogged;
 
 public class SuperStructure extends SubsystemBase{
-    public final Notifier notifier = new Notifier(this::run);
 
     public final ShooterIO shooterIO; 
     private final ShooterIOInputsAutoLogged shooterInputs = new ShooterIOInputsAutoLogged();
@@ -53,12 +51,10 @@ public class SuperStructure extends SubsystemBase{
         armDisconnected = new Alert("arm motor disconnected!", Alert.AlertType.kWarning);
         rollerDisconnected = new Alert("roller motor disconnected!", Alert.AlertType.kWarning);
         hopperDisconnected = new Alert("hopper motor disconnected!", Alert.AlertType.kWarning);
-
-        notifier.startPeriodic(100);
-        notifier.setName("SuperStructure");
     }
 
-    public void run() {
+    @Override
+    public void periodic() {
         shooterIO.updateInputs(shooterInputs);
         intakeIO.updateInputs(intakeInputs);
         hopperIO.updateInputs(hopperInputs);

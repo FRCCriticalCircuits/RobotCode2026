@@ -36,7 +36,7 @@ public class AxisConfigLoader {
                     y = parser.getDoubleValue();
 
                     // Insert into interpolation table
-                    tableBuffer.put(x / 100, y / 100);
+                    tableBuffer.put(x / 100.0, y / 100.0);
                 }
             }
         }

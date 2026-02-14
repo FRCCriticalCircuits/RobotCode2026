@@ -4,11 +4,14 @@ import static edu.wpi.first.units.Units.*;
 
 import java.util.function.Supplier;
 
+import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.drive.ChassisConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.utils.AxisMappingTable;
 
@@ -30,6 +33,11 @@ public class DriveCommand extends Command{
     private final Supplier<Double> rotationalRate;
     private final Supplier<Boolean> aiming;
     private final AxisMappingTable leftAxisTable, rightAxisTable;
+    private final Supplier<Double> yawSupplier;
+
+    private final PIDController rotationController;
+
+    private SwerveDriveState state;
 
     public DriveCommand(
         Drive drive,
@@ -38,7 +46,8 @@ public class DriveCommand extends Command{
         Supplier<Double> rotationalRate,
         Supplier<Boolean> aiming,
         AxisMappingTable leftAxisTable,
-        AxisMappingTable rightAxisTable
+        AxisMappingTable rightAxisTable,
+        Supplier<Double> yawSupplier
     ){
         this.drive = drive;
 
@@ -51,25 +60,44 @@ public class DriveCommand extends Command{
         this.leftAxisTable = leftAxisTable;
         this.rightAxisTable = rightAxisTable;
 
-        addRequirements(this.drive);
+        this.yawSupplier = yawSupplier;
+
+        rotationController = new PIDController(
+            ChassisConstants.ROTATION_PID_P,
+            0,
+            ChassisConstants.ROTATION_PID_D
+        );
+
+        rotationController.enableContinuousInput(0, Math.PI * 2);
+
+        addRequirements(drive);
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {
+        state = drive.getState();
+        // rotationController.reset(state.Pose.getRotation().getRadians(), state.Speeds.omegaRadiansPerSecond);        
+    }
 
     @Override
     public void execute() {
         if(aiming.get() == true){
-            drive.setControl(
-                customFieldCentric.withSpeeds(this.speeds)
+            speeds.vxMetersPerSecond = leftAxisTable.get(velocityX.get()) * MaxSpeed;
+            speeds.vyMetersPerSecond = leftAxisTable.get(velocityY.get()) * MaxSpeed;
+
+            speeds.omegaRadiansPerSecond = rotationController.calculate(
+                state.Pose.getRotation().getRadians(),
+                yawSupplier.get()
             );
+            
+            drive.setControl(customFieldCentric.withSpeeds(this.speeds));
         }else{
             drive.setControl(
                 fieldCentric
                     .withVelocityX(
                         leftAxisTable.get(velocityX.get()) * MaxSpeed
                     ).withVelocityY(
-                        leftAxisTable.get((velocityY.get())) * MaxSpeed
+                        leftAxisTable.get(velocityY.get()) * MaxSpeed
                     ).withRotationalRate(
                         rightAxisTable.get(rotationalRate.get()) * MaxAngularRate
                     )

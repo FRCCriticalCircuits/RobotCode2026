@@ -10,7 +10,7 @@ public class ChassisConstants {
     public class SIMULATION {
         private static final double TRANSLATION_PID_P = 5.0;
         private static final double TRANSLATION_PID_D = 0.0;
-        private static final double ROTATION_PID_P = 2.0;
+        private static final double ROTATION_PID_P = 5.0;
         private static final double ROTATION_PID_D = 0.0;
     }
 

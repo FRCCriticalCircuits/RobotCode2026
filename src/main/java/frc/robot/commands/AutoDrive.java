@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,7 +17,7 @@ public class AutoDrive extends Command {
     private final SwerveRequest.ApplyFieldSpeeds controlRequest = new SwerveRequest.ApplyFieldSpeeds()
         .withDesaturateWheelSpeeds(true);
 
-    private Pose2d curPose2d, targetPose2d;
+    private Pose2d targetPose2d;
 
     private final Pose2d tolorance = ChassisConstants.TOLORANCE_AUTO_DRIVE;
     private final ChassisSpeeds speeds = new ChassisSpeeds();
@@ -26,33 +27,40 @@ public class AutoDrive extends Command {
     private final State targetX = new State();
     private final State targetY = new State();
 
+    private final SwerveDriveState state;
+
     public AutoDrive(Drive drive){
         this.drive = drive;
+        this.state = drive.getState();
 
         rotationController = new ProfiledPIDController(
             ChassisConstants.ROTATION_PID_P,
             0,
             ChassisConstants.ROTATION_PID_D,
-            new Constraints(2, 0.1)
+            new Constraints(Math.PI * 2, Math.PI * 4)
         );
 
         xController = new ProfiledPIDController(
             ChassisConstants.TRANSLATION_PID_P,
             0,
             ChassisConstants.TRANSLATION_PID_D,
-            new Constraints(3, 1)
+            new Constraints(2, 3)
         );
 
         yController = new ProfiledPIDController(
             ChassisConstants.TRANSLATION_PID_P,
             0,
             ChassisConstants.TRANSLATION_PID_D,
-            new Constraints(3, 1)
+            new Constraints(2, 3)
         );
+
+        rotationController.enableContinuousInput(0, Math.PI * 2);
 
         this.targetRotation.velocity = 0;
         this.targetX.velocity = 0;
         this.targetY.velocity = 0;
+
+        addRequirements(drive);
     }
 
     public AutoDrive withTarget(Pose2d targetPose2d){
@@ -64,36 +72,29 @@ public class AutoDrive extends Command {
     public void initialize() {
         if(this.targetPose2d == null) this.cancel();
 
-        this.curPose2d = drive.getStateCopy().Pose;
-        ChassisSpeeds curChassisSpeeds = drive.getStateCopy().Speeds;
-
-        rotationController.reset(curPose2d.getRotation().getRadians(), curChassisSpeeds.omegaRadiansPerSecond);
-        xController.reset(curPose2d.getX(), curChassisSpeeds.vxMetersPerSecond);
-        yController.reset(curPose2d.getY(), curChassisSpeeds.vyMetersPerSecond);
-
-        addRequirements(drive);
+        rotationController.reset(state.Pose.getRotation().getRadians(), state.Speeds.omegaRadiansPerSecond);
+        xController.reset(state.Pose.getX(), state.Speeds.vxMetersPerSecond);
+        yController.reset(state.Pose.getY(), state.Speeds.vyMetersPerSecond);
     }
 
     @Override
     public void execute() {
-        this.curPose2d = drive.getState().Pose;
-    
         this.targetRotation.position = targetPose2d.getRotation().getRadians();
         this.targetX.position = targetPose2d.getX();
         this.targetY.position = targetPose2d.getY();
 
         speeds.vxMetersPerSecond = xController.calculate(
-            curPose2d.getX(),
+            state.Pose.getX(),
             targetX
         );
 
         speeds.vyMetersPerSecond = yController.calculate(
-            curPose2d.getY(),
+            state.Pose.getY(),
             targetY
         );
 
         speeds.omegaRadiansPerSecond = rotationController.calculate(
-            curPose2d.getRotation().getRadians(),
+            state.Pose.getRotation().getRadians(),
             targetRotation
         );
 
@@ -104,9 +105,9 @@ public class AutoDrive extends Command {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(curPose2d.getX() - targetPose2d.getX()) < tolorance.getX()
-        && Math.abs(curPose2d.getY() - targetPose2d.getY()) < tolorance.getY()
-        && Math.abs(curPose2d.getRotation().getRadians()) < tolorance.getRotation().getRadians();
+        return Math.abs(state.Pose.getX() - targetPose2d.getX()) < tolorance.getX()
+        && Math.abs(state.Pose.getY() - targetPose2d.getY()) < tolorance.getY()
+        && Math.abs(state.Pose.getRotation().getRadians()) < tolorance.getRotation().getRadians();
     }
 
     @Override
