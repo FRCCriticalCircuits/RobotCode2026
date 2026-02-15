@@ -9,7 +9,7 @@ import frc.robot.GlobalConstants.FIELD_CONSTANTS;
 import frc.robot.subsystems.drive.Drive;
 
 public class AutoAim {
-    private static final double shotTime = 0.0;
+    private static final double shotTime = 0.1;
     private final SwerveDriveState state;
 
     InterpolatingDoubleTreeMap hoodAngle = new InterpolatingDoubleTreeMap();
@@ -28,6 +28,7 @@ public class AutoAim {
     public Pair<Double, Double> getAimParams(){
         double tx, ty, cx, cy;
 
+        // Current Positions
         cx = state.Pose.getMeasureX().baseUnitMagnitude();
         cy = state.Pose.getMeasureY().baseUnitMagnitude();
 
@@ -55,14 +56,28 @@ public class AutoAim {
             }
         }
 
-        double dx = tx - cx - (shotTime * state.Speeds.vxMetersPerSecond);
-        double dy = ty - cy - (shotTime * state.Speeds.vyMetersPerSecond);
+        // Current ChassisSpeed
+        final double cos = state.Pose.getRotation().getCos();
+        final double sin = state.Pose.getRotation().getSin();
+
+        final double vx = state.Speeds.vxMetersPerSecond;
+        final double vy = state.Speeds.vyMetersPerSecond;
+
+        final double fieldVx = vx * cos - vy * sin;
+        double fieldVy = vx * sin + vy * cos;
+        // rotation Field-centric: state.Speeds.omegaRadiansPerSecond
+        
+        double dx = tx - cx - (shotTime * fieldVx);
+        double dy = ty - cy - (shotTime * fieldVy);
 
         double dist = fastSqrt(
             (float) (dx*dx + dy*dy)
         );
 
+        /* Visualization */
         // Logger.recordOutput("Visualization/AimTarget", new Translation2d(tx, ty));
+        // Logger.recordOutput("Visualization/FuturePose", new Pose2d(-dx + tx, -dy+ty, state.Pose.getRotation()));
+        // Logger.recordOutput("Visualization/Speeds", new ChassisSpeeds(fieldVx, fieldVy, state.Speeds.omegaRadiansPerSecond));
 
         return new Pair<>(Math.atan2(dy, dx), dist);
     }
