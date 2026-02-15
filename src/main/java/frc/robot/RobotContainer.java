@@ -122,9 +122,7 @@ public class RobotContainer {
 
         autoAim.whileTrue(
             upperParts.runShooter(
-                () -> {
-                    return 0.0;
-                }
+                () -> calculationUtil.getAimParams().getSecond()
             )
         );
 
