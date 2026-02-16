@@ -49,9 +49,9 @@ public class IntakeIOKraken implements IntakeIO{
         .withUpdateFreqHz(0.0);
 
     public IntakeIOKraken(){
-        this.armMotor = new TalonFX(61, GlobalConstants.CARNIVORE);
-        this.rollerMotor = new TalonFX(62, GlobalConstants.CARNIVORE);
-        this.secondaryArmMotor = new TalonFX(64, GlobalConstants.CARNIVORE);
+        this.armMotor = new TalonFX(30, GlobalConstants.CARNIVORE);
+        this.secondaryArmMotor = new TalonFX(31, GlobalConstants.CARNIVORE);
+        this.rollerMotor = new TalonFX(32, GlobalConstants.CARNIVORE);
 
         // Configuration
         this.armConfig = new TalonFXConfiguration();

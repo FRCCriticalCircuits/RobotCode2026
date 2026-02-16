@@ -19,7 +19,6 @@ Dot is the intake side
 Intake against the hub
 
 # CAN IDs
-
 Cancoder
 3, 6, 9, 12
 Drive
@@ -27,12 +26,15 @@ Drive
 Turn
 2, 5, 8, 11
 FL, FR, RL, RR
+Piegon: 20
 
-Piegon:
-
-Hopper: 60
 Intake:
-    Roller: 62
-    Arm: 61
-    Secondary Arm: 64
-Climber: 63
+    Arm: 30
+    Secondary Arm: 31
+    Roller: 32
+Shooter:
+    Hood: 40
+    Flywheel #1: 41
+    Flywheel #2: 42
+Hopper: 50
+Climber: 60

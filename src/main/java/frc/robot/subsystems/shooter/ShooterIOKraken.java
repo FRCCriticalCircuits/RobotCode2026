@@ -51,9 +51,9 @@ public class ShooterIOKraken implements ShooterIO{
     private double shooterSetpointRadPerSec = 0.0;
 
     public ShooterIOKraken(){
-        this.hoodMotor = new TalonFX(41, GlobalConstants.CARNIVORE);
-        this.shooter = new TalonFX(42, GlobalConstants.CARNIVORE);
-        this.secondaryShooter = new TalonFX(43, GlobalConstants.CARNIVORE);
+        this.hoodMotor = new TalonFX(40, GlobalConstants.CARNIVORE);
+        this.shooter = new TalonFX(41, GlobalConstants.CARNIVORE);
+        this.secondaryShooter = new TalonFX(42, GlobalConstants.CARNIVORE);
 
         // Configuration
         this.hoodConfig = new TalonFXConfiguration();

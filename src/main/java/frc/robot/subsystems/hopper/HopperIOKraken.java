@@ -37,7 +37,7 @@ public class HopperIOKraken implements HopperIO{
         .withUpdateFreqHz(0.0);
 
     public HopperIOKraken(){
-        this.hopperMotor = new TalonFX(60, GlobalConstants.CARNIVORE); //Need to set a new ID for hopper
+        this.hopperMotor = new TalonFX(50, GlobalConstants.CARNIVORE); //Need to set a new ID for hopper
 
         //Configuration
         this.hopperConfig = new TalonFXConfiguration();
