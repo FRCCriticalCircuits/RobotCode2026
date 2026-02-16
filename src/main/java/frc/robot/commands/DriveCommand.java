@@ -77,7 +77,7 @@ public class DriveCommand extends Command{
 
     @Override
     public void execute() {
-        if(aiming.get() == true){
+        if(aiming.get()){
             rotationSpeed = rotationController.calculate(
                 state.Pose.getRotation().getRadians(),
                 yawSupplier.get()

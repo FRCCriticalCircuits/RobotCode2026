@@ -56,12 +56,12 @@ public class AxisConfigLoader {
             System.err.println("Failed to load axis config: " + configName);
             e.printStackTrace();
 
-            AxisMappingTable tempTable = new AxisMappingTable();
-            tempTable.put(0.0, 0.0);
-            tempTable.put(0.2, 0.0);
-            tempTable.put(1.0, 0.2);
+            AxisMappingTable template = new AxisMappingTable();
+            template.put(0.0, 0.0);
+            template.put(0.2, 0.0);
+            template.put(1.0, 0.2);
 
-            return tempTable;
+            return template;
         }        
     }
 }

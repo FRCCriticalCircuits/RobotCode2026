@@ -23,7 +23,6 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOInputsAutoLogged;
 
 public class SuperStructure extends SubsystemBase{
-
     public final ShooterIO shooterIO; 
     private final ShooterIOInputsAutoLogged shooterInputs = new ShooterIOInputsAutoLogged();
     private final Debouncer hoodConnectedDebouncer = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
