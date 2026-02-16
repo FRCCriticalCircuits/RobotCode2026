@@ -1,10 +1,10 @@
 {
   "hubs": [
     {
-      "x": 368,
-      "y": 232,
-      "width": 1106,
-      "height": 656,
+      "x": -7,
+      "y": -7,
+      "width": 1454,
+      "height": 866,
       "state": {
         "sidebar": {
           "width": 300,
@@ -14,7 +14,8 @@
             "/AdvantageKit/RealOutputs/Swerve",
             "/AdvantageKit/ShooterIO",
             "/AdvantageKit/IntakeIO",
-            "/AdvantageKit/RealOutputs/Visualization"
+            "/AdvantageKit/RealOutputs/Visualization",
+            "/AdvantageKit/RealOutputs/Swerve/OdometryPose/translation"
           ]
         },
         "tabs": {
@@ -43,6 +44,16 @@
                     }
                   },
                   {
+                    "type": "vision",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Visualization/CurrentHeading",
+                    "logType": "Pose2d",
+                    "visible": true,
+                    "options": {
+                      "color": "#ff0000",
+                      "size": "normal"
+                    }
+                  },
+                  {
                     "type": "component",
                     "logKey": "NT:/AdvantageKit/RealOutputs/Visualization/Intake",
                     "logType": "Pose3d",
@@ -55,6 +66,49 @@
                     "logType": "Pose3d",
                     "visible": true,
                     "options": {}
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Visualization/FuturePose",
+                    "logType": "Pose2d",
+                    "visible": true,
+                    "options": {
+                      "model": "RustHOUNDS",
+                      "color": "#00ff00"
+                    }
+                  },
+                  {
+                    "type": "vision",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Visualization/FutureHeading",
+                    "logType": "Pose2d",
+                    "visible": true,
+                    "options": {
+                      "color": "#00ff00",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "component",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Visualization/Intake",
+                    "logType": "Pose3d",
+                    "visible": true,
+                    "options": {}
+                  },
+                  {
+                    "type": "component",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Visualization/Hood",
+                    "logType": "Pose3d",
+                    "visible": true,
+                    "options": {}
+                  },
+                  {
+                    "type": "robot",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Visualization/AimTarget",
+                    "logType": "Pose2d",
+                    "visible": true,
+                    "options": {
+                      "model": "2026 KitBot"
+                    }
                   }
                 ],
                 "game": "FRC:2026 Field"
@@ -64,17 +118,17 @@
                 "cameraIndex": -1,
                 "orbitFov": 50,
                 "cameraPosition": [
-                  -9.261623867438935,
-                  2.2214810110964898,
-                  6.509828178055285
+                  -3.00223334611143,
+                  8.439295391520268,
+                  -2.5376280967777327
                 ],
                 "cameraTarget": [
-                  -5.547584104795793,
-                  -2.6234249624365518,
-                  -1.6793541017218772
+                  -2.423685179812535,
+                  -2.056186509180078,
+                  0.044977056448679796
                 ]
               },
-              "controlsHeight": 200
+              "controlsHeight": 319
             },
             {
               "type": 1,
@@ -221,41 +275,6 @@
                 "rightFilter": 0
               },
               "controllerUUID": "fjv0z8xreealchedrbbmiox8e6rkuceh",
-              "renderer": null,
-              "controlsHeight": 200
-            },
-            {
-              "type": 9,
-              "title": "Swerve",
-              "controller": {
-                "sources": [
-                  {
-                    "type": "states",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Swerve/TargetModuleStates",
-                    "logType": "SwerveModuleState[]",
-                    "visible": true,
-                    "options": {
-                      "color": "#ff0000",
-                      "arrangement": "0,1,2,3"
-                    }
-                  },
-                  {
-                    "type": "states",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Swerve/CurrentModuleStates",
-                    "logType": "SwerveModuleState[]",
-                    "visible": true,
-                    "options": {
-                      "color": "#0000ff",
-                      "arrangement": "0,1,2,3"
-                    }
-                  }
-                ],
-                "maxSpeed": 5,
-                "sizeX": 0.65,
-                "sizeY": 0.65,
-                "orientation": 1
-              },
-              "controllerUUID": "oc0dwlgm0kvyrro4llj87c8cpxz4l0di",
               "renderer": null,
               "controlsHeight": 200
             }
