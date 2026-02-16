@@ -1,10 +1,11 @@
 package frc.robot.utils;
 
+import java.nio.BufferOverflowException;
+
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 
-import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -26,6 +27,9 @@ public class AutoAim {
 
     public AutoAim(Drive drive){
         this.state = drive.getState();
+
+        hoodAngle.put(0.0, Math.toRadians(90));
+        hoodAngle.put(10.0, Math.toRadians(0));
     }
 
     private double fastSqrt(float number) {
@@ -35,7 +39,13 @@ public class AutoAim {
         return y;
     }
 
-    public Pair<Double, Double> getAimParams(){
+    public class ShootingParams{
+        public double yaw = 0;
+        public double yaw_ff = 0;
+        public double pitch = 0;
+    }
+
+    public ShootingParams getAimParams(){
         double tx, ty, cx, cy;
 
         // Current Positions
@@ -68,10 +78,13 @@ public class AutoAim {
 
         // Current ChassisSpeed
         ChassisSpeeds fieldSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(state.Speeds, state.Pose.getRotation());
-        // rotation Field-centric: state.Speeds.omegaRadiansPerSecond
         
         double dx = tx - cx - (shotTime * fieldSpeeds.vxMetersPerSecond);
         double dy = ty - cy - (shotTime * fieldSpeeds.vyMetersPerSecond);
+
+        // derivative of atan2
+        double r_square = dx*dx + dy*dy;
+        double rotationFF = (dx * fieldSpeeds.vyMetersPerSecond - dy * fieldSpeeds.vxMetersPerSecond) / r_square; 
 
         double dist = fastSqrt(
             (float) (dx*dx + dy*dy)
@@ -81,12 +94,22 @@ public class AutoAim {
         if(!GlobalConstants.COMP){
             Pose2d futurPose2d = new Pose2d(-dx + tx, -dy + ty, Rotation2d.fromRadians(Math.atan2(dy, dx)));
 
-            Logger.recordOutput("Visualization/AimTarget", new Translation2d(tx, ty));
-            Logger.recordOutput("Visualization/FuturePose", futurPose2d);
-            Logger.recordOutput("Visualization/FutureHeading", futurPose2d.plus(heading));
-            Logger.recordOutput("Visualization/Speeds", fieldSpeeds);
+            try {
+                Logger.recordOutput("Visualization/AimTarget", new Pose2d(tx, ty, Rotation2d.kZero));
+                Logger.recordOutput("Visualization/CurrentHeading", state.Pose.plus(heading));
+                Logger.recordOutput("Visualization/FuturePose", futurPose2d);
+                Logger.recordOutput("Visualization/FutureHeading", futurPose2d.plus(heading));
+            } catch (BufferOverflowException e) {
+                // just ignore it
+                System.out.print("Buffer Overflow @ AutoAim.java Logging");
+            }
         }
+
+        final var ret = new ShootingParams();
+        ret.yaw = Math.atan2(dy, dx);
+        ret.yaw_ff = rotationFF;
+        ret.pitch = hoodAngle.get(dist);
         
-        return new Pair<>(Math.atan2(dy, dx), dist);
+        return ret;
     }
 }

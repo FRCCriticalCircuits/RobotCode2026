@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.ChassisConstants;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.utils.AutoAim.ShootingParams;
 import frc.robot.utils.AxisMappingTable;
 
 public class DriveCommand extends Command{
@@ -28,7 +29,7 @@ public class DriveCommand extends Command{
     private final Supplier<Double> rotationalRate;
     private final Supplier<Boolean> aiming;
     private final AxisMappingTable leftAxisTable, rightAxisTable;
-    private final Supplier<Double> yawSupplier;
+    private final Supplier<ShootingParams> yawSupplier;
 
     private final PIDController rotationController;
 
@@ -43,7 +44,7 @@ public class DriveCommand extends Command{
         Supplier<Boolean> aiming,
         AxisMappingTable leftAxisTable,
         AxisMappingTable rightAxisTable,
-        Supplier<Double> yawSupplier
+        Supplier<ShootingParams> yawSupplier
     ){
         this.drive = drive;
 
@@ -78,9 +79,9 @@ public class DriveCommand extends Command{
     @Override
     public void execute() {
         if(aiming.get()){
-            rotationSpeed = rotationController.calculate(
+            rotationSpeed = yawSupplier.get().yaw_ff + rotationController.calculate(
                 state.Pose.getRotation().getRadians(),
-                yawSupplier.get()
+                yawSupplier.get().yaw
             );
         }else{
             rotationSpeed = rightAxisTable.get(rotationalRate.get()) * MaxAngularRate;

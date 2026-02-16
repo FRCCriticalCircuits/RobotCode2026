@@ -50,7 +50,7 @@ public class RobotContainer {
         () -> autoAim.getAsBoolean(),
         AxisConfigLoader.loadTable(GlobalConstants.LEFT_AXIS_CONFIG),
         AxisConfigLoader.loadTable(GlobalConstants.RIGHT_AXIS_CONFIG),
-        () -> calculationUtil.getAimParams().getFirst()
+        () -> calculationUtil.getAimParams()
     );
 
     // SuperStructure    
@@ -122,7 +122,7 @@ public class RobotContainer {
 
         autoAim.whileTrue(
             upperParts.runShooter(
-                () -> calculationUtil.getAimParams().getSecond()
+                () -> calculationUtil.getAimParams().pitch
             )
         );
 

@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.nio.BufferOverflowException;
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
@@ -69,7 +70,14 @@ public class SuperStructure extends SubsystemBase{
         rollerDisconnected.set(!rollerConnectedDebouncer.calculate(intakeInputs.rollerConnected));
         hopperDisconnected.set(!hopperConnectedDebouncer.calculate(hopperInputs.hopperConnected));
 
-        if(!GlobalConstants.COMP) visualize();
+        if(!GlobalConstants.COMP) {
+            try {
+                visualize();
+            } catch (BufferOverflowException e) {
+                // just ignore it
+                System.out.print("Buffer Overflow @ SuperStructure.java Logging");
+            }
+        }
     }
 
     public Command runIntake(){
