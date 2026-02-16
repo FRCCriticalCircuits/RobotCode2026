@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.GlobalConstants;
 import frc.robot.subsystems.hopper.HopperIO;
 import frc.robot.subsystems.hopper.HopperIOInputsAutoLogged;
 import frc.robot.subsystems.intake.IntakeConstants;
@@ -68,7 +69,7 @@ public class SuperStructure extends SubsystemBase{
         rollerDisconnected.set(!rollerConnectedDebouncer.calculate(intakeInputs.rollerConnected));
         hopperDisconnected.set(!hopperConnectedDebouncer.calculate(hopperInputs.hopperConnected));
 
-        visualize();
+        if(!GlobalConstants.COMP) visualize();
     }
 
     public Command runIntake(){

@@ -1,9 +1,17 @@
 package frc.robot.utils;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import frc.robot.GlobalConstants;
 import frc.robot.GlobalVars;
 import frc.robot.GlobalConstants.FIELD_CONSTANTS;
 import frc.robot.subsystems.drive.Drive;
@@ -13,6 +21,8 @@ public class AutoAim {
     private final SwerveDriveState state;
 
     InterpolatingDoubleTreeMap hoodAngle = new InterpolatingDoubleTreeMap();
+
+    private final Transform2d heading = new Transform2d(new Translation2d(5, 0), Rotation2d.kZero);
 
     public AutoAim(Drive drive){
         this.state = drive.getState();
@@ -57,28 +67,26 @@ public class AutoAim {
         }
 
         // Current ChassisSpeed
-        final double cos = state.Pose.getRotation().getCos();
-        final double sin = state.Pose.getRotation().getSin();
-
-        final double vx = state.Speeds.vxMetersPerSecond;
-        final double vy = state.Speeds.vyMetersPerSecond;
-
-        final double fieldVx = vx * cos - vy * sin;
-        double fieldVy = vx * sin + vy * cos;
+        ChassisSpeeds fieldSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(state.Speeds, state.Pose.getRotation());
         // rotation Field-centric: state.Speeds.omegaRadiansPerSecond
         
-        double dx = tx - cx - (shotTime * fieldVx);
-        double dy = ty - cy - (shotTime * fieldVy);
+        double dx = tx - cx - (shotTime * fieldSpeeds.vxMetersPerSecond);
+        double dy = ty - cy - (shotTime * fieldSpeeds.vyMetersPerSecond);
 
         double dist = fastSqrt(
             (float) (dx*dx + dy*dy)
         );
 
         /* Visualization */
-        // Logger.recordOutput("Visualization/AimTarget", new Translation2d(tx, ty));
-        // Logger.recordOutput("Visualization/FuturePose", new Pose2d(-dx + tx, -dy+ty, state.Pose.getRotation()));
-        // Logger.recordOutput("Visualization/Speeds", new ChassisSpeeds(fieldVx, fieldVy, state.Speeds.omegaRadiansPerSecond));
+        if(!GlobalConstants.COMP){
+            Pose2d futurPose2d = new Pose2d(-dx + tx, -dy + ty, Rotation2d.fromRadians(Math.atan2(dy, dx)));
 
+            Logger.recordOutput("Visualization/AimTarget", new Translation2d(tx, ty));
+            Logger.recordOutput("Visualization/FuturePose", futurPose2d);
+            Logger.recordOutput("Visualization/FutureHeading", futurPose2d.plus(heading));
+            Logger.recordOutput("Visualization/Speeds", fieldSpeeds);
+        }
+        
         return new Pair<>(Math.atan2(dy, dx), dist);
     }
 }
