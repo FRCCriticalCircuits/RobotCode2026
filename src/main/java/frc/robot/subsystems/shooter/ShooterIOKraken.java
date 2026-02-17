@@ -174,7 +174,7 @@ public class ShooterIOKraken implements ShooterIO{
 
     @Override
     public Command runHood(DoubleSupplier positionRad) {
-        return Commands.runOnce(
+        return Commands.run(
             () -> {
                 // Track target locally so readiness logic can compare measured error.
                 hoodSetpointRad = positionRad.getAsDouble();
@@ -187,7 +187,7 @@ public class ShooterIOKraken implements ShooterIO{
 
     @Override
     public Command runShooter(double velocity) {
-        return Commands.runOnce(
+        return Commands.run(
             () -> {
                 // Track target locally so readiness logic can compare measured error.
                 shooterSetpointRadPerSec = velocity;

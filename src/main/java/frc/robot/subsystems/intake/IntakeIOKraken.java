@@ -171,7 +171,7 @@ public class IntakeIOKraken implements IntakeIO{
 
     @Override
     public Command runArm(double positionRad){
-        return Commands.runOnce(
+        return Commands.run(
             () -> {
                 armMotor.setControl(
                     armPostionFOC.withPosition(positionRad)
@@ -182,7 +182,7 @@ public class IntakeIOKraken implements IntakeIO{
 
     @Override
     public Command runRoller(double velocity) {
-        return Commands.runOnce(
+        return Commands.run(
             () -> {
                 rollerMotor.setControl(
                     rollerVelocityVoltage.withVelocity(velocity)  

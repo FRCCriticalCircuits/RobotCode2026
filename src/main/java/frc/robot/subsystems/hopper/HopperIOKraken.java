@@ -95,7 +95,7 @@ public class HopperIOKraken implements HopperIO{
 
     @Override
     public Command runHopper(double velocity){
-        return Commands.runOnce(
+        return Commands.run(
             () -> {
                 hopperMotor.setControl(
                     velocityVoltage.withVelocity(velocity)

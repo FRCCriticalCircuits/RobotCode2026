@@ -73,7 +73,7 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public Command runArm(double positionRad) {
-        return Commands.runOnce(
+        return Commands.run(
             () -> {
                 this.motorStopped = false;
                 this.armPosition = positionRad;
@@ -83,7 +83,7 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public Command runRoller(double velocity) {
-        return Commands.runOnce(
+        return Commands.run(
             () -> {
                 this.motorStopped = false;
                 this.rollerVelocity = velocity;

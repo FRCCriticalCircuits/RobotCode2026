@@ -34,7 +34,7 @@ public class HopperIOSim implements HopperIO{
 
     @Override
     public Command runHopper(double velocity) {
-        return Commands.runOnce(
+        return Commands.run(
             () -> {
                 hopper.setInputVoltage(
                     MathUtil.clamp(
