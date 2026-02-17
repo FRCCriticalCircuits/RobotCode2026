@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
+import frc.robot.GlobalVars;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -276,6 +276,8 @@ public class Drive extends TunerSwerveDrivetrain implements Subsystem {
                         ? Rotation2d.k180deg // RED
                         : Rotation2d.kZero
                 );
+
+                GlobalVars.BLUE_ALLIANCE = (allianceColor == Alliance.Blue);
                 m_hasAppliedOperatorPerspective = true;
             });
         }

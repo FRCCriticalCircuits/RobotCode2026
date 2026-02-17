@@ -74,7 +74,6 @@ public class SuperStructure extends SubsystemBase{
             try {
                 visualize();
             } catch (BufferOverflowException e) {
-                // just ignore it
                 System.out.print("Buffer Overflow @ SuperStructure.java Logging");
             }
         }

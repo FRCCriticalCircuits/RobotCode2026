@@ -11,8 +11,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.ctre.phoenix6.SignalLogger;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -52,9 +50,6 @@ public class Robot extends LoggedRobot {
 
         if(GlobalConstants.SYS_ID) SignalLogger.start();
         Logger.start();
-
-        var alliance = DriverStation.getAlliance();
-        if(alliance.isPresent()) GlobalVars.BLUE_ALLIANCE = (alliance.get() == Alliance.Blue);
     }
 
     @Override

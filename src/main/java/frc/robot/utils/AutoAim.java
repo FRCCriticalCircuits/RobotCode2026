@@ -100,7 +100,6 @@ public class AutoAim {
                 Logger.recordOutput("Visualization/FuturePose", futurPose2d);
                 Logger.recordOutput("Visualization/FutureHeading", futurPose2d.plus(heading));
             } catch (BufferOverflowException e) {
-                // just ignore it
                 System.out.print("Buffer Overflow @ AutoAim.java Logging");
             }
         }

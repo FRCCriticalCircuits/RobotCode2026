@@ -22,7 +22,6 @@ public class SwerveTelemetry {
             Logger.recordOutput("Swerve/CurrentModuleStates", state.ModuleStates);
             Logger.recordOutput("Swerve/TargetModuleStates", state.ModuleTargets);
         } catch (BufferOverflowException e) {
-            // just ignore it
             System.out.print("Buffer Overflow @ SwerveTelemetry.java Logging");
         }
     }
