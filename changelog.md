@@ -8,4 +8,3 @@ date - post `commit ID (short version)`
 (+ SIM) -> Tested in simulation
 
 # Todo
-change CAN ID of gyro to 20
