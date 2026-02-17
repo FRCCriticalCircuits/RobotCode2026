@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.GlobalConstants;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOInputsAutoLogged;
 import frc.robot.subsystems.hopper.HopperIO;
 import frc.robot.subsystems.hopper.HopperIOInputsAutoLogged;
 import frc.robot.subsystems.intake.IntakeConstants;
@@ -42,16 +44,23 @@ public class SuperStructure extends SubsystemBase{
     private final Debouncer hopperConnectedDebouncer = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
     private final Alert hopperDisconnected;
 
-    public SuperStructure(ShooterIO shooterIO, IntakeIO intakeIO, HopperIO hopperIO){
+    public final ClimberIO climberIO;
+    private final ClimberIOInputsAutoLogged climberInputs = new ClimberIOInputsAutoLogged();
+    private final Debouncer climberConnnectedDebouncer = new Debouncer(0.5,Debouncer.DebounceType.kFalling);
+    private final Alert climberDisconnected;
+
+    public SuperStructure(ShooterIO shooterIO, IntakeIO intakeIO, HopperIO hopperIO, ClimberIO climberIO){
         this.shooterIO = shooterIO;
         this.intakeIO = intakeIO;
         this.hopperIO = hopperIO;
+        this.climberIO = climberIO;
 
         hoodDisconnected = new Alert("hood motor disconnected!", Alert.AlertType.kWarning);
         shooterDisconnected = new Alert("shooter motor disconnected!", Alert.AlertType.kWarning);
         armDisconnected = new Alert("arm motor disconnected!", Alert.AlertType.kWarning);
         rollerDisconnected = new Alert("roller motor disconnected!", Alert.AlertType.kWarning);
         hopperDisconnected = new Alert("hopper motor disconnected!", Alert.AlertType.kWarning);
+        climberDisconnected = new Alert("climber motor disconnected!", Alert.AlertType.kWarning);
     }
 
     @Override
@@ -59,16 +68,19 @@ public class SuperStructure extends SubsystemBase{
         shooterIO.updateInputs(shooterInputs);
         intakeIO.updateInputs(intakeInputs);
         hopperIO.updateInputs(hopperInputs);
+        climberIO.updateInputs(climberInputs);
 
         Logger.processInputs("ShooterIO", shooterInputs);
         Logger.processInputs("IntakeIO", intakeInputs);
         Logger.processInputs("HopperIO", hopperInputs);
+        Logger.processInputs("ClimberIO", climberInputs);
         
         hoodDisconnected.set(!hoodConnectedDebouncer.calculate(shooterInputs.hoodConnected));
         shooterDisconnected.set(!shooterConnectedDebouncer.calculate(shooterInputs.shooterConnected));
         armDisconnected.set(!armConnectedDebouncer.calculate(intakeInputs.armConnected));
         rollerDisconnected.set(!rollerConnectedDebouncer.calculate(intakeInputs.rollerConnected));
         hopperDisconnected.set(!hopperConnectedDebouncer.calculate(hopperInputs.hopperConnected));
+        climberDisconnected.set(!climberConnnectedDebouncer.calculate(climberInputs.climberConnected));
 
         if(!GlobalConstants.COMP) {
             try {
@@ -99,6 +111,13 @@ public class SuperStructure extends SubsystemBase{
                 hopperIO.stopMotors();
             }
         ).withName("SuperStructure.runShooter");
+    }
+
+    public Command runClimber(){
+        return Commands.sequence(
+            climberIO.runClimber(6), // TODO
+            Commands.waitSeconds(2).andThen(climberIO.runClimber(-6)) // TODO
+        ).withName("SuperStructure.runClimber");
     }
 
     private void visualize(){

@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.SuperStructure;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.SwerveTelemetry;
@@ -57,7 +59,8 @@ public class RobotContainer {
     private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOSim();
     private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOSim();
     private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : new HopperIOSim();
-    private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO);
+    private final ClimberIO climberIO = Utils.isSimulation() ? new ClimberIOSim() : new ClimberIOSim();
+    private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO, climberIO);
 
     // Auto Aim Calculation
     
@@ -118,6 +121,10 @@ public class RobotContainer {
 
         driverController.leftTrigger(0.15).whileTrue(
             upperParts.runIntake()
+        );
+
+        driverController.b().onTrue(
+            upperParts.runClimber() 
         );
 
         autoAim.whileTrue(

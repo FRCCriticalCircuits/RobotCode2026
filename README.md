@@ -26,7 +26,7 @@ Drive
 Turn
 2, 5, 8, 11
 FL, FR, RL, RR
-Piegon: 20
+Pigeon: 20
 
 Intake:
     Arm: 30
