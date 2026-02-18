@@ -123,8 +123,12 @@ public class RobotContainer {
             upperParts.runIntake()
         );
 
-        driverController.b().onTrue(
-            upperParts.runClimber() 
+        driverController.b().whileTrue(
+            upperParts.openClimber() 
+        );
+
+        driverController.a().whileTrue(
+            upperParts.closeClimber()
         );
 
         autoAim.whileTrue(

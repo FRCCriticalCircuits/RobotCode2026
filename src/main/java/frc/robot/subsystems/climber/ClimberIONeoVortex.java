@@ -82,7 +82,7 @@ public class ClimberIONeoVortex implements ClimberIO{
 
     @Override
     public Command runClimber(double voltage) {
-        return Commands.runOnce(
+        return Commands.run(
             () -> {
                 climberNeoMotor.setVoltage(voltage);
             }

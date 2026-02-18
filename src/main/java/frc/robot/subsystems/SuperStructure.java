@@ -113,13 +113,31 @@ public class SuperStructure extends SubsystemBase{
         ).withName("SuperStructure.runShooter");
     }
 
-    public Command runClimber(){
-        return Commands.sequence(
-            climberIO.runClimber(6), // TODO
-            Commands.waitSeconds(2).andThen(climberIO.runClimber(-6)) // TODO
-        ).withName("SuperStructure.runClimber");
+    public Command openClimber(){
+        return Commands.run(
+            () -> {
+                climberIO.runClimber(6); // TODO
+            }
+        ).finallyDo(
+            () -> {
+                climberIO.stopMotors();
+            }
+        ).withName("SuperStructure.openClimber");
     }
 
+    public Command closeClimber(){
+        return Commands.run(
+            () -> {
+                climberIO.runClimber(-6); // TODO
+            }
+        ).finallyDo(
+            () -> {
+                climberIO.stopMotors();
+            }
+        ).withName("SuperStructure.closeClimber");
+    }
+
+    
     private void visualize(){
         Logger.recordOutput("Visualization/Hood", 
             new Pose3d(
