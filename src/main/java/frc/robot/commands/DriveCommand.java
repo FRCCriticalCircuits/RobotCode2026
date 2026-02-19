@@ -60,9 +60,9 @@ public class DriveCommand extends Command{
         this.yawSupplier = yawSupplier;
 
         rotationController = new PIDController(
-            ChassisConstants.ROTATION_PID_P,
+            ChassisConstants.AUTOAIM_ROTATION_PID_P,
             0,
-            ChassisConstants.ROTATION_PID_D
+            ChassisConstants.AUTOAIM_ROTATION_PID_D
         );
 
         rotationController.enableContinuousInput(0, Math.PI * 2);

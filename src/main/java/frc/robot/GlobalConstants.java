@@ -5,7 +5,11 @@ import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.math.geometry.Translation2d;
 
 public class GlobalConstants {
-    // Comp
+    /*
+     * COMPETITION MODE:
+     * Visualization for subsytems including autoaim
+     * Only load autos with prefix "comp_"
+     */
     public static final Boolean COMP = false;
     
     // System Identification
@@ -15,10 +19,11 @@ public class GlobalConstants {
     public static final CANBus CARNIVORE = new CANBus("*");
 
     // Driver Preferences
-    // it's not tanh(x) just because 
-    // upper part of it looks like tanh(x)
-    public static final String LEFT_AXIS_CONFIG = "tanh";
-    public static final String RIGHT_AXIS_CONFIG = "tanhRightAxis";
+    // public static final String LEFT_AXIS_CONFIG = "tanh";
+    // public static final String RIGHT_AXIS_CONFIG = "tanhRightAxis";
+    // TODO drivetest
+    public static final String LEFT_AXIS_CONFIG = "kidsMode";
+    public static final String RIGHT_AXIS_CONFIG = "kidsMode";
 
     public class FIELD_CONSTANTS {
         public static final double FIELD_WIDTH = 8.07;

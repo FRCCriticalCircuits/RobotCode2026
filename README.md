@@ -15,7 +15,7 @@ Create Joystick Axis Config with `./AxisConfigTool/AxisProfile.html`
 and save files to `./src/main/deploy/axis_configs`
 
 # Pathplanner Autos
-Dot is the intake side
+The Dot(Heading) is the intake side
 Intake against the hub
 
 # CAN IDs
@@ -38,3 +38,6 @@ Shooter:
     Flywheel #2: 42
 Hopper: 50
 Climber: 60
+
+# 2026/2/19 - 2/21 drive tests
+"// TODO drivetest", changes will be revert later
