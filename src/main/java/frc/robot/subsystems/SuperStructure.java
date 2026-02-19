@@ -114,19 +114,19 @@ public class SuperStructure extends SubsystemBase{
     }
 
     public Command openClimber(){
-        return climberIO.runClimber(6).finallyDo(
+        return climberIO.runClimber(SuperStructureConstants.CLIMBER_FORWARD).finallyDo(
             () -> {
                 climberIO.stopMotors();
             }
-        ).withName("SuperStructure.openClimber"); // TODO
+        ).withName("SuperStructure.openClimber");
     }
 
     public Command closeClimber(){
-        return climberIO.runClimber(-6).finallyDo(
+        return climberIO.runClimber(SuperStructureConstants.CLIMBER_REVERSE).finallyDo(
             () -> {
                 climberIO.stopMotors();
             }
-        ).withName("SuperStructure.closeClimber"); // TODO
+        ).withName("SuperStructure.closeClimber");
     }
 
     

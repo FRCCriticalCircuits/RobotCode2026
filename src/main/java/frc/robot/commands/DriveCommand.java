@@ -72,8 +72,7 @@ public class DriveCommand extends Command{
 
     @Override
     public void initialize() {
-        state = drive.getState();
-        // rotationController.reset(state.Pose.getRotation().getRadians(), state.Speeds.omegaRadiansPerSecond);        
+        state = drive.getState();    
     }
 
     @Override

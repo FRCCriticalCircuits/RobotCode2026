@@ -82,7 +82,7 @@ public class AutoAim {
         double dx = tx - cx - (shotTime * fieldSpeeds.vxMetersPerSecond);
         double dy = ty - cy - (shotTime * fieldSpeeds.vyMetersPerSecond);
 
-        // derivative of atan2
+        // Derivative of atan2
         double r_square = dx*dx + dy*dy;
         double rotationFF = (dx * fieldSpeeds.vyMetersPerSecond - dy * fieldSpeeds.vxMetersPerSecond) / r_square; 
 

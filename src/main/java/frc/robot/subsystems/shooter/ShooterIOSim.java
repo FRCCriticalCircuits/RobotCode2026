@@ -47,7 +47,7 @@ public class ShooterIOSim implements ShooterIO {
         inputs.hoodConnected = true;
         inputs.shooterConnected = true;
 
-        // always need closeloop
+        // update closeloop
         hood.setInputVoltage(
             MathUtil.clamp(
                 hoodController.calculate(

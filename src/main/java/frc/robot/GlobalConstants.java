@@ -15,7 +15,8 @@ public class GlobalConstants {
     public static final CANBus CARNIVORE = new CANBus("*");
 
     // Driver Preferences
-    // not tanh(x) just because upper part of it looks like tanh(x)
+    // it's not tanh(x) just because 
+    // upper part of it looks like tanh(x)
     public static final String LEFT_AXIS_CONFIG = "tanh";
     public static final String RIGHT_AXIS_CONFIG = "tanhRightAxis";
 

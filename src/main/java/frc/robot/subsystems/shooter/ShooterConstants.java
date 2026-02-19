@@ -9,8 +9,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class ShooterConstants {
-    // state space stuff
-    // will be replaced with actual kV/kA later
     public static final DCMotor HOOD_GEARBOX = DCMotor.getKrakenX60Foc(1);
     // Estimated hood rotational inertia for simulation modeling.
     public static final double HOOD_MOI = SingleJointedArmSim.estimateMOI(
