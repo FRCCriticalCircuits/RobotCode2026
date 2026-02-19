@@ -122,6 +122,7 @@ public class RobotContainer {
         // Reset the field-centric heading on left bumper press.
         driverController.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
+        /*/
         driverController.leftTrigger(0.15).whileTrue(
             upperParts.runIntake()
         );
@@ -132,19 +133,25 @@ public class RobotContainer {
 
         driverController.a().whileTrue(
             upperParts.closeClimber()
-        );
+        ); 
 
         autoAim.whileTrue(
             upperParts.runShooter(
                 () -> calculationUtil.getAimParams().pitch
             )
         );
+        */
 
         // TODO drivetest
         driverController.a().onTrue(new AutoDrive(drivetrain).withTarget(new Pose2d(5, 5, Rotation2d.fromDegrees(0))));
         driverController.x().onTrue(
             drivetrain.runOnce(
-                () -> drivetrain.resetPose(new Pose2d(2.5, 4.5, Rotation2d.kZero))
+                () -> drivetrain.resetPose(new Pose2d(2.5, 4.5, Rotation2d.kZero)) // BLUE
+            )
+        );
+        driverController.b().onTrue(
+            drivetrain.runOnce(
+                () -> drivetrain.resetPose(new Pose2d(14, 4.5, Rotation2d.k180deg)) // RED
             )
         );
         //#endregion
