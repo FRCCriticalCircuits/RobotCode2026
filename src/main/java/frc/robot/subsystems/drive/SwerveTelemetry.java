@@ -1,6 +1,7 @@
 package frc.robot.subsystems.drive;
 
 import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -23,6 +24,8 @@ public class SwerveTelemetry {
             Logger.recordOutput("Swerve/TargetModuleStates", state.ModuleTargets);
         } catch (BufferOverflowException e) {
             System.out.print("Buffer Overflow @ SwerveTelemetry.java Logging");
+        } catch (BufferUnderflowException e) {
+            System.out.print("Buffer Underflow @ SwerveTelemetry.java Logging");
         }
     }
 }

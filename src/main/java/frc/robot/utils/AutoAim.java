@@ -1,6 +1,7 @@
 package frc.robot.utils;
 
 import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -28,8 +29,9 @@ public class AutoAim {
     public AutoAim(Drive drive){
         this.state = drive.getState();
 
-        hoodAngle.put(0.0, Math.toRadians(90));
-        hoodAngle.put(10.0, Math.toRadians(0));
+        // TODO drivetest
+        hoodAngle.put(0.0, Math.toRadians(20));
+        hoodAngle.put(10.0, Math.toRadians(5));
     }
 
     private double fastSqrt(float number) {
@@ -85,6 +87,7 @@ public class AutoAim {
         // Derivative of atan2
         double r_square = dx*dx + dy*dy;
         double rotationFF = (dx * fieldSpeeds.vyMetersPerSecond - dy * fieldSpeeds.vxMetersPerSecond) / r_square; 
+        rotationFF *= -1;
 
         double dist = fastSqrt(
             (float) (dx*dx + dy*dy)
@@ -101,6 +104,8 @@ public class AutoAim {
                 Logger.recordOutput("Visualization/FutureHeading", futurPose2d.plus(heading));
             } catch (BufferOverflowException e) {
                 System.out.print("Buffer Overflow @ AutoAim.java Logging");
+            } catch (BufferUnderflowException e){
+                System.out.print("Buffer UnderFlow @ AutoAim.java Logging");
             }
         }
 

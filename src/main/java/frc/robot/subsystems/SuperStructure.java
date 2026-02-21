@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
@@ -87,6 +88,8 @@ public class SuperStructure extends SubsystemBase{
                 visualize();
             } catch (BufferOverflowException e) {
                 System.out.print("Buffer Overflow @ SuperStructure.java Logging");
+            } catch (BufferUnderflowException e) {
+                System.out.print("Buffer UnferFlow @ SuperStructure.java Logging");
             }
         }
     }
