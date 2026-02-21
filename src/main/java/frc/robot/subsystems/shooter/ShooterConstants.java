@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 public class ShooterConstants {
     public static final DCMotor HOOD_GEARBOX = DCMotor.getKrakenX60Foc(1);
     // Estimated hood rotational inertia for simulation modeling.
-    public static final double HOOD_MOI = SingleJointedArmSim.estimateMOI(
+    private static final double HOOD_MOI = SingleJointedArmSim.estimateMOI(
         0.2032,
         0.90718474
     );
-    public static final LinearSystem<N2, N1, N2> HOOD_STATE_SPACE_TEMP = LinearSystemId.createDCMotorSystem(
+    private static final LinearSystem<N2, N1, N2> HOOD_STATE_SPACE_TEMP = LinearSystemId.createDCMotorSystem(
         ShooterConstants.HOOD_GEARBOX,
         ShooterConstants.HOOD_MOI,
         HAL.HOOD_GEARING
@@ -24,10 +24,10 @@ public class ShooterConstants {
 
     public static final DCMotor SHOOTER_GEARBOX = DCMotor.getKrakenX60Foc(2);
     // Approximate shooter wheel+axle properties for state-space simulation.
-    public static final double WHEEL_AXLE_MASS = Units.lbsToKilograms(8);
-    public static final double WHEEL_RADIUS = Units.inchesToMeters(1.5);
-    public static final double SHOOTER_MOI = (1.0 / 2.0) * WHEEL_AXLE_MASS * Math.pow(WHEEL_RADIUS, 2);
-    public static final LinearSystem<N2, N1, N2> SHOOTER_STATE_SPACE_TEMP = LinearSystemId.createDCMotorSystem(
+    private static final double WHEEL_AXLE_MASS = Units.lbsToKilograms(8);
+    private static final double WHEEL_RADIUS = Units.inchesToMeters(1.5);
+    private static final double SHOOTER_MOI = (1.0 / 2.0) * WHEEL_AXLE_MASS * Math.pow(WHEEL_RADIUS, 2);
+    private static final LinearSystem<N2, N1, N2> SHOOTER_STATE_SPACE_TEMP = LinearSystemId.createDCMotorSystem(
         ShooterConstants.SHOOTER_GEARBOX,
         ShooterConstants.SHOOTER_MOI,
         HAL.SHOOTER_GEARING
@@ -43,7 +43,7 @@ public class ShooterConstants {
         public static final boolean SECONDARY_SHOOTER_INVERT = false;
     }
 
-    public class Tuning{
+    public class TUNING{
         // Allowed control error before shooter is considered ready to feed.
         public static final double HOOD_STABLE_TOLERANCE_RAD = Math.toRadians(1.5);
         public static final double SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC = 8.0;

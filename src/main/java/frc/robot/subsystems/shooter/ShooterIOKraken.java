@@ -21,7 +21,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.GlobalConstants;
 import frc.robot.subsystems.shooter.ShooterConstants.HAL;
-import frc.robot.subsystems.shooter.ShooterConstants.Tuning;
+import frc.robot.subsystems.shooter.ShooterConstants.TUNING;
 
 public class ShooterIOKraken implements ShooterIO{
     private final TalonFX hoodMotor, shooter, secondaryShooter;
@@ -43,7 +43,7 @@ public class ShooterIOKraken implements ShooterIO{
     private final TalonFXConfiguration hoodConfig, shooterConfig;
 
     // Control Requests
-    private final PositionTorqueCurrentFOC hoodPositionFOC = new PositionTorqueCurrentFOC(0)
+    private final PositionTorqueCurrentFOC hoodPositionFOC = new PositionTorqueCurrentFOC(0.0)
         .withUpdateFreqHz(0.0);
     private final VelocityTorqueCurrentFOC shooterVelocityFOC = new VelocityTorqueCurrentFOC(0)
         .withUpdateFreqHz(0.0);
@@ -52,17 +52,17 @@ public class ShooterIOKraken implements ShooterIO{
     private double shooterSetpointRadPerSec = 0.0;
 
     public ShooterIOKraken(){
-        this.hoodMotor = new TalonFX(40, GlobalConstants.CARNIVORE);
-        this.shooter = new TalonFX(41, GlobalConstants.CARNIVORE);
-        this.secondaryShooter = new TalonFX(42, GlobalConstants.CARNIVORE);
+        this.hoodMotor = new TalonFX(40, GlobalConstants.BUS);
+        this.shooter = new TalonFX(41, GlobalConstants.BUS);
+        this.secondaryShooter = new TalonFX(42, GlobalConstants.BUS);
 
         // Configuration
         this.hoodConfig = new TalonFXConfiguration();
         this.shooterConfig = new TalonFXConfiguration();
         
-        this.hoodConfig.Slot0.kP = Tuning.HOOD_PID_P;
-        this.hoodConfig.Slot0.kI = Tuning.HOOD_PID_I;
-        this.hoodConfig.Slot0.kD = Tuning.HOOD_PID_D;
+        this.hoodConfig.Slot0.kP = TUNING.HOOD_PID_P;
+        this.hoodConfig.Slot0.kI = TUNING.HOOD_PID_I;
+        this.hoodConfig.Slot0.kD = TUNING.HOOD_PID_D;
         
         this.hoodConfig.MotorOutput.Inverted =
             HAL.HOOD_INVERT
@@ -72,9 +72,9 @@ public class ShooterIOKraken implements ShooterIO{
         this.hoodConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         this.hoodConfig.Feedback.RotorToSensorRatio = HAL.HOOD_GEARING;
 
-        this.shooterConfig.Slot0.kP = Tuning.SHOOTER_PID_P;
-        this.shooterConfig.Slot0.kI = Tuning.SHOOTER_PID_I;
-        this.shooterConfig.Slot0.kD = Tuning.SHOOTER_PID_D;
+        this.shooterConfig.Slot0.kP = TUNING.SHOOTER_PID_P;
+        this.shooterConfig.Slot0.kI = TUNING.SHOOTER_PID_I;
+        this.shooterConfig.Slot0.kD = TUNING.SHOOTER_PID_D;
         this.shooterConfig.MotorOutput.Inverted =
             HAL.SHOOTER_INVERT
                 ? InvertedValue.Clockwise_Positive
@@ -85,14 +85,14 @@ public class ShooterIOKraken implements ShooterIO{
 
         // Pull torque limits from constants so real+sim tuning stays centralized.
         this.hoodConfig.TorqueCurrent.PeakForwardTorqueCurrent =
-            ShooterConstants.Tuning.HOOD_PEAK_FORWARD_TORQUE_CURRENT;
+            TUNING.HOOD_PEAK_FORWARD_TORQUE_CURRENT;
         this.hoodConfig.TorqueCurrent.PeakReverseTorqueCurrent =
-            ShooterConstants.Tuning.HOOD_PEAK_REVERSE_TORQUE_CURRENT;
+            TUNING.HOOD_PEAK_REVERSE_TORQUE_CURRENT;
 
         this.shooterConfig.TorqueCurrent.PeakForwardTorqueCurrent =
-            ShooterConstants.Tuning.HOOD_PEAK_FORWARD_TORQUE_CURRENT;
+            TUNING.HOOD_PEAK_FORWARD_TORQUE_CURRENT;
         this.shooterConfig.TorqueCurrent.PeakReverseTorqueCurrent =
-            ShooterConstants.Tuning.SHOOTER_PEAK_REVERSE_TORQUE_CURRENT;
+            TUNING.SHOOTER_PEAK_REVERSE_TORQUE_CURRENT;
 
         // dont know if we need it these
         this.hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -221,8 +221,8 @@ public class ShooterIOKraken implements ShooterIO{
         double hoodErrorRad = Math.abs((hoodPosition.getValueAsDouble() * Math.PI * 2.0) - hoodSetpointRad);
         double shooterErrorRadPerSec =
             Math.abs((shooterVelocity.getValueAsDouble() * Math.PI * 2.0) - shooterSetpointRadPerSec);
-        return hoodErrorRad <= ShooterConstants.Tuning.HOOD_STABLE_TOLERANCE_RAD
-            && shooterErrorRadPerSec <= ShooterConstants.Tuning.SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC;
+        return hoodErrorRad <= TUNING.HOOD_STABLE_TOLERANCE_RAD
+            && shooterErrorRadPerSec <= TUNING.SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC;
     }
 
     @Override

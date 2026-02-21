@@ -16,7 +16,7 @@ public class GlobalConstants {
     public static final Boolean SYS_ID = false;
     public static final String CTRE_LOG_PATH = "/media/sda1/ctre-logs/";
 
-    public static final CANBus CARNIVORE = new CANBus("*");
+    public static final CANBus BUS = new CANBus("rio");
 
     // Driver Preferences
     // public static final String LEFT_AXIS_CONFIG = "tanh";

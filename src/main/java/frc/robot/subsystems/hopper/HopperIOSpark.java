@@ -17,6 +17,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.hopper.HopperConstants.HAL;
+import frc.robot.subsystems.hopper.HopperConstants.TUNING;
 
 public class HopperIOSpark implements HopperIO{
     private final SparkMax hopperSparkMax;
@@ -35,12 +36,12 @@ public class HopperIOSpark implements HopperIO{
             .inverted(HAL.HOPPER_INVERT);
 
         hopperConfig
-            .smartCurrentLimit(30, 20)
+            .smartCurrentLimit(TUNING.CLIMBER_STALL_LIMIT, TUNING.CLIMBER_FREE_LIMIT)
             .voltageCompensation(12.0);
         
         hopperConfig.encoder
-            .positionConversionFactor(1 * Math.PI * 2)
-            .velocityConversionFactor(Math.PI * 2 / 60)
+            .positionConversionFactor((1/HAL.HOPPER_GEARING) * Math.PI * 2)
+            .velocityConversionFactor((1/HAL.HOPPER_GEARING) * Math.PI * 2 / 60)
             .uvwMeasurementPeriod(10)
             .uvwAverageDepth(4);
         
@@ -69,9 +70,9 @@ public class HopperIOSpark implements HopperIO{
             .maxMotionSetpointVelocityAlwaysOn(false);
 
         hopperConfig.closedLoop
-            .p(HAL.HOPPER_PID_P_SPARK)
-            .i(HAL.HOPPER_PID_I_SPARK)
-            .d(HAL.HOPPER_PID_D_SPARK)
+            .p(TUNING.HOPPER_PID_P)
+            .i(TUNING.HOPPER_PID_I)
+            .d(TUNING.HOPPER_PID_D)
             .outputRange(-1.0, 1.0);
 
         tryUntilOk(

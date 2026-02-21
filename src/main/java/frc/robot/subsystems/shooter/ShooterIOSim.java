@@ -7,6 +7,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.shooter.ShooterConstants.TUNING;
 
 public class ShooterIOSim implements ShooterIO {
     private final DCMotorSim hood, shooter;
@@ -98,8 +99,8 @@ public class ShooterIOSim implements ShooterIO {
         // Match Kraken readiness behavior in sim so sequencing logic is testable.
         double hoodErrorRad = Math.abs(hood.getAngularPositionRad() - hoodPosition);
         double shooterErrorRadPerSec = Math.abs(shooter.getAngularVelocityRadPerSec() - shooterVelocity);
-        return hoodErrorRad <= ShooterConstants.Tuning.HOOD_STABLE_TOLERANCE_RAD
-            && shooterErrorRadPerSec <= ShooterConstants.Tuning.SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC;
+        return hoodErrorRad <= TUNING.HOOD_STABLE_TOLERANCE_RAD
+            && shooterErrorRadPerSec <= TUNING.SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC;
     }
 
     @Override

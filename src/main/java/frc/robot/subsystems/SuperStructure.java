@@ -28,24 +28,24 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOInputsAutoLogged;
 
 public class SuperStructure extends SubsystemBase{
-    public final ShooterIO shooterIO; 
+    private final ShooterIO shooterIO; 
     private final ShooterIOInputsAutoLogged shooterInputs = new ShooterIOInputsAutoLogged();
     private final Debouncer hoodConnectedDebouncer = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
     private final Debouncer shooterConnectedDebouncer = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
     private final Alert hoodDisconnected, shooterDisconnected;
 
-    public final IntakeIO intakeIO;
+    private final IntakeIO intakeIO;
     private final IntakeIOInputsAutoLogged intakeInputs = new IntakeIOInputsAutoLogged();
     private final Debouncer armConnectedDebouncer = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
     private final Debouncer rollerConnectedDebouncer = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
     private final Alert armDisconnected, rollerDisconnected;
 
-    public final HopperIO hopperIO;
+    private final HopperIO hopperIO;
     private final HopperIOInputsAutoLogged hopperInputs = new HopperIOInputsAutoLogged();
     private final Debouncer hopperConnectedDebouncer = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
     private final Alert hopperDisconnected;
 
-    public final ClimberIO climberIO;
+    private final ClimberIO climberIO;
     private final ClimberIOInputsAutoLogged climberInputs = new ClimberIOInputsAutoLogged();
     private final Debouncer climberConnnectedDebouncer = new Debouncer(0.5,Debouncer.DebounceType.kFalling);
     private final Alert climberDisconnected;
@@ -132,7 +132,6 @@ public class SuperStructure extends SubsystemBase{
         ).withName("SuperStructure.closeClimber");
     }
 
-    
     private void visualize(){
         Logger.recordOutput("Visualization/Hood", 
             new Pose3d(

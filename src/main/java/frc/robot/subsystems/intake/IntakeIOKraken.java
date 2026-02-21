@@ -44,15 +44,15 @@ public class IntakeIOKraken implements IntakeIO{
     private final TalonFXConfiguration armConfig, rollerConfig;
 
     // Control Requests
-    private final PositionTorqueCurrentFOC armPostionFOC = new PositionTorqueCurrentFOC(0)
+    private final PositionTorqueCurrentFOC armPostionFOC = new PositionTorqueCurrentFOC(0.0)
         .withUpdateFreqHz(0.0);
     private final VelocityTorqueCurrentFOC rollerVelocityFOC = new VelocityTorqueCurrentFOC(0.0)
         .withUpdateFreqHz(0.0);
 
     public IntakeIOKraken(){
-        this.armMotor = new TalonFX(30, GlobalConstants.CARNIVORE);
-        this.secondaryArmMotor = new TalonFX(31, GlobalConstants.CARNIVORE);
-        this.rollerMotor = new TalonFX(32, GlobalConstants.CARNIVORE);
+        this.armMotor = new TalonFX(30, GlobalConstants.BUS);
+        this.secondaryArmMotor = new TalonFX(31, GlobalConstants.BUS);
+        this.rollerMotor = new TalonFX(32, GlobalConstants.BUS);
 
         // Configuration
         this.armConfig = new TalonFXConfiguration();

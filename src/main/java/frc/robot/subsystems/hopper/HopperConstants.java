@@ -14,16 +14,14 @@ public class HopperConstants {
         public static final double HOPPER_GEARING = 1.0;
 
         public static final boolean HOPPER_INVERT = false;
+    }
 
+    public class TUNING{
         public static final int CLIMBER_STALL_LIMIT = 30;
         public static final int CLIMBER_FREE_LIMIT = 20;
 
         public static final double HOPPER_PID_P = 0;
         public static final double HOPPER_PID_I = 0;
         public static final double HOPPER_PID_D = 0;
-    
-        public static final double HOPPER_PID_P_SPARK = 0;
-        public static final double HOPPER_PID_I_SPARK = 0;
-        public static final double HOPPER_PID_D_SPARK = 0;
     }
 }
