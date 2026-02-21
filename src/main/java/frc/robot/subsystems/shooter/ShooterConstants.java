@@ -41,14 +41,6 @@ public class ShooterConstants {
         public static final boolean HOOD_INVERT = true;
         public static final boolean SHOOTER_INVERT = false;
         public static final boolean SECONDARY_SHOOTER_INVERT = false;
-
-        public static final double HOOD_PID_P = 0;
-        public static final double HOOD_PID_I = 0;
-        public static final double HOOD_PID_D = 0;
-
-        public static final double SHOOTER_PID_P = 0;
-        public static final double SHOOTER_PID_I = 0;
-        public static final double SHOOTER_PID_D = 0;
     }
 
     public class Tuning{
@@ -63,6 +55,14 @@ public class ShooterConstants {
         // Hood torque current caps used in Shooter Kraken configuration.
         public static final double SHOOTER_PEAK_FORWARD_TORQUE_CURRENT = 40.0;
         public static final double SHOOTER_PEAK_REVERSE_TORQUE_CURRENT = -40.0;
+
+        public static final double HOOD_PID_P = 0;
+        public static final double HOOD_PID_I = 0;
+        public static final double HOOD_PID_D = 0;
+
+        public static final double SHOOTER_PID_P = 0;
+        public static final double SHOOTER_PID_I = 0;
+        public static final double SHOOTER_PID_D = 0;
     }
 
     public class CAD{

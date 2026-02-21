@@ -32,6 +32,16 @@ public class IntakeConstants {
         public static final boolean ARM_INVERT = true;
         public static final boolean SECONDARY_ARM_INVERT = true;
         public static final boolean ROLLER_INVERT = true;
+    }
+
+    public class Tuning{
+        // Hood torque current caps used in ARMs Kraken configuration.
+        public static final double ARM_PEAK_FORWARD_TORQUE_CURRENT = 30.0;
+        public static final double ARM_PEAK_REVERSE_TORQUE_CURRENT = -30.0;
+
+        // Hood torque current caps used in ROLLER Kraken configuration.
+        public static final double ROLLER_PEAK_FORWARD_TORQUE_CURRENT = 30.0;
+        public static final double ROLLER_PEAK_REVERSE_TORQUE_CURRENT = -30.0;
 
         public static final double ARM_PID_P = 0;
         public static final double ARM_PID_I = 0;

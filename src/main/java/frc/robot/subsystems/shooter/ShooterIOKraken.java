@@ -21,6 +21,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.GlobalConstants;
 import frc.robot.subsystems.shooter.ShooterConstants.HAL;
+import frc.robot.subsystems.shooter.ShooterConstants.Tuning;
 
 public class ShooterIOKraken implements ShooterIO{
     private final TalonFX hoodMotor, shooter, secondaryShooter;
@@ -42,9 +43,9 @@ public class ShooterIOKraken implements ShooterIO{
     private final TalonFXConfiguration hoodConfig, shooterConfig;
 
     // Control Requests
-    private final PositionTorqueCurrentFOC positionFOC = new PositionTorqueCurrentFOC(0)
+    private final PositionTorqueCurrentFOC hoodPositionFOC = new PositionTorqueCurrentFOC(0)
         .withUpdateFreqHz(0.0);
-    private final VelocityTorqueCurrentFOC velocityFOC = new VelocityTorqueCurrentFOC(0)
+    private final VelocityTorqueCurrentFOC shooterVelocityFOC = new VelocityTorqueCurrentFOC(0)
         .withUpdateFreqHz(0.0);
     // Cached last commanded targets, used by isStable() feed gating.
     private double hoodSetpointRad = 0.0;
@@ -59,9 +60,9 @@ public class ShooterIOKraken implements ShooterIO{
         this.hoodConfig = new TalonFXConfiguration();
         this.shooterConfig = new TalonFXConfiguration();
         
-        this.hoodConfig.Slot0.kP = HAL.HOOD_PID_P;
-        this.hoodConfig.Slot0.kI = HAL.HOOD_PID_I;
-        this.hoodConfig.Slot0.kD = HAL.HOOD_PID_D;
+        this.hoodConfig.Slot0.kP = Tuning.HOOD_PID_P;
+        this.hoodConfig.Slot0.kI = Tuning.HOOD_PID_I;
+        this.hoodConfig.Slot0.kD = Tuning.HOOD_PID_D;
         
         this.hoodConfig.MotorOutput.Inverted =
             HAL.HOOD_INVERT
@@ -71,9 +72,9 @@ public class ShooterIOKraken implements ShooterIO{
         this.hoodConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         this.hoodConfig.Feedback.RotorToSensorRatio = HAL.HOOD_GEARING;
 
-        this.shooterConfig.Slot0.kP = HAL.SHOOTER_PID_P;
-        this.shooterConfig.Slot0.kI = HAL.SHOOTER_PID_I;
-        this.shooterConfig.Slot0.kD = HAL.SHOOTER_PID_D;
+        this.shooterConfig.Slot0.kP = Tuning.SHOOTER_PID_P;
+        this.shooterConfig.Slot0.kI = Tuning.SHOOTER_PID_I;
+        this.shooterConfig.Slot0.kD = Tuning.SHOOTER_PID_D;
         this.shooterConfig.MotorOutput.Inverted =
             HAL.SHOOTER_INVERT
                 ? InvertedValue.Clockwise_Positive
@@ -93,10 +94,16 @@ public class ShooterIOKraken implements ShooterIO{
         this.shooterConfig.TorqueCurrent.PeakReverseTorqueCurrent =
             ShooterConstants.Tuning.SHOOTER_PEAK_REVERSE_TORQUE_CURRENT;
 
+        // dont know if we need it these
         this.hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        this.hoodConfig.CurrentLimits.StatorCurrentLimit = 100;
+        this.hoodConfig.CurrentLimits.StatorCurrentLimit = 80;
         this.hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        this.hoodConfig.CurrentLimits.SupplyCurrentLimit = 60;
+        this.hoodConfig.CurrentLimits.SupplyCurrentLimit = 30;
+
+        this.shooterConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        this.shooterConfig.CurrentLimits.StatorCurrentLimit = 140;
+        this.shooterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        this.shooterConfig.CurrentLimits.SupplyCurrentLimit = 60;
 
         // Status Signals
         this.hoodPosition = hoodMotor.getPosition();
@@ -189,7 +196,7 @@ public class ShooterIOKraken implements ShooterIO{
                 // Track target locally so readiness logic can compare measured error.
                 hoodSetpointRad = positionRad.getAsDouble();
                 hoodMotor.setControl(
-                    positionFOC.withPosition(hoodSetpointRad)
+                    hoodPositionFOC.withPosition(hoodSetpointRad)
                 );
             }
         ).withName("Shooter.runHoodPosition");
@@ -202,7 +209,7 @@ public class ShooterIOKraken implements ShooterIO{
                 // Track target locally so readiness logic can compare measured error.
                 shooterSetpointRadPerSec = velocity;
                 shooter.setControl(
-                    velocityFOC.withVelocity(shooterSetpointRadPerSec)
+                    shooterVelocityFOC.withVelocity(shooterSetpointRadPerSec)
                 );
             }
         ).withName("Shooter.runShooterVelocity");

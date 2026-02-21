@@ -6,7 +6,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.GlobalConstants;
 import frc.robot.subsystems.intake.IntakeConstants.HAL;
+import frc.robot.subsystems.intake.IntakeConstants.Tuning;
 
 public class IntakeIOKraken implements IntakeIO{
     private final TalonFX armMotor, rollerMotor, secondaryArmMotor;
@@ -45,7 +46,7 @@ public class IntakeIOKraken implements IntakeIO{
     // Control Requests
     private final PositionTorqueCurrentFOC armPostionFOC = new PositionTorqueCurrentFOC(0)
         .withUpdateFreqHz(0.0);
-    private final VelocityVoltage rollerVelocityVoltage = new VelocityVoltage(0.0)
+    private final VelocityTorqueCurrentFOC rollerVelocityFOC = new VelocityTorqueCurrentFOC(0.0)
         .withUpdateFreqHz(0.0);
 
     public IntakeIOKraken(){
@@ -57,9 +58,9 @@ public class IntakeIOKraken implements IntakeIO{
         this.armConfig = new TalonFXConfiguration();
         this.rollerConfig = new TalonFXConfiguration();
     
-        this.armConfig.Slot0.kP = HAL.ARM_PID_P;
-        this.armConfig.Slot0.kI = HAL.ARM_PID_I;
-        this.armConfig.Slot0.kD = HAL.ARM_PID_D;
+        this.armConfig.Slot0.kP = Tuning.ARM_PID_P;
+        this.armConfig.Slot0.kI = Tuning.ARM_PID_I;
+        this.armConfig.Slot0.kD = Tuning.ARM_PID_D;
 
         this.armConfig.MotorOutput.Inverted = 
             HAL.ARM_INVERT
@@ -69,9 +70,9 @@ public class IntakeIOKraken implements IntakeIO{
         this.armConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         this.armConfig.Feedback.RotorToSensorRatio = HAL.ARM_GEARING;
 
-        this.rollerConfig.Slot0.kP = HAL.ROLLER_PID_P;
-        this.rollerConfig.Slot0.kI = HAL.ROLLER_PID_I;
-        this.rollerConfig.Slot0.kD = HAL.ROLLER_PID_D;
+        this.rollerConfig.Slot0.kP = Tuning.ROLLER_PID_P;
+        this.rollerConfig.Slot0.kI = Tuning.ROLLER_PID_I;
+        this.rollerConfig.Slot0.kD = Tuning.ROLLER_PID_D;
 
         this.rollerConfig.MotorOutput.Inverted =
             HAL.ROLLER_INVERT
@@ -82,8 +83,21 @@ public class IntakeIOKraken implements IntakeIO{
         this.rollerConfig.Feedback.RotorToSensorRatio = HAL.ROLLER_GEARING;
 
         /* Default Supply Limit */
-        this.armConfig.TorqueCurrent.PeakForwardTorqueCurrent = 30.0;
-        this.armConfig.TorqueCurrent.PeakReverseTorqueCurrent = -30.0;
+        this.armConfig.TorqueCurrent.PeakForwardTorqueCurrent = Tuning.ARM_PEAK_FORWARD_TORQUE_CURRENT;
+        this.armConfig.TorqueCurrent.PeakReverseTorqueCurrent = Tuning.ARM_PEAK_REVERSE_TORQUE_CURRENT;
+        this.rollerConfig.TorqueCurrent.PeakForwardTorqueCurrent = Tuning.ROLLER_PEAK_FORWARD_TORQUE_CURRENT;
+        this.rollerConfig.TorqueCurrent.PeakReverseTorqueCurrent = Tuning.ROLLER_PEAK_REVERSE_TORQUE_CURRENT;
+
+        // dont know if we need these
+        this.armConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        this.armConfig.CurrentLimits.StatorCurrentLimit = 80;
+        this.armConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        this.armConfig.CurrentLimits.SupplyCurrentLimit = 30;
+
+        this.rollerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        this.rollerConfig.CurrentLimits.StatorCurrentLimit = 80;
+        this.rollerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        this.rollerConfig.CurrentLimits.SupplyCurrentLimit = 30;
 
         // Status Signals
         this.armPosition = armMotor.getPosition();
@@ -185,7 +199,7 @@ public class IntakeIOKraken implements IntakeIO{
         return Commands.run(
             () -> {
                 rollerMotor.setControl(
-                    rollerVelocityVoltage.withVelocity(velocity)  
+                    rollerVelocityFOC.withVelocity(velocity)  
                 );
             }
         ).withName("Intake.runRollerVelocity");
