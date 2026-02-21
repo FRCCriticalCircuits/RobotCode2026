@@ -20,57 +20,75 @@ import frc.robot.subsystems.hopper.HopperConstants.HAL;
 
 public class HopperIOSpark implements HopperIO{
     private final SparkMax hopperSparkMax;
-    private final RelativeEncoder encoder;
-    private final SparkClosedLoopController controller;
-    private final SparkBaseConfig config;
-
+    private final RelativeEncoder hopperEncoder;
+    private final SparkClosedLoopController hopperController;
+    private final SparkBaseConfig hopperConfig;
+    
     public HopperIOSpark(){
         this.hopperSparkMax = new SparkMax(50, MotorType.kBrushless);
-        this.encoder = hopperSparkMax.getEncoder();
-        this.controller = hopperSparkMax.getClosedLoopController();
-        this.config = new SparkMaxConfig();
+        this.hopperEncoder = hopperSparkMax.getEncoder();
+        this.hopperController = hopperSparkMax.getClosedLoopController();
+        this.hopperConfig = new SparkMaxConfig();
+        
+        hopperConfig
+            .idleMode(IdleMode.kCoast)
+            .inverted(HAL.HOPPER_INVERT);
 
-        config.idleMode(IdleMode.kCoast);
-            
-        config
+        hopperConfig
             .smartCurrentLimit(30, 20)
             .voltageCompensation(12.0);
         
-        config.encoder
+        hopperConfig.encoder
+            .positionConversionFactor(1 * Math.PI * 2)
+            .velocityConversionFactor(Math.PI * 2 / 60)
             .uvwMeasurementPeriod(10)
             .uvwAverageDepth(4);
         
-        config
-            .signals
+        hopperConfig.signals
             .primaryEncoderPositionAlwaysOn(true)
-            .primaryEncoderPositionPeriodMs(100)
+            .primaryEncoderPositionPeriodMs(100) // dont need this to be 20ms
             .primaryEncoderVelocityAlwaysOn(true)
             .primaryEncoderVelocityPeriodMs(20)
             .appliedOutputPeriodMs(20)
             .busVoltagePeriodMs(20)
             .outputCurrentPeriodMs(20); // might need to detect jam
 
-        config.closedLoop
-            .p(HAL.HOPPER_PID_P)
-            .i(HAL.HOPPER_PID_I)
-            .d(HAL.HOPPER_PID_D)
+        // To reduce CAN utilization
+        hopperConfig.signals
+            .limitsPeriodMs(300)
+            .setSetpointAlwaysOn(false)
+            .isAtSetpointAlwaysOn(false)
+            .selectedSlotAlwaysOn(false)
+            .analogVoltageAlwaysOn(false)
+            .iAccumulationAlwaysOn(false)
+            .analogPositionAlwaysOn(false)
+            .analogVelocityAlwaysOn(false)
+            .absoluteEncoderPositionAlwaysOn(false)
+            .absoluteEncoderVelocityAlwaysOn(false)
+            .maxMotionSetpointPositionAlwaysOn(false)
+            .maxMotionSetpointVelocityAlwaysOn(false);
+
+        hopperConfig.closedLoop
+            .p(HAL.HOPPER_PID_P_SPARK)
+            .i(HAL.HOPPER_PID_I_SPARK)
+            .d(HAL.HOPPER_PID_D_SPARK)
             .outputRange(-1.0, 1.0);
 
         tryUntilOk(
             hopperSparkMax,
             5,
             () -> hopperSparkMax.configure(
-                config,
+                hopperConfig,
                 ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters
             )
         );
-        tryUntilOk(hopperSparkMax, 5, () -> encoder.setPosition(0.0));
+        tryUntilOk(hopperSparkMax, 5, () -> hopperEncoder.setPosition(0.0));
     }
 
     @Override
     public void updateInputs(HopperIOInputs inputs) {
-        inputs.hopperVelocity = encoder.getVelocity();
+        inputs.hopperVelocity = hopperEncoder.getVelocity();
         inputs.appliedVoltsHopper = hopperSparkMax.getBusVoltage() * hopperSparkMax.getAppliedOutput();
         inputs.supplyCurrentHopper = 0.0;
         inputs.tempHopper = hopperSparkMax.getMotorTemperature();
@@ -80,7 +98,7 @@ public class HopperIOSpark implements HopperIO{
     @Override
     public Command runHopper(double velocity) {
         return Commands.run(
-            () -> controller.setSetpoint(velocity, ControlType.kVelocity)
+            () -> hopperController.setSetpoint(velocity, ControlType.kVelocity)
         );
     }
 

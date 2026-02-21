@@ -11,7 +11,7 @@ public interface ClimberIO {
         public double climberPosition = 0;
         
         public double appliedVoltsClimber = 0;
-        public double torqueCurrentClimber = 0;
+        public double supplyCurrentClimber = 0;
 
         public double tempClimber = 0;
 
