@@ -10,7 +10,6 @@ date - post `commit ID (short version)`
 # Todo
 MotionMagic FOC Control for Hood and maybe Intake arm also
 SPARKMAX Implement for hopper
-deprecated warning for old hopper implement
 maybe SysID for shooter/intake flywheel 
 
 ## post `97d14c3`

@@ -36,6 +36,7 @@ public class HopperIOKraken implements HopperIO{
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0.0)
         .withUpdateFreqHz(0.0);
 
+    @Deprecated(forRemoval=true)
     public HopperIOKraken(){
         this.hopperMotor = new TalonFX(50, GlobalConstants.CARNIVORE);
 

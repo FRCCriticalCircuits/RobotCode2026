@@ -63,6 +63,7 @@ public class RobotContainer {
     private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOSim();
     private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : new HopperIOSim();
     private final ClimberIO climberIO = Utils.isSimulation() ? new ClimberIOSim() : new ClimberIOSim();
+    @SuppressWarnings("unused")
     private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO, climberIO);
 
     // Auto Aim Calculation
