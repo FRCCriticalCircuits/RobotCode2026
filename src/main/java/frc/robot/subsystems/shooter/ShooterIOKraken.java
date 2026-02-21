@@ -12,7 +12,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -44,7 +44,7 @@ public class ShooterIOKraken implements ShooterIO{
     // Control Requests
     private final PositionTorqueCurrentFOC positionFOC = new PositionTorqueCurrentFOC(0)
         .withUpdateFreqHz(0.0);
-    private final VelocityVoltage velocityVoltage = new VelocityVoltage(0)
+    private final VelocityTorqueCurrentFOC velocityFOC = new VelocityTorqueCurrentFOC(0)
         .withUpdateFreqHz(0.0);
     // Cached last commanded targets, used by isStable() feed gating.
     private double hoodSetpointRad = 0.0;
@@ -87,6 +87,16 @@ public class ShooterIOKraken implements ShooterIO{
             ShooterConstants.Tuning.HOOD_PEAK_FORWARD_TORQUE_CURRENT;
         this.hoodConfig.TorqueCurrent.PeakReverseTorqueCurrent =
             ShooterConstants.Tuning.HOOD_PEAK_REVERSE_TORQUE_CURRENT;
+
+        this.shooterConfig.TorqueCurrent.PeakForwardTorqueCurrent =
+            ShooterConstants.Tuning.HOOD_PEAK_FORWARD_TORQUE_CURRENT;
+        this.shooterConfig.TorqueCurrent.PeakReverseTorqueCurrent =
+            ShooterConstants.Tuning.SHOOTER_PEAK_REVERSE_TORQUE_CURRENT;
+
+        this.hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        this.hoodConfig.CurrentLimits.StatorCurrentLimit = 100;
+        this.hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        this.hoodConfig.CurrentLimits.SupplyCurrentLimit = 60;
 
         // Status Signals
         this.hoodPosition = hoodMotor.getPosition();
@@ -192,7 +202,7 @@ public class ShooterIOKraken implements ShooterIO{
                 // Track target locally so readiness logic can compare measured error.
                 shooterSetpointRadPerSec = velocity;
                 shooter.setControl(
-                    velocityVoltage.withVelocity(shooterSetpointRadPerSec)
+                    velocityFOC.withVelocity(shooterSetpointRadPerSec)
                 );
             }
         ).withName("Shooter.runShooterVelocity");
