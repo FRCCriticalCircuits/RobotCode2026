@@ -100,7 +100,7 @@ public class HopperIOSpark implements HopperIO{
     public Command runHopper(double velocity) {
         return Commands.run(
             () -> hopperController.setSetpoint(velocity, ControlType.kVelocity)
-        );
+        ).withName("Hopper.runHopperVelocity");
     }
 
     @Override

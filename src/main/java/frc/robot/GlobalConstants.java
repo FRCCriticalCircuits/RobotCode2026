@@ -12,11 +12,15 @@ public class GlobalConstants {
      */
     public static final Boolean COMP = false;
     
-    // System Identification
-    public static final Boolean SYS_ID = false;
+    /*
+     * SYSID: (commands will be added to autoChooser)
+     * Swerve uses CTRE log
+     * FLYWHEELS(Shooter) uses AdvantageKit
+     */
+    public static final Boolean SYS_ID_SWERVE = false;
     public static final String CTRE_LOG_PATH = "/media/sda1/ctre-logs/";
 
-    public static final CANBus BUS = new CANBus("rio");
+    public static final Boolean SYS_ID_FLYWHEELS = true;
 
     // Driver Preferences
     // public static final String LEFT_AXIS_CONFIG = "tanh";
@@ -24,6 +28,8 @@ public class GlobalConstants {
     // TODO drivetest
     public static final String LEFT_AXIS_CONFIG = "kidsMode";
     public static final String RIGHT_AXIS_CONFIG = "kidsMode";
+
+    public static final CANBus BUS = new CANBus("rio");
 
     public class FIELD_CONSTANTS {
         public static final double FIELD_WIDTH = 8.07;

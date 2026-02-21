@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.*;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -16,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.AutoDrive;
@@ -66,6 +71,18 @@ public class RobotContainer {
     @SuppressWarnings("unused")
     private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO, climberIO);
 
+    private final SysIdRoutine shooterRoutine = new SysIdRoutine(
+        new SysIdRoutine.Config(
+            null, null, null, // Use default config
+            (state) -> Logger.recordOutput("shooterRoutine", state.toString())
+        ),
+        new SysIdRoutine.Mechanism(
+            (voltage) -> shooterIO.runShooterVoltage(voltage.in(Volts)),
+            null, // No log consumer, since data is recorded by AdvantageKit
+            null
+        )
+    );
+
     // Auto Aim Calculation
     
 
@@ -81,7 +98,7 @@ public class RobotContainer {
         );
 
         //#region SysID
-        if(GlobalConstants.SYS_ID){
+        if(GlobalConstants.SYS_ID_SWERVE && !GlobalConstants.COMP){
             rotationSysID.setDefaultOption("Rotation", true);
             rotationSysID.addOption("Translation", false);
             SmartDashboard.putData("SysID Option", rotationSysID);
@@ -106,6 +123,14 @@ public class RobotContainer {
                 drivetrain.sysIdQuasistatic(Direction.kReverse, rotationSysID.getSelected())
             );
         }
+
+        if(GlobalConstants.SYS_ID_FLYWHEELS && !GlobalConstants.COMP){
+            autoChooser.addOption("Shooter SysID | DF", shooterRoutine.dynamic(Direction.kForward));
+            autoChooser.addOption("Shooter SysID | DR", shooterRoutine.dynamic(Direction.kReverse));
+            autoChooser.addOption("Shooter SysID | QF", shooterRoutine.quasistatic(Direction.kForward));
+            autoChooser.addOption("Shooter SysID | QR", shooterRoutine.quasistatic(Direction.kReverse));
+        }
+
         //#endregion
 
         drivetrain.setDefaultCommand(teleDrive);

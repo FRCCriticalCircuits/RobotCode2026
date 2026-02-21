@@ -11,6 +11,7 @@ public interface ShooterIO {
     @AutoLog
     public class ShooterIOInputs {
         public double hoodPosition = 0;
+        public double shooterPosition = 0;
         public double shooterVelocity = 0;
 
         public double appliedVoltsHood = 0;
@@ -33,6 +34,7 @@ public interface ShooterIO {
     
     default Command runHood(DoubleSupplier positionRad) {return Commands.none();}
     default Command runShooter(double velocity) {return Commands.none();}
+    default void runShooterVoltage(double voltage) {}
 
     default Boolean isStable() {return false;}
     default void stopMotors() {}

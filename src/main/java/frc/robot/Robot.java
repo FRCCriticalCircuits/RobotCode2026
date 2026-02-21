@@ -48,7 +48,7 @@ public class Robot extends LoggedRobot {
             Logger.addDataReceiver(new NT4Publisher());
         }
 
-        if(GlobalConstants.SYS_ID) SignalLogger.start();
+        if(GlobalConstants.SYS_ID_SWERVE) SignalLogger.start();
         Logger.start();
     }
 
