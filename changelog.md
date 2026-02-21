@@ -9,9 +9,8 @@ date - post `commit ID (short version)`
 
 # Todo
 MotionMagic FOC Control for Hood and maybe Intake arm also
-maybe SysID for shooter/intake flywheel 
 
-IF THE FUEL EVER GET STUCK WE DO A Cascade PID FOR THE HOPPER(SEQUENCER)
+IF THE FUEL EVER GET STUCK WE DO A Cascade PID FOR THE arm/HOPPER(SEQUENCER)
 
 ## post `97d14c3`
 - a KidsMode Axis Config for swerve
