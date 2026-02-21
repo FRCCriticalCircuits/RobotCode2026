@@ -8,6 +8,10 @@ date - post `commit ID (short version)`
 (+ SIM) -> Tested in simulation
 
 # Todo
+MotionMagic FOC Control for Hood and maybe Intake arm also
+SPARKMAX Implement for hopper
+deprecated warning for old hopper implement
+maybe SysID for shooter/intake flywheel 
 
 ## post `97d14c3`
 - a KidsMode Axis Config for swerve

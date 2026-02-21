@@ -17,12 +17,6 @@ public class ClimberIONeoVortex implements ClimberIO{
     private final SparkFlex climberNeoMotor;
     private final RelativeEncoder climberEncoder;
 
-    @SuppressWarnings("unused")
-    private double appliedVoltsClimber = 0;
-
-    @SuppressWarnings("unused")
-    private double tempClimber = 0;
-
     // Configuration
     private final SparkFlexConfig climberConfig;
     @SuppressWarnings("unused")
@@ -54,9 +48,6 @@ public class ClimberIONeoVortex implements ClimberIO{
         climberConfig.idleMode(IdleMode.kBrake);
         climberConfig.inverted(HAL.CLIMBER_INVERT);
 
-        this.tempClimber = climberNeoMotor.getMotorTemperature();
-        this.appliedVoltsClimber = climberNeoMotor.getAppliedOutput();
-
         // PID
         climberPID = new PIDController(
             HAL.CLIMBER_PID_P,
@@ -73,10 +64,8 @@ public class ClimberIONeoVortex implements ClimberIO{
     @Override
     public void updateInputs(ClimberIOInputs inputs) {
         inputs.climberPosition = climberEncoder.getPosition();
-
         inputs.appliedVoltsClimber = climberNeoMotor.getAppliedOutput();
         inputs.torqueCurrentClimber = climberNeoMotor.getOutputCurrent();
-
         inputs.tempClimber = climberNeoMotor.getMotorTemperature();
     }
 
