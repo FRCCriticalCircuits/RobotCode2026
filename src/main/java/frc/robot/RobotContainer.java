@@ -70,20 +70,19 @@ public class RobotContainer {
     private final ClimberIO climberIO = Utils.isSimulation() ? new ClimberIOSim() : new ClimberIOSim();
     private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO, climberIO);
 
-    private final SysIdRoutine shooterRoutine = new SysIdRoutine(
+    // SysID Routine for flywheels(shooter/hopper/intake)
+    private final SysIdRoutine flywheelRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(
-            null, null, null, // Use default config
-            (state) -> Logger.recordOutput("shooterRoutine", state.toString())
+            null, null, null,
+            (state) -> Logger.recordOutput("flywheelRoutine", state.toString())
         ),
         new SysIdRoutine.Mechanism(
-            (voltage) -> shooterIO.runShooterVoltage(voltage.in(Volts)),
+            // Change this line to characterize other motors
+            (voltage) -> shooterIO.runShooterVoltage(voltage.in(Volts)), 
             null, // No log consumer, since data is recorded by AdvantageKit
             upperParts
         )
     );
-
-    // Auto Aim Calculation
-    
 
     public RobotContainer() {
         drivetrain.registerTelemetry(swerveLogger::telemeterize);
@@ -124,10 +123,10 @@ public class RobotContainer {
         }
 
         if(GlobalConstants.SYS_ID_FLYWHEELS && !GlobalConstants.COMP){
-            autoChooser.addOption("Shooter SysID | DF", shooterRoutine.dynamic(Direction.kForward));
-            autoChooser.addOption("Shooter SysID | DR", shooterRoutine.dynamic(Direction.kReverse));
-            autoChooser.addOption("Shooter SysID | QF", shooterRoutine.quasistatic(Direction.kForward));
-            autoChooser.addOption("Shooter SysID | QR", shooterRoutine.quasistatic(Direction.kReverse));
+            autoChooser.addOption("Shooter SysID | DF", flywheelRoutine.dynamic(Direction.kForward));
+            autoChooser.addOption("Shooter SysID | DR", flywheelRoutine.dynamic(Direction.kReverse));
+            autoChooser.addOption("Shooter SysID | QF", flywheelRoutine.quasistatic(Direction.kForward));
+            autoChooser.addOption("Shooter SysID | QR", flywheelRoutine.quasistatic(Direction.kReverse));
         }
 
         //#endregion

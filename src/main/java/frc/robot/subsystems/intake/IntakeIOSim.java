@@ -12,7 +12,7 @@ public class IntakeIOSim implements IntakeIO {
     private final PIDController armController = new PIDController(10, 0, 0);
     private final PIDController rollerController = new PIDController(0.5, 0, 0);
 
-    private double appliedVoltsArm, appliedVoltsRoller;
+    private double appliedVoltsArm = 0, appliedVoltsRoller = 0;
     private double armPosition = 0, rollerVelocity = 0;
     private Boolean rollerStopped = false;
 
@@ -34,6 +34,7 @@ public class IntakeIOSim implements IntakeIO {
         roller.update(0.02);
         
         inputs.armPosition = arm.getAngularPositionRad();
+        inputs.rollerPosition = roller.getAngularPositionRad();
         inputs.rollerVelocity = roller.getAngularVelocityRadPerSec();
 
         inputs.appliedVoltsArm = this.appliedVoltsArm;
@@ -57,16 +58,18 @@ public class IntakeIOSim implements IntakeIO {
         // always need closeloop 
         arm.setInputVoltage(appliedVoltsArm);
 
-        this.appliedVoltsRoller = MathUtil.clamp(
-            rollerController.calculate(
-                roller.getAngularVelocityRadPerSec(),
-                this.rollerVelocity
-            ),
-            -12.0,
-            12.0
-        );
+        if(!rollerStopped) {
+            this.appliedVoltsRoller = MathUtil.clamp(
+                rollerController.calculate(
+                    roller.getAngularVelocityRadPerSec(),
+                    this.rollerVelocity
+                ),
+                -12.0,
+                12.0
+            );
 
-        if(!rollerStopped) roller.setInputVoltage(appliedVoltsRoller);
+            roller.setInputVoltage(appliedVoltsRoller);
+        }
     }
 
     @Override
@@ -90,9 +93,17 @@ public class IntakeIOSim implements IntakeIO {
     }
 
     @Override
+    public void runRollerVoltage(double voltage) {
+        this.appliedVoltsRoller = voltage;
+        // will ignore `rollerStopped` variable
+        roller.setInputVoltage(voltage);
+    }
+
+    @Override
     public void stopMotors() {
         this.rollerStopped = true;
         this.armPosition = 0;
+
         roller.setInputVoltage(0.0);
     }
 }

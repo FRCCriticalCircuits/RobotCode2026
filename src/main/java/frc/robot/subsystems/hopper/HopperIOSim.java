@@ -11,7 +11,9 @@ public class HopperIOSim implements HopperIO{
 
     private final PIDController hopperController = new PIDController(10, 0, 0);
 
-    private double appliedVoltsHopper;
+    private double appliedVoltsHopper = 0;
+    private double hopperVelocity = 0;
+    private boolean hopperStopped = true;
 
     public HopperIOSim(){
         hopper = new DCMotorSim(
@@ -24,34 +26,49 @@ public class HopperIOSim implements HopperIO{
     public void updateInputs(HopperIOInputs inputs) {
         hopper.update(0.02);
         
+        inputs.hopperPosition = hopper.getAngularPositionRad();
         inputs.hopperVelocity = hopper.getAngularVelocityRadPerSec();
 
         inputs.appliedVoltsHopper = this.appliedVoltsHopper;
         inputs.supplyCurrentHopper = hopper.getCurrentDrawAmps();
 
         inputs.hopperConnected = true;
+
+        if(!hopperStopped){
+            this.appliedVoltsHopper = MathUtil.clamp(
+                hopperController.calculate(
+                    hopper.getAngularVelocityRadPerSec(),
+                    this.hopperVelocity
+                ),
+                -12.0,
+                12.0
+            );
+
+            hopper.setInputVoltage(appliedVoltsHopper);
+        }
     }
 
     @Override
     public Command runHopper(double velocity) {
         return Commands.run(
             () -> {
-                hopper.setInputVoltage(
-                    MathUtil.clamp(
-                        hopperController.calculate(
-                            hopper.getAngularVelocityRadPerSec(),
-                            velocity
-                        ),
-                        -12.0,
-                        12.0
-                    )
-                );
+                this.hopperStopped = false;
+                this.hopperVelocity = velocity;
             }
         ).withName("hopper.runRollerVelocity");
     }
 
     @Override
+    public void runHopperVoltage(double voltage) {
+        this.appliedVoltsHopper = voltage;
+        // will ignore `hopperStopped` variable
+        hopper.setInputVoltage(voltage);
+    }
+
+    @Override
     public void stopMotors() {
+        this.hopperStopped = true;
+
         hopper.setInputVoltage(0.0);
     }
 }

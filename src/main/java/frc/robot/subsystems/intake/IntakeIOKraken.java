@@ -25,6 +25,7 @@ public class IntakeIOKraken implements IntakeIO{
     
     // Status Signals
     private final StatusSignal<Angle> armPosition;
+    private final StatusSignal<Angle> rollerPosition;
     private final StatusSignal<AngularVelocity> rollerVelocity;
     private final StatusSignal<Voltage> appliedVoltsArm;
     private final StatusSignal<Current> supplyCurrentArm;
@@ -97,6 +98,7 @@ public class IntakeIOKraken implements IntakeIO{
 
         // Status Signals
         this.armPosition = armMotor.getPosition();
+        this.rollerPosition = rollerMotor.getPosition();
         this.rollerVelocity = rollerMotor.getVelocity();
 
         this.appliedVoltsArm = armMotor.getMotorVoltage();
@@ -114,6 +116,7 @@ public class IntakeIOKraken implements IntakeIO{
         BaseStatusSignal.setUpdateFrequencyForAll(
             100.0, 
             this.armPosition,
+            this.rollerPosition,
             this.rollerVelocity,
             this.appliedVoltsArm,
             this.supplyCurrentArm,
@@ -147,6 +150,7 @@ public class IntakeIOKraken implements IntakeIO{
     @Override
     public void updateInputs(IntakeIOInputs inputs){
         inputs.rollerConnected = BaseStatusSignal.refreshAll(
+            this.rollerPosition,
             this.rollerVelocity,
             this.appliedVoltsRoller,
             this.supplyCurrentRoller,
@@ -163,6 +167,7 @@ public class IntakeIOKraken implements IntakeIO{
             this.tempSecondaryArm
         ).isOK();
 
+        inputs.rollerPosition = this.rollerPosition.getValueAsDouble() * Math.PI * 2;
         inputs.rollerVelocity = this.rollerVelocity.getValueAsDouble() * Math.PI * 2;
         inputs.armPosition = this.armPosition.getValueAsDouble() * Math.PI * 2;
 
@@ -199,6 +204,11 @@ public class IntakeIOKraken implements IntakeIO{
                 );
             }
         ).withName("Intake.runRollerVelocity");
+    }
+
+    @Override
+    public void runRollerVoltage(double voltage) {
+        rollerMotor.setVoltage(voltage);
     }
 
     @Override

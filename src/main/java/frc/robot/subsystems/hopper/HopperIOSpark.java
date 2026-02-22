@@ -46,7 +46,7 @@ public class HopperIOSpark implements HopperIO{
         
         hopperConfig.signals
             .primaryEncoderPositionAlwaysOn(true)
-            .primaryEncoderPositionPeriodMs(100) // dont need this to be 20ms
+            .primaryEncoderPositionPeriodMs(20)
             .primaryEncoderVelocityAlwaysOn(true)
             .primaryEncoderVelocityPeriodMs(20)
             .appliedOutputPeriodMs(20)
@@ -88,6 +88,7 @@ public class HopperIOSpark implements HopperIO{
 
     @Override
     public void updateInputs(HopperIOInputs inputs) {
+        inputs.hopperPosition = hopperEncoder.getPosition();
         inputs.hopperVelocity = hopperEncoder.getVelocity();
         inputs.appliedVoltsHopper = hopperSparkMax.getBusVoltage() * hopperSparkMax.getAppliedOutput();
         inputs.supplyCurrentHopper = 0.0;
@@ -100,6 +101,11 @@ public class HopperIOSpark implements HopperIO{
         return Commands.run(
             () -> hopperController.setSetpoint(velocity, ControlType.kVelocity)
         ).withName("Hopper.runHopperVelocity");
+    }
+
+    @Override
+    public void runHopperVoltage(double voltage) {
+        hopperSparkMax.setVoltage(voltage);
     }
 
     @Override

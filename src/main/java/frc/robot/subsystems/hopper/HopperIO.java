@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 public interface HopperIO {
     @AutoLog
     public class HopperIOInputs {
+        public double hopperPosition = 0;
         public double hopperVelocity = 0;
 
         public double appliedVoltsHopper = 0;
@@ -22,6 +23,7 @@ public interface HopperIO {
     default void updateInputs(HopperIOInputs inputs) {}
     
     default Command runHopper(double velocity) {return Commands.none();}
-    
+    default void runHopperVoltage(double voltage) {}
+
     default void stopMotors() {}
 }

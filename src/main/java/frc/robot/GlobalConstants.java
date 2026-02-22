@@ -16,7 +16,7 @@ public class GlobalConstants {
     /*
      * SYSID: (commands will be added to autoChooser)
      * Swerve uses CTRE log
-     * FLYWHEELS(Shooter) uses AdvantageKit
+     * FLYWHEELS uses AdvantageKit
      */
     public static final Boolean SYS_ID_SWERVE = false;
     public static final String CTRE_LOG_PATH = "/media/sda1/ctre-logs/";

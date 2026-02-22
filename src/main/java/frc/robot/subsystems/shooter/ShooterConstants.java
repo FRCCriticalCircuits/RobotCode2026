@@ -14,12 +14,14 @@ public class ShooterConstants {
         0.2032,
         0.90718474
     );
-    private static final LinearSystem<N2, N1, N2> HOOD_STATE_SPACE_TEMP = LinearSystemId.createDCMotorSystem(
+    private static final LinearSystem<N2, N1, N2> HOOD_STATE_SPACE_TEMP = LinearSystemId.createSingleJointedArmSystem(
         ShooterConstants.HOOD_GEARBOX,
         ShooterConstants.HOOD_MOI,
         HAL.HOOD_GEARING
     );
+
     public static final LinearSystem<N2, N1, N2> HOOD_STATE_SPACE = HOOD_STATE_SPACE_TEMP;
+    
 
     public static final DCMotor SHOOTER_GEARBOX = DCMotor.getKrakenX60Foc(2);
     public static final LinearSystem<N2, N1, N2> SHOOTER_STATE_SPACE = LinearSystemId.createDCMotorSystem(0.5, 1.0);

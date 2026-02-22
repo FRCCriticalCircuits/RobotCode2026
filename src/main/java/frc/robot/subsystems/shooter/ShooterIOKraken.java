@@ -26,6 +26,7 @@ public class ShooterIOKraken implements ShooterIO{
 
     // Status Signals
     private final StatusSignal<Angle> hoodPosition;
+    private final StatusSignal<AngularVelocity> hoodVelocity;
     private final StatusSignal<Angle> shooterPosition;
     private final StatusSignal<AngularVelocity> shooterVelocity;
     private final StatusSignal<Voltage> appliedVoltsHood;
@@ -106,6 +107,7 @@ public class ShooterIOKraken implements ShooterIO{
 
         // Status Signals
         this.hoodPosition = hoodMotor.getPosition();
+        this.hoodVelocity = hoodMotor.getVelocity();
         this.shooterPosition = shooter.getPosition();
         this.shooterVelocity = shooter.getVelocity();
 
@@ -124,6 +126,7 @@ public class ShooterIOKraken implements ShooterIO{
         BaseStatusSignal.setUpdateFrequencyForAll(
             100.0,
             this.hoodPosition,
+            this.hoodVelocity,
             this.shooterPosition,
             this.shooterVelocity,
             this.appliedVoltsHood,
@@ -159,6 +162,7 @@ public class ShooterIOKraken implements ShooterIO{
     public void updateInputs(ShooterIOInputs inputs) {
         inputs.hoodConnected = BaseStatusSignal.refreshAll(
             this.hoodPosition,
+            this.hoodVelocity,
             this.appliedVoltsHood,
             this.supplyCurrentHood,
             this.torqueCurrentHood,
@@ -175,6 +179,7 @@ public class ShooterIOKraken implements ShooterIO{
         ).isOK();
 
         inputs.hoodPosition = this.hoodPosition.getValueAsDouble() * Math.PI * 2;
+        inputs.hoodVelocity = this.hoodVelocity.getValueAsDouble() * Math.PI * 2;
         inputs.shooterPosition = this.shooterPosition.getValueAsDouble() * Math.PI * 2;
         inputs.shooterVelocity = this.shooterVelocity.getValueAsDouble() * Math.PI * 2;
         
