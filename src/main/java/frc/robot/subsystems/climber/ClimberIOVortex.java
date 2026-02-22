@@ -13,7 +13,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
@@ -40,8 +39,8 @@ public class ClimberIOVortex implements ClimberIO{
             .voltageCompensation(12.0);
         
         climberConfig.encoder
-            .positionConversionFactor((double)(1 / HAL.CLIMBER_GEARING) * Math.PI * 2)
-            .velocityConversionFactor((double)(1 / HAL.CLIMBER_GEARING) * Math.PI * 2 / 60)
+            .positionConversionFactor((1 / HAL.CLIMBER_GEARING) * Math.PI * 2)
+            .velocityConversionFactor((1 / HAL.CLIMBER_GEARING) * Math.PI * 2 / 60)
             .uvwMeasurementPeriod(10)
             .uvwAverageDepth(4);
         
@@ -91,7 +90,7 @@ public class ClimberIOVortex implements ClimberIO{
     public void updateInputs(ClimberIOInputs inputs) {
         inputs.climberPosition = climberEncoder.getPosition();
         inputs.appliedVoltsClimber = climberSparkFlex.getBusVoltage() * climberSparkFlex.getAppliedOutput();
-        inputs.supplyCurrentClimber = climberSparkFlex.getOutputCurrent();
+        inputs.supplyCurrentClimber = 0.0;
         inputs.tempClimber = climberSparkFlex.getMotorTemperature();
         inputs.climberConnected = (climberSparkFlex.getLastError() == REVLibError.kOk);
     }
@@ -99,7 +98,7 @@ public class ClimberIOVortex implements ClimberIO{
     @Override
     public Command runClimber(double voltage) {
         return Commands.run(
-            () -> climberSparkFlex.setVoltage(MathUtil.clamp(voltage, -12.0, 12.0))
+            () -> climberSparkFlex.setVoltage(voltage)
         );
     }
     
