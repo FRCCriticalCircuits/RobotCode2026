@@ -1,5 +1,8 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.units.measure.*;
+import frc.robot.subsystems.intake.IntakeConstants.*;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -13,16 +16,9 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Temperature;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.GlobalConstants;
-import frc.robot.subsystems.intake.IntakeConstants.HAL;
-import frc.robot.subsystems.intake.IntakeConstants.Tuning;
 
 public class IntakeIOKraken implements IntakeIO{
     private final TalonFX armMotor, rollerMotor, secondaryArmMotor;
@@ -58,9 +54,9 @@ public class IntakeIOKraken implements IntakeIO{
         this.armConfig = new TalonFXConfiguration();
         this.rollerConfig = new TalonFXConfiguration();
     
-        this.armConfig.Slot0.kP = Tuning.ARM_PID_P;
-        this.armConfig.Slot0.kI = Tuning.ARM_PID_I;
-        this.armConfig.Slot0.kD = Tuning.ARM_PID_D;
+        this.armConfig.Slot0.kP = TUNING.ARM_PID_P;
+        this.armConfig.Slot0.kI = TUNING.ARM_PID_I;
+        this.armConfig.Slot0.kD = TUNING.ARM_PID_D;
 
         this.armConfig.MotorOutput.Inverted = 
             HAL.ARM_INVERT
@@ -70,9 +66,9 @@ public class IntakeIOKraken implements IntakeIO{
         this.armConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         this.armConfig.Feedback.RotorToSensorRatio = HAL.ARM_GEARING;
 
-        this.rollerConfig.Slot0.kP = Tuning.ROLLER_PID_P;
-        this.rollerConfig.Slot0.kI = Tuning.ROLLER_PID_I;
-        this.rollerConfig.Slot0.kD = Tuning.ROLLER_PID_D;
+        this.rollerConfig.Slot0.kP = TUNING.ROLLER_PID_P;
+        this.rollerConfig.Slot0.kI = TUNING.ROLLER_PID_I;
+        this.rollerConfig.Slot0.kD = TUNING.ROLLER_PID_D;
 
         this.rollerConfig.MotorOutput.Inverted =
             HAL.ROLLER_INVERT
@@ -83,10 +79,10 @@ public class IntakeIOKraken implements IntakeIO{
         this.rollerConfig.Feedback.RotorToSensorRatio = HAL.ROLLER_GEARING;
 
         /* Default Supply Limit */
-        this.armConfig.TorqueCurrent.PeakForwardTorqueCurrent = Tuning.ARM_PEAK_FORWARD_TORQUE_CURRENT;
-        this.armConfig.TorqueCurrent.PeakReverseTorqueCurrent = Tuning.ARM_PEAK_REVERSE_TORQUE_CURRENT;
-        this.rollerConfig.TorqueCurrent.PeakForwardTorqueCurrent = Tuning.ROLLER_PEAK_FORWARD_TORQUE_CURRENT;
-        this.rollerConfig.TorqueCurrent.PeakReverseTorqueCurrent = Tuning.ROLLER_PEAK_REVERSE_TORQUE_CURRENT;
+        this.armConfig.TorqueCurrent.PeakForwardTorqueCurrent = TUNING.ARM_PEAK_FORWARD_TORQUE_CURRENT;
+        this.armConfig.TorqueCurrent.PeakReverseTorqueCurrent = TUNING.ARM_PEAK_REVERSE_TORQUE_CURRENT;
+        this.rollerConfig.TorqueCurrent.PeakForwardTorqueCurrent = TUNING.ROLLER_PEAK_FORWARD_TORQUE_CURRENT;
+        this.rollerConfig.TorqueCurrent.PeakReverseTorqueCurrent = TUNING.ROLLER_PEAK_REVERSE_TORQUE_CURRENT;
 
         // dont know if we need these
         this.armConfig.CurrentLimits.StatorCurrentLimitEnable = true;

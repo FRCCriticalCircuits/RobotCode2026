@@ -34,7 +34,7 @@ public class IntakeConstants {
         public static final boolean ROLLER_INVERT = true;
     }
 
-    public class Tuning{
+    public class TUNING{
         // tune Current Settings in IntakeIOKrakne.java if needed
 
         // Hood torque current caps used in ARMs Kraken configuration.

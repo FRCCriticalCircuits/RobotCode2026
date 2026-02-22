@@ -1,6 +1,7 @@
 package frc.robot.subsystems.hopper;
 
 import static frc.robot.utils.SparkUtil.*;
+import frc.robot.subsystems.hopper.HopperConstants.*;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -16,8 +17,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.hopper.HopperConstants.HAL;
-import frc.robot.subsystems.hopper.HopperConstants.TUNING;
 
 public class HopperIOSpark implements HopperIO{
     private final SparkMax hopperSparkMax;

@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter;
 
+import frc.robot.subsystems.shooter.ShooterConstants.*;
+
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
@@ -7,7 +9,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.shooter.ShooterConstants.TUNING;
 
 public class ShooterIOSim implements ShooterIO {
     private final DCMotorSim hood, shooter;

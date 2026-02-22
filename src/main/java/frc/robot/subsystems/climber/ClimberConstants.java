@@ -5,7 +5,9 @@ public class ClimberConstants {
         public static final double CLIMBER_GEARING = 1.0;
 
         public static final boolean CLIMBER_INVERT = false;
-        
+    }
+
+    public class TUNING{
         public static final int CLIMBER_STALL_LIMIT = 60;
         public static final int CLIMBER_FREE_LIMIT = 50;
 

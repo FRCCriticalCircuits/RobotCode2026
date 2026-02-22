@@ -1,6 +1,7 @@
 package frc.robot.subsystems.climber;
 
 import static frc.robot.utils.SparkUtil.*;
+import frc.robot.subsystems.climber.ClimberConstants.*;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.REVLibError;
@@ -14,7 +15,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.climber.ClimberConstants.HAL;
 
 public class ClimberIOVortex implements ClimberIO{
     private final SparkFlex climberSparkFlex;
@@ -35,7 +35,7 @@ public class ClimberIOVortex implements ClimberIO{
             .inverted(HAL.CLIMBER_INVERT);
 
         climberConfig
-            .smartCurrentLimit(HAL.CLIMBER_STALL_LIMIT, HAL.CLIMBER_FREE_LIMIT)
+            .smartCurrentLimit(TUNING.CLIMBER_STALL_LIMIT, TUNING.CLIMBER_FREE_LIMIT)
             .voltageCompensation(12.0);
         
         climberConfig.encoder
@@ -69,9 +69,9 @@ public class ClimberIOVortex implements ClimberIO{
             .maxMotionSetpointVelocityAlwaysOn(false);
 
         climberConfig.closedLoop
-            .p(HAL.CLIMBER_PID_P)
-            .i(HAL.CLIMBER_PID_I)
-            .d(HAL.CLIMBER_PID_D)
+            .p(TUNING.CLIMBER_PID_P)
+            .i(TUNING.CLIMBER_PID_I)
+            .d(TUNING.CLIMBER_PID_D)
             .outputRange(-1.0, 1.0);
 
         tryUntilOk(

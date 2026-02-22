@@ -1,11 +1,11 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.units.measure.*;
+import frc.robot.subsystems.shooter.ShooterConstants.*;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-
 import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -20,8 +20,6 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.GlobalConstants;
-import frc.robot.subsystems.shooter.ShooterConstants.HAL;
-import frc.robot.subsystems.shooter.ShooterConstants.TUNING;
 
 public class ShooterIOKraken implements ShooterIO{
     private final TalonFX hoodMotor, shooter, secondaryShooter;
