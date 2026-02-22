@@ -46,7 +46,7 @@ public class ShooterIOKraken implements ShooterIO{
     // Control Requests
     private final PositionTorqueCurrentFOC hoodPositionFOC = new PositionTorqueCurrentFOC(0.0)
         .withUpdateFreqHz(0.0);
-    private final VelocityTorqueCurrentFOC shooterVelocityFOC = new VelocityTorqueCurrentFOC(0)
+    private final VelocityTorqueCurrentFOC shooterVelocityFOC = new VelocityTorqueCurrentFOC(0.0)
         .withUpdateFreqHz(0.0);
     // Cached last commanded targets, used by isStable() feed gating.
     private double hoodSetpointRad = 0.0;

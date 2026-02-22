@@ -39,14 +39,8 @@ public class Robot extends LoggedRobot {
         );
 
         // Set up data receivers
-        if(Robot.isReal()){
-            // Running on a real robot, log to a USB stick ("/U/logs")
-            Logger.addDataReceiver(new WPILOGWriter());
-            Logger.addDataReceiver(new NT4Publisher());
-        }else{
-            // Running simulator, log to NT
-            Logger.addDataReceiver(new NT4Publisher());
-        }
+        Logger.addDataReceiver(new WPILOGWriter());
+        if (!Robot.isReal() || !GlobalConstants.COMP) Logger.addDataReceiver(new NT4Publisher());
 
         if(GlobalConstants.SYS_ID_SWERVE) SignalLogger.start();
         Logger.start();

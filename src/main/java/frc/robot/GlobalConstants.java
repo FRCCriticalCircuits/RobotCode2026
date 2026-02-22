@@ -9,6 +9,7 @@ public class GlobalConstants {
      * COMPETITION MODE:
      * Visualization for subsytems including autoaim
      * Only load autos with prefix "comp_"
+     * Publish AKit Logging data
      */
     public static final Boolean COMP = false;
     

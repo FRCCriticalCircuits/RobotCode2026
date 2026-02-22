@@ -14,7 +14,7 @@ public class IntakeIOSim implements IntakeIO {
 
     private double appliedVoltsArm, appliedVoltsRoller;
     private double armPosition = 0, rollerVelocity = 0;
-    private Boolean motorStopped = false;
+    private Boolean rollerStopped = false;
 
     public IntakeIOSim() {
         arm = new DCMotorSim(
@@ -45,37 +45,35 @@ public class IntakeIOSim implements IntakeIO {
         inputs.armConnected = true;
         inputs.rollerConnected = true;
 
-        // always need closeloop 
-        arm.setInputVoltage(
-            MathUtil.clamp(
-                armController.calculate(
-                    arm.getAngularPositionRad(),
-                    this.armPosition
-                ),
-                -12.0,
-                12.0
-            )
+        this.appliedVoltsArm = MathUtil.clamp(
+            armController.calculate(
+                arm.getAngularPositionRad(),
+                this.armPosition
+            ),
+            -12.0,
+            12.0
         );
 
-        if(!motorStopped){    
-            roller.setInputVoltage(
-                MathUtil.clamp(
-                    rollerController.calculate(
-                        roller.getAngularVelocityRadPerSec(),
-                        this.rollerVelocity
-                    ),
-                    -12.0,
-                    12.0
-                )
-            );
-        }
+        // always need closeloop 
+        arm.setInputVoltage(appliedVoltsArm);
+
+        this.appliedVoltsRoller = MathUtil.clamp(
+            rollerController.calculate(
+                roller.getAngularVelocityRadPerSec(),
+                this.rollerVelocity
+            ),
+            -12.0,
+            12.0
+        );
+
+        if(!rollerStopped) roller.setInputVoltage(appliedVoltsRoller);
     }
 
     @Override
     public Command runArm(double positionRad) {
         return Commands.run(
             () -> {
-                this.motorStopped = false;
+                this.rollerStopped = false;
                 this.armPosition = positionRad;
             }
         ).withName("Intake.runArmPosition");
@@ -85,7 +83,7 @@ public class IntakeIOSim implements IntakeIO {
     public Command runRoller(double velocity) {
         return Commands.run(
             () -> {
-                this.motorStopped = false;
+                this.rollerStopped = false;
                 this.rollerVelocity = velocity;
             }
         ).withName("Intake.runRollerVelocity");
@@ -93,9 +91,9 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public void stopMotors() {
-        roller.setInputVoltage(0.0);
-        this.motorStopped = true;
+        this.rollerStopped = true;
         this.armPosition = 0;
+        roller.setInputVoltage(0.0);
     }
 }
 

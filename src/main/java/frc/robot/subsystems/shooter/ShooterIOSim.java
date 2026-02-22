@@ -13,9 +13,9 @@ public class ShooterIOSim implements ShooterIO {
     private final DCMotorSim hood, shooter;
 
     private final PIDController hoodController = new PIDController(10, 0, 0);
-    private final PIDController shooterController = new PIDController(0.5, 0, 0);
+    private final PIDController shooterController = new PIDController(0.1, 0, 0);
 
-    private double appliedVoltsHood, appliedVoltsShooter;
+    private double appliedVoltsHood = 0, appliedVoltsShooter = 0;
     private double hoodPosition = 0, shooterVelocity = 0;
     private boolean shooterStopped = false;
 
@@ -37,6 +37,7 @@ public class ShooterIOSim implements ShooterIO {
         shooter.update(0.02);
         
         inputs.hoodPosition = hood.getAngularPositionRad();
+        inputs.shooterPosition = shooter.getAngularPositionRad();
         inputs.shooterVelocity = shooter.getAngularVelocityRadPerSec();
 
         inputs.appliedVoltsHood = this.appliedVoltsHood;
@@ -48,30 +49,28 @@ public class ShooterIOSim implements ShooterIO {
         inputs.hoodConnected = true;
         inputs.shooterConnected = true;
 
-        // update closeloop
-        hood.setInputVoltage(
-            MathUtil.clamp(
-                hoodController.calculate(
-                    hood.getAngularPositionRad(),
-                    this.hoodPosition
-                ),
-                -12.0,
-                12.0
-            )
+        this.appliedVoltsHood = MathUtil.clamp(
+            hoodController.calculate(
+                hood.getAngularPositionRad(),
+                this.hoodPosition
+            ),
+            -12.0,
+            12.0
         );
 
-        if(!shooterStopped){
-            shooter.setInputVoltage(
-                MathUtil.clamp(
-                    shooterController.calculate(
-                        shooter.getAngularVelocityRadPerSec(),
-                        this.shooterVelocity
-                    ),
-                    -12.0,
-                    12.0
-                )
-            );
-        } 
+        // update closeloop
+        hood.setInputVoltage(appliedVoltsHood);
+
+        this.appliedVoltsShooter = MathUtil.clamp(
+            shooterController.calculate(
+                shooter.getAngularVelocityRadPerSec(),
+                this.shooterVelocity
+            ),
+            -12.0,
+            12.0
+        );
+
+        if(!shooterStopped){shooter.setInputVoltage(appliedVoltsShooter);} 
     }
 
     @Override
@@ -112,6 +111,6 @@ public class ShooterIOSim implements ShooterIO {
     public void stopMotors() {
         this.shooterStopped = true;
         this.hoodPosition = 0.0;
-        shooter.setInputVoltage(0);
+        shooter.setInputVoltage(0.0);
     }
 }

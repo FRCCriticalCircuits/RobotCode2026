@@ -68,7 +68,6 @@ public class RobotContainer {
     private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOSim();
     private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : new HopperIOSim();
     private final ClimberIO climberIO = Utils.isSimulation() ? new ClimberIOSim() : new ClimberIOSim();
-    @SuppressWarnings("unused")
     private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO, climberIO);
 
     private final SysIdRoutine shooterRoutine = new SysIdRoutine(
@@ -79,7 +78,7 @@ public class RobotContainer {
         new SysIdRoutine.Mechanism(
             (voltage) -> shooterIO.runShooterVoltage(voltage.in(Volts)),
             null, // No log consumer, since data is recorded by AdvantageKit
-            null
+            upperParts
         )
     );
 
