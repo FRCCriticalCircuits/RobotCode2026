@@ -14,6 +14,12 @@ public class ClimberIOSim implements ClimberIO{
     private double climberVelocity = 0;
     private boolean climberStopped = true;
 
+    /*
+     * DO NOT RUN IT
+     * 1. runClimber Function is suppose to take voltage as input
+     * 2. We dont need velocity closeloop, we need either position closeloop or voltage openloop
+     */
+    @Deprecated()
     public ClimberIOSim(){
         climber = new DCMotorSim(
             ClimberConstants.CLIMBER_STATE_SPACE,
@@ -25,10 +31,6 @@ public class ClimberIOSim implements ClimberIO{
     public void updateInputs(ClimberIOInputs inputs) {
         climber.update(0.02);
         inputs.climberPosition = climber.getAngularPositionRad();
-        inputs.climberVelocity = climber.getAngularVelocityRadPerSec();
-
-        inputs.climberAppliedVolts = appliedVoltsClimber;
-        inputs.climberCurrentAmps = climber.getCurrentDrawAmps();
 
         inputs.climberConnected = true;
 
@@ -49,13 +51,6 @@ public class ClimberIOSim implements ClimberIO{
                 this.climberVelocity = velocity;
             }
         ).withName("climber.runClimberVelocity");
-    }
-
-    @Override
-    public void runClimberVoltage(double voltage) {
-        this.climberStopped = false;
-        this.appliedVoltsClimber = voltage;
-        climber.setInputVoltage(voltage);
     }
 
     @Override

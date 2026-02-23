@@ -16,17 +16,10 @@ public interface ClimberIO {
         public double tempClimber = 0;
 
         public boolean climberConnected = false;
-
-        public double climberVelocity;
-
-        public double climberAppliedVolts;
-
-        public double climberCurrentAmps;
     }
     
     default void updateInputs(ClimberIOInputs inputs) {}
     
     default Command runClimber(double voltage) {return Commands.none();}
-    default void runClimberVoltage(double voltage) {}
     default void stopMotors() {}
 }
