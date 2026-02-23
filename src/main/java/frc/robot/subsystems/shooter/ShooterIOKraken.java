@@ -148,6 +148,8 @@ public class ShooterIOKraken implements ShooterIO{
         shooter.getConfigurator().apply(shooterConfig);
         secondaryShooter.getConfigurator().apply(shooterConfig);
 
+        hoodMotor.setPosition(0.0);
+
         secondaryShooter.setControl(
             new Follower(
                 shooter.getDeviceID(), 

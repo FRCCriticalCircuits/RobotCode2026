@@ -140,7 +140,7 @@ public class SuperStructure extends SubsystemBase{
                 ShooterConstants.CAD.ORIGIN_OFFSET_Z,
                 new Rotation3d(
                     0,
-                    shooterInputs.hoodPosition + ShooterConstants.CAD.PITCH_OFFSET,
+                    ShooterConstants.CAD.PITCH_OFFSET + shooterInputs.hoodPosition,
                     0
                 )
             )

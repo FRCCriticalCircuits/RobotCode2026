@@ -137,6 +137,9 @@ public class IntakeIOKraken implements IntakeIO{
         secondaryArmMotor.getConfigurator().apply(armConfig);
         rollerMotor.getConfigurator().apply(rollerConfig);
 
+        armMotor.setPosition(0.0);
+        secondaryArmMotor.setPosition(0.0);
+
         secondaryArmMotor.setControl(
             new Follower(
                 armMotor.getDeviceID(),
