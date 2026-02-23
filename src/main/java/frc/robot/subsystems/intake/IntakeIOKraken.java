@@ -126,7 +126,8 @@ public class IntakeIOKraken implements IntakeIO{
             this.torqueCurrentRoller,
             this.tempArm,
             this.tempSecondaryArm,
-            this.tempRoller
+            this.tempRoller,
+            this.armMotor.getControlMode()
         );
         
         armMotor.optimizeBusUtilization(1.0);

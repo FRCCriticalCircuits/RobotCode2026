@@ -137,7 +137,8 @@ public class ShooterIOKraken implements ShooterIO{
             this.torqueCurrentShooter,
             this.tempHood,
             this.tempShooter,
-            this.tempSecondaryShooter
+            this.tempSecondaryShooter,
+            this.shooter.getControlMode()
         );
 
         shooter.optimizeBusUtilization(1.0);
