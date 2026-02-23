@@ -14,10 +14,9 @@ public class ClimberIOSim implements ClimberIO{
     private double climberVelocity = 0;
     private boolean climberStopped = true;
 
-    /*
-     * DO NOT RUN IT
-     * 1. runClimber Function is suppose to take voltage as input
-     * 2. We dont need velocity closeloop, we need either position closeloop or voltage openloop
+    /**
+     * @deprecated
+     * runClimber Function is suppose to take voltage as input; We dont need velocity closeloop, we need either position closeloop or voltage openloop
      */
     @Deprecated()
     public ClimberIOSim(){
