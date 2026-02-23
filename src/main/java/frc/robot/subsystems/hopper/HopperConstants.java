@@ -7,7 +7,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 
 public class HopperConstants {
-    public static final DCMotor HOPPER_GEARBOX = DCMotor.getKrakenX60(1);
+    public static final DCMotor HOPPER_GEARBOX = DCMotor.getNEO(1);
     public static final LinearSystem<N2, N1, N2> HOPPER_STATE_SPACE = LinearSystemId.createDCMotorSystem(0.1, 0.01);
 
     public class HAL{
