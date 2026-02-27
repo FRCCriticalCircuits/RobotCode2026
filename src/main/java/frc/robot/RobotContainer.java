@@ -67,7 +67,7 @@ public class RobotContainer {
     private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOSim();
     private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOSim();
     private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : new HopperIOSim();
-    private final ClimberIO climberIO = Utils.isSimulation() ? new ClimberIOSim() : new ClimberIOSim();
+    private final ClimberIO climberIO = Utils.isSimulation() ? new ClimberIOSim() : new ClimberIOSim(); // TODO
     private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO, climberIO);
 
     // SysID Routine for flywheels(shooter/hopper/intake)
