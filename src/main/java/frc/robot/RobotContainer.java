@@ -36,6 +36,9 @@ import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionConstants;
+import frc.robot.subsystems.vision.VisionPhoton;
 import frc.robot.utils.AutoAim;
 import frc.robot.utils.AxisConfigLoader;
 
@@ -62,6 +65,12 @@ public class RobotContainer {
         AxisConfigLoader.loadTable(GlobalConstants.RIGHT_AXIS_CONFIG),
         () -> calculationUtil.getAimParams()
     );
+
+    // Vision
+    private final VisionPhoton leftCam = new VisionPhoton("cameraLeft", VisionConstants.leftCam);
+    private final VisionPhoton rightCam = new VisionPhoton("cameraRight", VisionConstants.rightCam);
+    @SuppressWarnings("unused")
+    private final Vision visionSubsystem = new Vision(drivetrain, leftCam, rightCam);
 
     // SuperStructure    
     private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOSim();
