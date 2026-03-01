@@ -7,9 +7,9 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -41,9 +41,9 @@ public class IntakeIOKraken implements IntakeIO{
     private final TalonFXConfiguration armConfig, rollerConfig;
 
     // Control Requests
-    private final PositionTorqueCurrentFOC armPostionFOC = new PositionTorqueCurrentFOC(0.0)
+    private final MotionMagicVoltage armPostionVoltage = new MotionMagicVoltage(0.0)
         .withUpdateFreqHz(0.0);
-    private final VelocityTorqueCurrentFOC rollerVelocityFOC = new VelocityTorqueCurrentFOC(0.0)
+    private final VelocityVoltage rollerVelocityVoltage = new VelocityVoltage(0.0)
         .withUpdateFreqHz(0.0);
 
     public IntakeIOKraken(){
@@ -58,6 +58,10 @@ public class IntakeIOKraken implements IntakeIO{
         this.armConfig.Slot0.kP = TUNING.ARM_PID_P;
         this.armConfig.Slot0.kI = TUNING.ARM_PID_I;
         this.armConfig.Slot0.kD = TUNING.ARM_PID_D;
+
+        this.armConfig.Slot0.kV = TUNING.ARM_VEL_FF;
+        this.armConfig.MotionMagic.MotionMagicCruiseVelocity = TUNING.ARM_MAX_VEL;  
+        this.armConfig.MotionMagic.MotionMagicAcceleration = TUNING.ARM_MAX_ACCEL; 
 
         this.armConfig.MotorOutput.Inverted = 
             HAL.ARM_INVERT
@@ -78,14 +82,7 @@ public class IntakeIOKraken implements IntakeIO{
         this.rollerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         this.rollerConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         this.rollerConfig.Feedback.RotorToSensorRatio = HAL.ROLLER_GEARING;
-
-        /* Default Supply Limit */
-        this.armConfig.TorqueCurrent.PeakForwardTorqueCurrent = TUNING.ARM_PEAK_FORWARD_TORQUE_CURRENT;
-        this.armConfig.TorqueCurrent.PeakReverseTorqueCurrent = TUNING.ARM_PEAK_REVERSE_TORQUE_CURRENT;
-        this.rollerConfig.TorqueCurrent.PeakForwardTorqueCurrent = TUNING.ROLLER_PEAK_FORWARD_TORQUE_CURRENT;
-        this.rollerConfig.TorqueCurrent.PeakReverseTorqueCurrent = TUNING.ROLLER_PEAK_REVERSE_TORQUE_CURRENT;
-
-        // dont know if we need these
+        
         this.armConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         this.armConfig.CurrentLimits.StatorCurrentLimit = 80;
         this.armConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -193,7 +190,7 @@ public class IntakeIOKraken implements IntakeIO{
         return Commands.run(
             () -> {
                 armMotor.setControl(
-                    armPostionFOC.withPosition(positionRad)
+                    armPostionVoltage.withPosition(positionRad)
                 );
             }
         ).withName("Intake.runArmPosition");
@@ -204,7 +201,7 @@ public class IntakeIOKraken implements IntakeIO{
         return Commands.run(
             () -> {
                 rollerMotor.setControl(
-                    rollerVelocityFOC.withVelocity(velocity)  
+                    rollerVelocityVoltage.withVelocity(velocity)  
                 );
             }
         ).withName("Intake.runRollerVelocity");

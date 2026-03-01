@@ -35,19 +35,31 @@ public class IntakeConstants {
     }
 
     public class TUNING{
-        // tune Current Settings in IntakeIOKrakne.java if needed
+        /*
+            // tune Current Settings in IntakeIOKrakne.java if needed
 
-        // Hood torque current caps used in ARMs Kraken configuration.
-        public static final double ARM_PEAK_FORWARD_TORQUE_CURRENT = 30.0;
-        public static final double ARM_PEAK_REVERSE_TORQUE_CURRENT = -30.0;
+            // Hood torque current caps used in ARMs Kraken configuration.
+            public static final double ARM_PEAK_FORWARD_TORQUE_CURRENT = 30.0;
+            public static final double ARM_PEAK_REVERSE_TORQUE_CURRENT = -30.0;
 
-        // Hood torque current caps used in ROLLER Kraken configuration.
-        public static final double ROLLER_PEAK_FORWARD_TORQUE_CURRENT = 30.0;
-        public static final double ROLLER_PEAK_REVERSE_TORQUE_CURRENT = -30.0;
+            // Hood torque current caps used in ROLLER Kraken configuration.
+            public static final double ROLLER_PEAK_FORWARD_TORQUE_CURRENT = 30.0;
+            public static final double ROLLER_PEAK_REVERSE_TORQUE_CURRENT = -30.0;
+        */
 
+        /**
+         * with MotionMagic Control
+         * kP : the proportion for position error
+         * kD : the proportion for velocity error
+         * *_VEL_FF -> kV : voltage per velocity unit
+         */
         public static final double ARM_PID_P = 0;
         public static final double ARM_PID_I = 0;
         public static final double ARM_PID_D = 0;
+
+        public static final double ARM_VEL_FF = 0.0;
+        public static final double ARM_MAX_VEL = 0.5;
+        public static final double ARM_MAX_ACCEL = 0.5;
 
         public static final double ROLLER_PID_P = 0;
         public static final double ROLLER_PID_I = 0;

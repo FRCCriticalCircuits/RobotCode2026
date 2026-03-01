@@ -40,17 +40,29 @@ public class ShooterConstants {
         public static final double HOOD_STABLE_TOLERANCE_RAD = Math.toRadians(1.5);
         public static final double SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC = 8.0;
 
-        // Hood torque current caps used in HOOD Kraken configuration.
-        public static final double HOOD_PEAK_FORWARD_TORQUE_CURRENT = 30.0;
-        public static final double HOOD_PEAK_REVERSE_TORQUE_CURRENT = -30.0;
+        /*
+            // Hood torque current caps used in HOOD Kraken configuration.
+            public static final double HOOD_PEAK_FORWARD_TORQUE_CURRENT = 30.0;
+            public static final double HOOD_PEAK_REVERSE_TORQUE_CURRENT = -30.0;
 
-        // Hood torque current caps used in Shooter Kraken configuration.
-        public static final double SHOOTER_PEAK_FORWARD_TORQUE_CURRENT = 40.0;
-        public static final double SHOOTER_PEAK_REVERSE_TORQUE_CURRENT = -40.0;
+            // Hood torque current caps used in Shooter Kraken configuration.
+            public static final double SHOOTER_PEAK_FORWARD_TORQUE_CURRENT = 40.0;
+            public static final double SHOOTER_PEAK_REVERSE_TORQUE_CURRENT = -40.0;
+        */
 
+        /**
+         * with MotionMagic Control
+         * kP : the proportion for position error
+         * kD : the proportion for velocity error
+         * *_VEL_FF -> kV : voltage per velocity unit
+         */
         public static final double HOOD_PID_P = 0;
         public static final double HOOD_PID_I = 0;
         public static final double HOOD_PID_D = 0;
+
+        public static final double HOOD_VEL_FF = 0.0;
+        public static final double HOOD_MAX_VEL = 0.5;
+        public static final double HOOD_MAX_ACCEL = 0.5;
 
         public static final double SHOOTER_PID_P = 0;
         public static final double SHOOTER_PID_I = 0;

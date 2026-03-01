@@ -10,9 +10,9 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -43,9 +43,9 @@ public class ShooterIOKraken implements ShooterIO{
     private final TalonFXConfiguration hoodConfig, shooterConfig;
 
     // Control Requests
-    private final PositionTorqueCurrentFOC hoodPositionFOC = new PositionTorqueCurrentFOC(0.0)
+    private final MotionMagicVoltage hoodPositionVoltage = new MotionMagicVoltage(0.0)
         .withUpdateFreqHz(0.0);
-    private final VelocityTorqueCurrentFOC shooterVelocityFOC = new VelocityTorqueCurrentFOC(0.0)
+    private final VelocityVoltage shooterVelocityVoltage = new VelocityVoltage(0.0)
         .withUpdateFreqHz(0.0);
     // Cached last commanded targets, used by isStable() feed gating.
     private double hoodSetpointRad = 0.0;
@@ -63,6 +63,10 @@ public class ShooterIOKraken implements ShooterIO{
         this.hoodConfig.Slot0.kP = TUNING.HOOD_PID_P;
         this.hoodConfig.Slot0.kI = TUNING.HOOD_PID_I;
         this.hoodConfig.Slot0.kD = TUNING.HOOD_PID_D;
+
+        this.hoodConfig.Slot0.kV = TUNING.HOOD_VEL_FF;
+        this.hoodConfig.MotionMagic.MotionMagicCruiseVelocity = TUNING.HOOD_MAX_VEL;  
+        this.hoodConfig.MotionMagic.MotionMagicAcceleration = TUNING.HOOD_MAX_ACCEL; 
         
         this.hoodConfig.MotorOutput.Inverted =
             HAL.HOOD_INVERT
@@ -83,18 +87,6 @@ public class ShooterIOKraken implements ShooterIO{
         this.shooterConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         this.shooterConfig.Feedback.RotorToSensorRatio = HAL.SHOOTER_GEARING;
 
-        // Pull torque limits from constants so real+sim tuning stays centralized.
-        this.hoodConfig.TorqueCurrent.PeakForwardTorqueCurrent =
-            TUNING.HOOD_PEAK_FORWARD_TORQUE_CURRENT;
-        this.hoodConfig.TorqueCurrent.PeakReverseTorqueCurrent =
-            TUNING.HOOD_PEAK_REVERSE_TORQUE_CURRENT;
-
-        this.shooterConfig.TorqueCurrent.PeakForwardTorqueCurrent =
-            TUNING.HOOD_PEAK_FORWARD_TORQUE_CURRENT;
-        this.shooterConfig.TorqueCurrent.PeakReverseTorqueCurrent =
-            TUNING.SHOOTER_PEAK_REVERSE_TORQUE_CURRENT;
-
-        // dont know if we need it these
         this.hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         this.hoodConfig.CurrentLimits.StatorCurrentLimit = 80;
         this.hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -206,7 +198,7 @@ public class ShooterIOKraken implements ShooterIO{
                 // Track target locally so readiness logic can compare measured error.
                 hoodSetpointRad = positionRad.getAsDouble();
                 hoodMotor.setControl(
-                    hoodPositionFOC.withPosition(hoodSetpointRad)
+                    hoodPositionVoltage.withPosition(hoodSetpointRad)
                 );
             }
         ).withName("Shooter.runHoodPosition");
@@ -219,7 +211,7 @@ public class ShooterIOKraken implements ShooterIO{
                 // Track target locally so readiness logic can compare measured error.
                 shooterSetpointRadPerSec = velocity;
                 shooter.setControl(
-                    shooterVelocityFOC.withVelocity(shooterSetpointRadPerSec)
+                    shooterVelocityVoltage.withVelocity(shooterSetpointRadPerSec)
                 );
             }
         ).withName("Shooter.runShooterVelocity");
