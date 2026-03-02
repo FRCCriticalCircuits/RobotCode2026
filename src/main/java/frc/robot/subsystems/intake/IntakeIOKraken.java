@@ -65,8 +65,8 @@ public class IntakeIOKraken implements IntakeIO{
 
         this.armConfig.MotorOutput.Inverted = 
             HAL.ARM_INVERT
-                ? InvertedValue.Clockwise_Positive
-                : InvertedValue.CounterClockwise_Positive;
+                ? InvertedValue.CounterClockwise_Positive
+                : InvertedValue.Clockwise_Positive;
         this.armConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         this.armConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         this.armConfig.Feedback.RotorToSensorRatio = HAL.ARM_GEARING;
@@ -77,8 +77,8 @@ public class IntakeIOKraken implements IntakeIO{
 
         this.rollerConfig.MotorOutput.Inverted =
             HAL.ROLLER_INVERT
-                ? InvertedValue.Clockwise_Positive
-                : InvertedValue.CounterClockwise_Positive;
+                ? InvertedValue.CounterClockwise_Positive
+                : InvertedValue.Clockwise_Positive;
         this.rollerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         this.rollerConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         this.rollerConfig.Feedback.RotorToSensorRatio = HAL.ROLLER_GEARING;

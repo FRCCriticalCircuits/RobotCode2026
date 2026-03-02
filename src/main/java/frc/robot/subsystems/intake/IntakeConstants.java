@@ -29,7 +29,7 @@ public class IntakeConstants {
         public static final double ARM_GEARING = 23.0 * 1.2587890624;
         public static final double ROLLER_GEARING = 1.0;
 
-        public static final boolean ARM_INVERT = true;
+        public static final boolean ARM_INVERT = false;
         public static final boolean SECONDARY_ARM_INVERT = true;
         public static final boolean ROLLER_INVERT = true;
     }
@@ -53,13 +53,13 @@ public class IntakeConstants {
          * kD : the proportion for velocity error
          * *_VEL_FF -> kV : voltage per velocity unit
          */
-        public static final double ARM_PID_P = 0;
+        public static final double ARM_PID_P = 2;
         public static final double ARM_PID_I = 0;
         public static final double ARM_PID_D = 0;
 
-        public static final double ARM_VEL_FF = 0.0;
-        public static final double ARM_MAX_VEL = 0.5;
-        public static final double ARM_MAX_ACCEL = 0.5;
+        public static final double ARM_VEL_FF = 0.3;
+        public static final double ARM_MAX_VEL = 4;
+        public static final double ARM_MAX_ACCEL = 8;
 
         public static final double ROLLER_PID_P = 0;
         public static final double ROLLER_PID_I = 0;
