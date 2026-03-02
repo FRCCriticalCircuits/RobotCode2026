@@ -1,8 +1,10 @@
 package frc.robot;
 
 import com.ctre.phoenix6.CANBus;
+import com.pathplanner.lib.util.FlippingUtil;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.utils.FlippingUtil.FieldSymmetry;
 
 public class GlobalConstants {
     /*
@@ -33,6 +35,7 @@ public class GlobalConstants {
     public static final CANBus BUS = new CANBus("rio");
 
     public class FIELD_CONSTANTS {
+        public static FieldSymmetry symmetryType = FieldSymmetry.kRotational;
         public static final double FIELD_WIDTH = 8.07;
         public static final double FIELD_LENGTH = 16.54;
 
@@ -44,12 +47,9 @@ public class GlobalConstants {
             FIELD_WIDTH / 2
         );
 
-        public static final Translation2d RED_HUB = new Translation2d(
-            RED_ALLIANCE_ZONE_X - 0.5969,  // 23.5 in
-            FIELD_WIDTH / 2
-        );
+        public static final Translation2d RED_HUB = FlippingUtil.flipFieldPosition(BLUE_HUB);
 
-        // Positions to aim when Passing
+        // Positions for Passing
         public static final Translation2d TOP_LEFT = new Translation2d(2.5, 6);
         public static final Translation2d TOP_RIGHT = new Translation2d(FIELD_LENGTH - 2.5, 6);
         public static final Translation2d BOTTOM_LEFT = new Translation2d(2.5, 2);

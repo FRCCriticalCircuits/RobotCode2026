@@ -45,7 +45,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionPhoton;
 import frc.robot.utils.AimCalc;
-import frc.robot.utils.AxisConfigLoader;
+import frc.robot.utils.axis.AxisConfigLoader;
 
 public class RobotContainer {
     private final CommandXboxController driverController = new CommandXboxController(0);
@@ -148,7 +148,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
             "drive27",
-            autoDrive.withTarget(new Pose2d(2, 7, Rotation2d.fromDegrees(0)))
+            new AutoDrive(drivetrain).withTarget(new Pose2d(2, 7, Rotation2d.fromDegrees(0)))
         );
 
         // This will use Commands.none() as the default option.
@@ -228,8 +228,9 @@ public class RobotContainer {
         );
         */
 
-        // TODO drivetest
-        driverController.a().onTrue(new AutoDrive(drivetrain).withTarget(new Pose2d(5, 5, Rotation2d.fromDegrees(0))));
+        // TODO drivetest, a climb position manager maybe
+        driverController.a().onTrue(autoDrive.withTarget(new Pose2d(5, 5, Rotation2d.fromDegrees(0))));
+        
         driverController.x().onTrue(
             drivetrain.runOnce(
                 () -> drivetrain.resetPose(new Pose2d(2.5, 4.5, Rotation2d.kZero)) // BLUE
