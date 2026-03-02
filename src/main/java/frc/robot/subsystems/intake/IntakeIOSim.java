@@ -100,7 +100,7 @@ public class IntakeIOSim implements IntakeIO {
     }
 
     @Override
-    public void stopMotors() {
+    public void stopIntake() {
         this.rollerStopped = true;
         this.armPosition = 0;
 

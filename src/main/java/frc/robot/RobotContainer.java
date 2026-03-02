@@ -5,18 +5,22 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
+import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -39,7 +43,7 @@ import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionPhoton;
-import frc.robot.utils.AutoAim;
+import frc.robot.utils.AimCalc;
 import frc.robot.utils.AxisConfigLoader;
 
 public class RobotContainer {
@@ -52,15 +56,18 @@ public class RobotContainer {
     private final SwerveTelemetry swerveLogger = new SwerveTelemetry();     
     private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
 
-    private final Trigger autoAim = driverController.rightBumper().debounce(0.02);
-    private final AutoAim calculationUtil = new AutoAim(drivetrain);
+    private Boolean autoAimEnabled = false;
+    private final Trigger autoAimTrigger = driverController.rightBumper().debounce(0.02);
+    private Supplier<Boolean> autoAim = () -> autoAimTrigger.getAsBoolean() || autoAimEnabled;
+    
+    private final AimCalc calculationUtil = new AimCalc(drivetrain);
 
     private final DriveCommand teleDrive = new DriveCommand(
         drivetrain,
         () -> -driverController.getLeftY(),
         () -> -driverController.getLeftX(),
         () -> -driverController.getRightX(),
-        () -> autoAim.getAsBoolean(),
+        autoAim,
         AxisConfigLoader.loadTable(GlobalConstants.LEFT_AXIS_CONFIG),
         AxisConfigLoader.loadTable(GlobalConstants.RIGHT_AXIS_CONFIG),
         () -> calculationUtil.getAimParams()
@@ -93,8 +100,52 @@ public class RobotContainer {
         )
     );
 
+    // Commands
+    private final AutoDrive autoDrive = new AutoDrive(drivetrain);
+    private final Command intakeCommand = upperParts.runIntake();
+    private final Command shooterCommand = upperParts.runShooter(
+        () -> calculationUtil.getAimParams().pitch
+    );
+
     public RobotContainer() {
         drivetrain.registerTelemetry(swerveLogger::telemeterize);
+
+        NamedCommands.registerCommand("runIntake", intakeCommand);
+        
+        NamedCommands.registerCommand(
+            "stopIntake",
+            Commands.runOnce(
+                () -> CommandScheduler.getInstance().cancel(intakeCommand)
+            )
+        );
+
+        NamedCommands.registerCommand("runShooter", 
+            Commands.parallel(
+                teleDrive,
+                shooterCommand,
+                Commands.runOnce(
+                    () -> {
+                        autoAimEnabled = true;
+                    }
+                )
+            )
+        );
+
+        NamedCommands.registerCommand(
+            "stopShooter",
+            Commands.runOnce(
+                () -> {
+                    CommandScheduler.getInstance().cancel(teleDrive);
+                    CommandScheduler.getInstance().cancel(shooterCommand);
+                    autoAimEnabled = false;
+                }
+            )
+        );
+
+        NamedCommands.registerCommand(
+            "drive27",
+            autoDrive.withTarget(new Pose2d(2, 7, Rotation2d.fromDegrees(0)))
+        );
 
         // This will use Commands.none() as the default option.
         // Displayed as "None"
@@ -140,7 +191,7 @@ public class RobotContainer {
 
         //#endregion
 
-        drivetrain.setDefaultCommand(teleDrive);
+        // drivetrain.setDefaultCommand(teleDrive);
 
         SmartDashboard.putData("Auto to Run", autoChooser);
         configureBindings();
@@ -155,9 +206,9 @@ public class RobotContainer {
         // Reset the field-centric heading on left bumper press.
         driverController.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
-        /*/
+        /*
         driverController.leftTrigger(0.15).whileTrue(
-            upperParts.runIntake()
+            intakeCommand
         );
 
         driverController.b().whileTrue(
@@ -169,9 +220,7 @@ public class RobotContainer {
         ); 
 
         autoAim.whileTrue(
-            upperParts.runShooter(
-                () -> calculationUtil.getAimParams().pitch
-            )
+            shooterCommand
         );
         */
 

@@ -18,7 +18,7 @@ import frc.robot.GlobalVars;
 import frc.robot.GlobalConstants.FIELD_CONSTANTS;
 import frc.robot.subsystems.drive.Drive;
 
-public class AutoAim {
+public class AimCalc {
     private static final double shotTime = 0.1;
     private final SwerveDriveState state;
 
@@ -26,7 +26,7 @@ public class AutoAim {
 
     private final Transform2d heading = new Transform2d(new Translation2d(5, 0), Rotation2d.kZero);
 
-    public AutoAim(Drive drive){
+    public AimCalc(Drive drive){
         this.state = drive.getState();
 
         // TODO drivetest

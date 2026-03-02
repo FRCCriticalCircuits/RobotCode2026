@@ -99,7 +99,7 @@ public class SuperStructure extends SubsystemBase{
             intakeIO.runArm(SuperStructureConstants.INTAKE_ARM_POS),
             intakeIO.runRoller(SuperStructureConstants.INTAKE_ROLLER_VEL)
         ).finallyDo(
-            (interrupted) -> intakeIO.stopMotors()
+            (interrupted) -> intakeIO.stopIntake()
         ).withName("SuperStructure.runIntake");
     }
 

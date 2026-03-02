@@ -34,5 +34,5 @@ public interface IntakeIO {
     default Command runRoller(double velocity) {return Commands.none();}
     default void runRollerVoltage(double voltage) {}
 
-    default void stopMotors() {}
+    default void stopIntake() {}
 }
