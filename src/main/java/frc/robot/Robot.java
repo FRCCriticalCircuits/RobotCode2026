@@ -54,9 +54,9 @@ public class Robot extends LoggedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         
-        if(!hasAppliedAlliance){
+        if(!hasAppliedAlliance && DriverStation.isDSAttached()){
             DriverStation.getAlliance().ifPresent(allianceColor -> {
-                GlobalVars.BLUE_ALLIANCE = allianceColor == Alliance.Blue;
+                GlobalVars.BLUE_ALLIANCE = (allianceColor == Alliance.Blue);
                 hasAppliedAlliance = true;
             });                
         }

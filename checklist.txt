@@ -1,0 +1,4 @@
+GlobalConstants:
+    SYS ID
+    COMP
+
