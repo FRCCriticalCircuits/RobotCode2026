@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.PPDriveCommand;
 import frc.robot.commands.AutoDrive;
 import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.climber.ClimberIO;
@@ -56,6 +57,7 @@ public class RobotContainer {
     private final SwerveTelemetry swerveLogger = new SwerveTelemetry();     
     private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
 
+    // AutoAIm (Toggle/Hold)
     private Boolean autoAimEnabled = false;
     private final Trigger autoAimTrigger = driverController.rightBumper().debounce(0.02);
     private Supplier<Boolean> autoAim = () -> autoAimTrigger.getAsBoolean() || autoAimEnabled;
@@ -70,6 +72,14 @@ public class RobotContainer {
         autoAim,
         AxisConfigLoader.loadTable(GlobalConstants.LEFT_AXIS_CONFIG),
         AxisConfigLoader.loadTable(GlobalConstants.RIGHT_AXIS_CONFIG),
+        () -> calculationUtil.getAimParams()
+    );
+
+    // need this separate command because
+    // teleDrive cant work with pathplanner (NamedCommands)
+    // it's the default command of drive subsystem
+    private final PPDriveCommand pathplannerDrive = new PPDriveCommand(
+        drivetrain,
         () -> calculationUtil.getAimParams()
     );
 
@@ -121,13 +131,8 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("runShooter", 
             Commands.parallel(
-                teleDrive,
-                shooterCommand,
-                Commands.runOnce(
-                    () -> {
-                        autoAimEnabled = true;
-                    }
-                )
+                pathplannerDrive,
+                shooterCommand
             )
         );
 
@@ -135,9 +140,8 @@ public class RobotContainer {
             "stopShooter",
             Commands.runOnce(
                 () -> {
-                    CommandScheduler.getInstance().cancel(teleDrive);
+                    CommandScheduler.getInstance().cancel(pathplannerDrive);
                     CommandScheduler.getInstance().cancel(shooterCommand);
-                    autoAimEnabled = false;
                 }
             )
         );
@@ -191,7 +195,7 @@ public class RobotContainer {
 
         //#endregion
 
-        // drivetrain.setDefaultCommand(teleDrive);
+        drivetrain.setDefaultCommand(teleDrive);
 
         SmartDashboard.putData("Auto to Run", autoChooser);
         configureBindings();
