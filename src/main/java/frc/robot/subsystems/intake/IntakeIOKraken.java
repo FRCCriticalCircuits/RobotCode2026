@@ -215,6 +215,8 @@ public class IntakeIOKraken implements IntakeIO{
     @Override
     public void stopIntake() {
         rollerMotor.setControl(new NeutralOut());
-        runArm(0);
+        armMotor.setControl(
+            armPostionVoltage.withPosition(0.0)
+        );
     }
 }

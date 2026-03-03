@@ -8,12 +8,13 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 
 public class HopperConstants {
     public static final DCMotor HOPPER_GEARBOX = DCMotor.getNEO(1);
-    public static final LinearSystem<N2, N1, N2> HOPPER_STATE_SPACE = LinearSystemId.createDCMotorSystem(0.1, 0.01);
+    public static final LinearSystem<N2, N1, N2> HOPPER_STATE_SPACE = LinearSystemId.createDCMotorSystem(0.02, 0.0006);
+    public static final double HOPPER_KS = 0.13;
 
     public class HAL{
         public static final double HOPPER_GEARING = 1.0;
 
-        public static final boolean HOPPER_INVERT = false;
+        public static final boolean HOPPER_INVERT = true;
     }
 
     public class TUNING{

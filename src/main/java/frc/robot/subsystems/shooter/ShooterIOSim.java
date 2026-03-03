@@ -72,8 +72,13 @@ public class ShooterIOSim implements ShooterIO {
                 -12.0,
                 12.0
             );
-            shooter.setInputVoltage(appliedVoltsShooter);
+            feedShooterVoltage(appliedVoltsShooter);
         }
+    }
+
+    /* Feed voltage into simulation state-spate, considering KS */
+    private void feedShooterVoltage(double voltage){
+        shooter.setInputVoltage(voltage - ShooterConstants.SHOOTER_KS);
     }
 
     @Override
@@ -100,7 +105,7 @@ public class ShooterIOSim implements ShooterIO {
     public void runShooterVoltage(double voltage) {
         this.appliedVoltsShooter = voltage;
         // will ignore `shooterStopped` variable
-        shooter.setInputVoltage(voltage);
+        feedShooterVoltage(voltage);
     }
 
     @Override

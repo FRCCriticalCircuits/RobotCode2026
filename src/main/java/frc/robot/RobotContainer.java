@@ -16,6 +16,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,11 +34,13 @@ import frc.robot.commands.AutoDrive;
 import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSim;
+import frc.robot.subsystems.climber.ClimberIOVortex;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.SwerveTelemetry;
 import frc.robot.subsystems.hopper.HopperIO;
 import frc.robot.subsystems.hopper.HopperIOSim;
+import frc.robot.subsystems.hopper.HopperIOSpark;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOKraken;
 import frc.robot.subsystems.intake.IntakeIOSim;
@@ -92,16 +96,16 @@ public class RobotContainer {
     private final Vision visionSubsystem = new Vision(drivetrain, leftCam, rightCam);
 
     // SuperStructure    
-    private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOSim();
-    private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOSim();
-    private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : new HopperIOSim();
-    private final ClimberIO climberIO = Utils.isSimulation() ? new ClimberIOSim() : new ClimberIOSim(); // TODO
+    private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOKraken();
+    private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOKraken();
+    private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : new HopperIOSpark();
+    private final ClimberIO climberIO = Utils.isSimulation() ? new ClimberIOSim() : new ClimberIOVortex(); // TODO
     private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO, climberIO);
 
     // SysID Routine for flywheels(shooter/hopper/intake)
     private final SysIdRoutine flywheelRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(
-            null, null, null,
+            null, Voltage.ofRelativeUnits(3, Units.Volts), null,
             (state) -> Logger.recordOutput("flywheelRoutine", state.toString())
         ),
         new SysIdRoutine.Mechanism(
@@ -212,11 +216,11 @@ public class RobotContainer {
         // Reset the field-centric heading on left bumper press.
         driverController.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
-        /*
-        driverController.leftTrigger(0.15).whileTrue(
+        driverController.leftTrigger(0.15).debounce(0.02).whileTrue(
             intakeCommand
         );
 
+        /*
         driverController.b().whileTrue(
             upperParts.openClimber() 
         );

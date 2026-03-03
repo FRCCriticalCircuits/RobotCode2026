@@ -54,7 +54,7 @@ public class HopperIOSpark implements HopperIO{
             .outputCurrentPeriodMs(20); // might need to detect jam
 
         // To reduce CAN utilization
-        hopperConfig.signals
+        /*hopperConfig.signals
             .limitsPeriodMs(300)
             .setSetpointAlwaysOn(false)
             .isAtSetpointAlwaysOn(false)
@@ -66,7 +66,7 @@ public class HopperIOSpark implements HopperIO{
             .absoluteEncoderPositionAlwaysOn(false)
             .absoluteEncoderVelocityAlwaysOn(false)
             .maxMotionSetpointPositionAlwaysOn(false)
-            .maxMotionSetpointVelocityAlwaysOn(false);
+            .maxMotionSetpointVelocityAlwaysOn(false); */
 
         hopperConfig.closedLoop
             .p(TUNING.HOPPER_PID_P)
@@ -97,10 +97,10 @@ public class HopperIOSpark implements HopperIO{
     }
 
     @Override
-    public Command runHopper(double velocity) {
+    public Command runHopper(double voltage) {
         return Commands.run(
-            () -> hopperController.setSetpoint(velocity, ControlType.kVelocity)
-        ).withName("Hopper.runHopperVelocity");
+            () -> hopperController.setSetpoint(voltage, ControlType.kVoltage)
+        ).withName("Hopper.runHopperVoltage");
     }
 
     @Override

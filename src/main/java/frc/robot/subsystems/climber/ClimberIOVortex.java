@@ -25,7 +25,7 @@ public class ClimberIOVortex implements ClimberIO{
     
     // Control Requests
     public ClimberIOVortex(){
-        this.climberSparkFlex = new SparkFlex(63, MotorType.kBrushless);        
+        this.climberSparkFlex = new SparkFlex(51, MotorType.kBrushless);        
         this.climberEncoder = climberSparkFlex.getEncoder();
         this.climberController = climberSparkFlex.getClosedLoopController();
         this.climberConfig = new SparkFlexConfig();
@@ -54,7 +54,7 @@ public class ClimberIOVortex implements ClimberIO{
             .outputCurrentPeriodMs(20); // might need to detect jam
 
         // To reduce CAN utilization
-        climberConfig.signals
+        /*climberConfig.signals
             .limitsPeriodMs(300)
             .setSetpointAlwaysOn(false)
             .isAtSetpointAlwaysOn(false)
@@ -67,7 +67,8 @@ public class ClimberIOVortex implements ClimberIO{
             .absoluteEncoderVelocityAlwaysOn(false)
             .maxMotionSetpointPositionAlwaysOn(false)
             .maxMotionSetpointVelocityAlwaysOn(false);
-
+        */
+        
         climberConfig.closedLoop
             .p(TUNING.CLIMBER_PID_P)
             .i(TUNING.CLIMBER_PID_I)

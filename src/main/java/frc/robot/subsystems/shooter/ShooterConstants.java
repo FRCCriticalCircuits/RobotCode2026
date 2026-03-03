@@ -24,7 +24,8 @@ public class ShooterConstants {
     
 
     public static final DCMotor SHOOTER_GEARBOX = DCMotor.getKrakenX60Foc(2);
-    public static final LinearSystem<N2, N1, N2> SHOOTER_STATE_SPACE = LinearSystemId.createDCMotorSystem(0.5, 1.0);
+    public static final LinearSystem<N2, N1, N2> SHOOTER_STATE_SPACE = LinearSystemId.createDCMotorSystem(0.018, 0.0005);
+    public static final double SHOOTER_KS = 0.17861;
 
     public class HAL{
         public static final double HOOD_GEARING = 40;

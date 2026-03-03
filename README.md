@@ -37,7 +37,8 @@ Shooter:
     Flywheel #1: 41
     Flywheel #2: 42
 Hopper: 50
-Climber: 60
+Climber: 51
+pdh 60
 
 # 2026/2/19 - 2/21 drive tests
 "// TODO drivetest", changes will be revert later
