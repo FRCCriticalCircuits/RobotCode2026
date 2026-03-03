@@ -4,12 +4,10 @@ import static frc.robot.utils.SparkUtil.*;
 import frc.robot.subsystems.hopper.HopperConstants.*;
 
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.PersistMode;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -21,13 +19,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 public class HopperIOSpark implements HopperIO{
     private final SparkMax hopperSparkMax;
     private final RelativeEncoder hopperEncoder;
-    private final SparkClosedLoopController hopperController;
+    // private final SparkClosedLoopController hopperController;
     private final SparkBaseConfig hopperConfig;
     
     public HopperIOSpark(){
         this.hopperSparkMax = new SparkMax(50, MotorType.kBrushless);
         this.hopperEncoder = hopperSparkMax.getEncoder();
-        this.hopperController = hopperSparkMax.getClosedLoopController();
+        // this.hopperController = hopperSparkMax.getClosedLoopController();
         this.hopperConfig = new SparkMaxConfig();
         
         hopperConfig
@@ -99,7 +97,7 @@ public class HopperIOSpark implements HopperIO{
     @Override
     public Command runHopper(double voltage) {
         return Commands.run(
-            () -> hopperController.setSetpoint(voltage, ControlType.kVoltage)
+            () -> hopperSparkMax.setVoltage(voltage)
         ).withName("Hopper.runHopperVoltage");
     }
 

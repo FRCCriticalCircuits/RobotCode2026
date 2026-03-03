@@ -3,8 +3,6 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 
 public class IntakeIOSim implements IntakeIO {
     private final DCMotorSim arm, roller;
@@ -12,9 +10,14 @@ public class IntakeIOSim implements IntakeIO {
     private final PIDController armController = new PIDController(10, 0, 0);
     private final PIDController rollerController = new PIDController(0.5, 0, 0);
 
-    private double appliedVoltsArm = 0, appliedVoltsRoller = 0;
-    private double armPosition = 0, rollerVelocity = 0;
-    private Boolean rollerStopped = false;
+    // Cached Desired States
+    private double desiredArmPositionRad = 0.0;
+    private double desiredRollerVelocityRadPerSec = 0.0;
+    private boolean rollerClosedLoopEnabled = false;
+
+    // Cached Voltage for Logging
+    private double appliedVoltsArm = 0.0;
+    private double appliedVoltsRoller = 0.0;
 
     public IntakeIOSim() {
         arm = new DCMotorSim(
@@ -30,66 +33,61 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public void updateInputs(IntakeIOInputs inputs) {
-        arm.update(0.02);
-        roller.update(0.02);
-        
         inputs.armPosition = arm.getAngularPositionRad();
         inputs.rollerPosition = roller.getAngularPositionRad();
         inputs.rollerVelocity = roller.getAngularVelocityRadPerSec();
 
-        inputs.appliedVoltsArm = this.appliedVoltsArm;
+        inputs.appliedVoltsArm = appliedVoltsArm;
         inputs.supplyCurrentArm = arm.getCurrentDrawAmps();
 
-        inputs.appliedVoltsRoller = this.appliedVoltsRoller;
+        inputs.appliedVoltsRoller = appliedVoltsRoller;
         inputs.supplyCurrentRoller = roller.getCurrentDrawAmps();
 
         inputs.armConnected = true;
         inputs.rollerConnected = true;
+    }
 
-        this.appliedVoltsArm = MathUtil.clamp(
+    @Override
+    public void applyOutputs(){
+        arm.update(0.02);
+        roller.update(0.02);
+
+        appliedVoltsArm = MathUtil.clamp(
             armController.calculate(
                 arm.getAngularPositionRad(),
-                this.armPosition
+                desiredArmPositionRad
             ),
             -12.0,
             12.0
         );
 
-        // always need closeloop 
         arm.setInputVoltage(appliedVoltsArm);
 
-        if(!rollerStopped) {
-            this.appliedVoltsRoller = MathUtil.clamp(
+        if (rollerClosedLoopEnabled) {
+            appliedVoltsRoller = MathUtil.clamp(
                 rollerController.calculate(
                     roller.getAngularVelocityRadPerSec(),
-                    this.rollerVelocity
+                    desiredRollerVelocityRadPerSec
                 ),
                 -12.0,
                 12.0
             );
-
-            roller.setInputVoltage(appliedVoltsRoller);
+        } else {
+            appliedVoltsRoller = 0.0;
         }
+
+        roller.setInputVoltage(appliedVoltsRoller);
     }
 
     @Override
-    public Command runArm(double positionRad) {
-        return Commands.run(
-            () -> {
-                this.rollerStopped = false;
-                this.armPosition = positionRad;
-            }
-        ).withName("Intake.runArmPosition");
+    public void setArmPosition(double positionRad) {
+        desiredArmPositionRad = positionRad;
     }
 
     @Override
-    public Command runRoller(double velocity) {
-        return Commands.run(
-            () -> {
-                this.rollerStopped = false;
-                this.rollerVelocity = velocity;
-            }
-        ).withName("Intake.runRollerVelocity");
+    public void setRollerVelocity(double velocityRadPerSec) {
+        desiredRollerVelocityRadPerSec = velocityRadPerSec;
+        rollerClosedLoopEnabled = true;
     }
 
     @Override
@@ -101,10 +99,8 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public void stopIntake() {
-        this.rollerStopped = true;
-        this.armPosition = 0;
-
-        roller.setInputVoltage(0.0);
+        desiredArmPositionRad = 0.0;
+        rollerClosedLoopEnabled = false;
     }
 }
 

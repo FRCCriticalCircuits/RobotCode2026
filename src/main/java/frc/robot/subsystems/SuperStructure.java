@@ -66,6 +66,8 @@ public class SuperStructure extends SubsystemBase{
 
     @Override
     public void periodic() {
+        intakeIO.applyOutputs();
+
         shooterIO.updateInputs(shooterInputs);
         intakeIO.updateInputs(intakeInputs);
         hopperIO.updateInputs(hopperInputs);
@@ -94,12 +96,13 @@ public class SuperStructure extends SubsystemBase{
         }
     }
 
-    public Command runIntake(){
-        return Commands.parallel(
-            intakeIO.runArm(SuperStructureConstants.INTAKE_ARM_POS),
-            intakeIO.runRoller(SuperStructureConstants.INTAKE_ROLLER_VEL)
-        ).finallyDo(
-            (interrupted) -> intakeIO.stopIntake()
+    public Command runIntake() {
+        return Commands.startEnd(
+            () -> {
+                intakeIO.setArmPosition(SuperStructureConstants.INTAKE_ARM_POS);
+                intakeIO.setRollerVelocity(SuperStructureConstants.INTAKE_ROLLER_VEL);
+            },
+            () -> intakeIO.stopIntake()
         ).withName("SuperStructure.runIntake");
     }
 
@@ -110,6 +113,8 @@ public class SuperStructure extends SubsystemBase{
             Commands.waitUntil(shooterIO::isStable).andThen(hopperIO.runHopper(SuperStructureConstants.SHOOT_SEQUENCER_VOLTS))
         ).finallyDo(
             (interrupted) -> {
+                // we actually dont need stopMotors() for shooter
+                // because it stops(NeutralOut) itself when no futher requests are made
                 shooterIO.stopMotors();
                 hopperIO.stopMotors();
             }

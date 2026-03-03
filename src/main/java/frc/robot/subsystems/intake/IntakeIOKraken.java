@@ -16,8 +16,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.GlobalConstants;
 
 public class IntakeIOKraken implements IntakeIO{
@@ -42,9 +40,14 @@ public class IntakeIOKraken implements IntakeIO{
 
     // Control Requests
     private final MotionMagicVoltage armPostionVoltage = new MotionMagicVoltage(0.0)
-        .withUpdateFreqHz(0.0);
+        .withUpdateFreqHz(50.0);
     private final VelocityVoltage rollerVelocityVoltage = new VelocityVoltage(0.0)
-        .withUpdateFreqHz(0.0);
+        .withUpdateFreqHz(50.0);
+
+    // Cached Desired States
+    private double desiredArmPositionRot = 0.0;      // rotations
+    private double desiredRollerVelocityRps = 0.0;   // rotations per second
+    private boolean rollerClosedLoopEnabled = false;
 
     public IntakeIOKraken(){
         this.armMotor = new TalonFX(30, GlobalConstants.BUS);
@@ -186,25 +189,29 @@ public class IntakeIOKraken implements IntakeIO{
     }
 
     @Override
-    public Command runArm(double positionRad){
-        return Commands.run(
-            () -> {
-                armMotor.setControl(
-                    armPostionVoltage.withPosition(positionRad / (Math.PI * 2))
-                );
-            }
-        ).withName("Intake.runArmPosition");
+    public void applyOutputs() {
+        armMotor.setControl(
+            armPostionVoltage.withPosition(desiredArmPositionRot)
+        );
+
+        if (rollerClosedLoopEnabled) {
+            rollerMotor.setControl(
+                rollerVelocityVoltage.withVelocity(desiredRollerVelocityRps)
+            );
+        } else {
+            rollerMotor.setControl(new NeutralOut());
+        }
     }
 
     @Override
-    public Command runRoller(double velocity) {
-        return Commands.run(
-            () -> {
-                rollerMotor.setControl(
-                    rollerVelocityVoltage.withVelocity(velocity)  
-                );
-            }
-        ).withName("Intake.runRollerVelocity");
+    public void setArmPosition(double positionRad) {
+        desiredArmPositionRot = positionRad / (Math.PI * 2.0);
+    }
+
+    @Override
+    public void setRollerVelocity(double velocityRadPerSec) {
+        desiredRollerVelocityRps = velocityRadPerSec / (Math.PI * 2.0);
+        rollerClosedLoopEnabled = true;
     }
 
     @Override
@@ -214,9 +221,7 @@ public class IntakeIOKraken implements IntakeIO{
 
     @Override
     public void stopIntake() {
-        rollerMotor.setControl(new NeutralOut());
-        armMotor.setControl(
-            armPostionVoltage.withPosition(0.0)
-        );
+        desiredArmPositionRot = 0.0;
+        rollerClosedLoopEnabled = false;
     }
 }

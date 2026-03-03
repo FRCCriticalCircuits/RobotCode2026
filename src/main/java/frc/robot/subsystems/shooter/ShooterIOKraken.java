@@ -44,9 +44,9 @@ public class ShooterIOKraken implements ShooterIO{
 
     // Control Requests
     private final MotionMagicVoltage hoodPositionVoltage = new MotionMagicVoltage(0.0)
-        .withUpdateFreqHz(0.0);
+        .withUpdateFreqHz(50.0);
     private final VelocityVoltage shooterVelocityVoltage = new VelocityVoltage(0.0)
-        .withUpdateFreqHz(0.0);
+        .withUpdateFreqHz(50.0);
     // Cached last commanded targets, used by isStable() feed gating.
     private double hoodSetpointRad = 0.0;
     private double shooterSetpointRadPerSec = 0.0;
@@ -211,7 +211,7 @@ public class ShooterIOKraken implements ShooterIO{
                 // Track target locally so readiness logic can compare measured error.
                 shooterSetpointRadPerSec = velocity;
                 shooter.setControl(
-                    shooterVelocityVoltage.withVelocity(shooterSetpointRadPerSec)
+                    shooterVelocityVoltage.withVelocity(shooterSetpointRadPerSec / (Math.PI * 2))
                 );
             }
         ).withName("Shooter.runShooterVelocity");
