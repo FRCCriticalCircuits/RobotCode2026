@@ -198,7 +198,7 @@ public class ShooterIOKraken implements ShooterIO{
                 // Track target locally so readiness logic can compare measured error.
                 hoodSetpointRad = positionRad.getAsDouble();
                 hoodMotor.setControl(
-                    hoodPositionVoltage.withPosition(hoodSetpointRad)
+                    hoodPositionVoltage.withPosition(hoodSetpointRad / (Math.PI * 2))
                 );
             }
         ).withName("Shooter.runHoodPosition");

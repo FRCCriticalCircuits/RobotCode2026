@@ -51,7 +51,7 @@ public class ShooterIOSim implements ShooterIO {
         inputs.hoodConnected = true;
         inputs.shooterConnected = true;
 
-        if(this.hoodStopped){
+        if(!this.hoodStopped){
             this.appliedVoltsHood = MathUtil.clamp(
                 hoodController.calculate(
                     hood.getAngularPositionRad(),

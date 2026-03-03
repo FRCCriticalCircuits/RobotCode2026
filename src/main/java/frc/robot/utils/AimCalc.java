@@ -86,8 +86,11 @@ public class AimCalc {
 
         // Derivative of atan2
         double r_square = dx*dx + dy*dy;
-        double rotationFF = (dx * fieldSpeeds.vyMetersPerSecond - dy * fieldSpeeds.vxMetersPerSecond) / r_square; 
-        rotationFF *= -1;
+        double rotationFF = 0;
+        if (r_square > 1e-9) {
+            rotationFF = (dx * fieldSpeeds.vyMetersPerSecond - dy * fieldSpeeds.vxMetersPerSecond) / r_square; 
+            rotationFF *= -1;
+        }
 
         double dist = fastSqrt(
             (float) (dx*dx + dy*dy)

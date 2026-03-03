@@ -107,7 +107,7 @@ public class AutoDrive extends Command {
     public boolean isFinished() {
         return Math.abs(state.Pose.getX() - targetPose2d.getX()) < tolorance.getX()
         && Math.abs(state.Pose.getY() - targetPose2d.getY()) < tolorance.getY()
-        && Math.abs(state.Pose.getRotation().getRadians()) < tolorance.getRotation().getRadians();
+        && Math.abs(state.Pose.getRotation().getRadians() - targetPose2d.getRotation().getRadians()) < tolorance.getRotation().getRadians();
     }
 
     @Override

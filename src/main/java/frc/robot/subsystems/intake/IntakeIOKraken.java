@@ -190,7 +190,7 @@ public class IntakeIOKraken implements IntakeIO{
         return Commands.run(
             () -> {
                 armMotor.setControl(
-                    armPostionVoltage.withPosition(positionRad)
+                    armPostionVoltage.withPosition(positionRad / (Math.PI * 2))
                 );
             }
         ).withName("Intake.runArmPosition");
