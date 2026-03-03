@@ -220,6 +220,10 @@ public class RobotContainer {
             intakeCommand
         );
 
+        driverController.rightTrigger(0.15).debounce(0.02).whileTrue(
+            shooterCommand
+        );
+
         /*
         driverController.b().whileTrue(
             upperParts.openClimber() 
