@@ -118,36 +118,31 @@ public class RobotContainer {
 
     // Commands
     private final AutoDrive autoDrive = new AutoDrive(drivetrain);
-    private final Command intakeCommand = upperParts.runIntake();
-    private final Command shooterCommand = upperParts.runShooter(
-        () -> calculationUtil.getAimParams().pitch
+    private final Command autoIntakeCommand = upperParts.runIntake();
+    private final Command autoShooterCommand = Commands.parallel(
+        pathplannerDrive,
+        upperParts.runShooter(() -> calculationUtil.getAimParams().pitch)
     );
 
     public RobotContainer() {
         drivetrain.registerTelemetry(swerveLogger::telemeterize);
 
-        NamedCommands.registerCommand("runIntake", intakeCommand);
+        NamedCommands.registerCommand("runIntake", autoIntakeCommand);
         
         NamedCommands.registerCommand(
             "stopIntake",
             Commands.runOnce(
-                () -> CommandScheduler.getInstance().cancel(intakeCommand)
+                () -> CommandScheduler.getInstance().cancel(autoIntakeCommand)
             )
         );
 
-        NamedCommands.registerCommand("runShooter", 
-            Commands.parallel(
-                pathplannerDrive,
-                shooterCommand
-            )
-        );
+        NamedCommands.registerCommand("runShooter", autoShooterCommand);
 
         NamedCommands.registerCommand(
             "stopShooter",
             Commands.runOnce(
                 () -> {
-                    CommandScheduler.getInstance().cancel(pathplannerDrive);
-                    CommandScheduler.getInstance().cancel(shooterCommand);
+                    CommandScheduler.getInstance().cancel(autoShooterCommand);
                 }
             )
         );
@@ -217,11 +212,11 @@ public class RobotContainer {
         driverController.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         driverController.leftTrigger(0.15).debounce(0.02).whileTrue(
-            intakeCommand
+            upperParts.runIntake()
         );
 
         driverController.rightTrigger(0.15).debounce(0.02).whileTrue(
-            shooterCommand
+            upperParts.runShooter(() -> calculationUtil.getAimParams().pitch)
         );
 
         /*

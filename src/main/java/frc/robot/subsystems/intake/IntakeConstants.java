@@ -61,7 +61,7 @@ public class IntakeConstants {
         public static final double ARM_MAX_VEL = 4;
         public static final double ARM_MAX_ACCEL = 8;
 
-        public static final double ROLLER_PID_P = 0;
+        public static final double ROLLER_PID_P = 10;
         public static final double ROLLER_PID_I = 0;
         public static final double ROLLER_PID_D = 0;
     }

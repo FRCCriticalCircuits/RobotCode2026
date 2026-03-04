@@ -32,8 +32,8 @@ public class ShooterConstants {
         public static final double SHOOTER_GEARING = 24.0 / 18.0;
 
         public static final boolean HOOD_INVERT = true;
-        public static final boolean SHOOTER_INVERT = false;
-        public static final boolean SECONDARY_SHOOTER_INVERT = false;
+        public static final boolean SHOOTER_INVERT = true;
+        public static final boolean SECONDARY_SHOOTER_INVERT = true;
     }
 
     public class TUNING{
@@ -57,7 +57,7 @@ public class ShooterConstants {
          * kD : the proportion for velocity error
          * *_VEL_FF -> kV : voltage per velocity unit
          */
-        public static final double HOOD_PID_P = 0;
+        public static final double HOOD_PID_P = 0.0;
         public static final double HOOD_PID_I = 0;
         public static final double HOOD_PID_D = 0;
 
@@ -65,7 +65,7 @@ public class ShooterConstants {
         public static final double HOOD_MAX_VEL = 0.5;
         public static final double HOOD_MAX_ACCEL = 0.5;
 
-        public static final double SHOOTER_PID_P = 0;
+        public static final double SHOOTER_PID_P = 1;
         public static final double SHOOTER_PID_I = 0;
         public static final double SHOOTER_PID_D = 0;
     }
