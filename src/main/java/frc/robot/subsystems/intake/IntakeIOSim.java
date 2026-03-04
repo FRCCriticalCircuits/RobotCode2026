@@ -3,6 +3,7 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import frc.robot.subsystems.intake.IntakeConstants.HAL;
 
 public class IntakeIOSim implements IntakeIO {
     private final DCMotorSim arm, roller;
@@ -30,7 +31,7 @@ public class IntakeIOSim implements IntakeIO {
             IntakeConstants.ROLLER_GEARBOX
         );
 
-        arm.setState(Math.toRadians(-50), 0.0);
+        arm.setState(Math.toRadians(HAL.DEFAULT_ARM_POSITION_ROT), 0.0);
     }
 
     @Override
