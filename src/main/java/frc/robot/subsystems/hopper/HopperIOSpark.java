@@ -66,12 +66,6 @@ public class HopperIOSpark implements HopperIO{
             .maxMotionSetpointPositionAlwaysOn(false)
             .maxMotionSetpointVelocityAlwaysOn(false); */
 
-        hopperConfig.closedLoop
-            .p(TUNING.HOPPER_PID_P)
-            .i(TUNING.HOPPER_PID_I)
-            .d(TUNING.HOPPER_PID_D)
-            .outputRange(-1.0, 1.0);
-
         tryUntilOk(
             hopperSparkMax,
             5,

@@ -26,7 +26,9 @@ public class IntakeConstants {
     public static final LinearSystem<N2, N1, N2> ROLLER_STATE_SPACE = LinearSystemId.createDCMotorSystem(0.1, 0.01);
 
     public class HAL{
+        // Keep gearbox and linkage conversion split so measurement updates stay clear.
         public static final double ARM_GEARING = 23.0 * 1.2587890624;
+        // TODO tune-hardware: update to match measured roller-to-mechanism ratio.
         public static final double ROLLER_GEARING = 1.0;
 
         public static final boolean ARM_INVERT = false;
@@ -58,12 +60,16 @@ public class IntakeConstants {
         public static final double ARM_PID_D = 0;
 
         public static final double ARM_VEL_FF = 0.3;
+        // Optional gravity term for arm MotionMagic.
+        public static final double ARM_GRAVITY_FF = 0.0;
         public static final double ARM_MAX_VEL = 4;
         public static final double ARM_MAX_ACCEL = 8;
 
         public static final double ROLLER_PID_P = 10;
         public static final double ROLLER_PID_I = 0;
         public static final double ROLLER_PID_D = 0;
+        // Optional velocity feedforward for roller closed-loop velocity.
+        public static final double ROLLER_VEL_FF = 0.0;
     }
 
     public class CAD{

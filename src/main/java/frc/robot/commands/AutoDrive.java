@@ -44,14 +44,20 @@ public class AutoDrive extends Command {
             ChassisConstants.TRANSLATION_PID_P,
             0,
             ChassisConstants.TRANSLATION_PID_D,
-            new Constraints(0.5, 1) // TODO drivetest
+            new Constraints(
+                ChassisConstants.AUTO_DRIVE_MAX_VEL,
+                ChassisConstants.AUTO_DRIVE_MAX_ACCEL
+            )
         );
 
         yController = new ProfiledPIDController(
             ChassisConstants.TRANSLATION_PID_P,
             0,
             ChassisConstants.TRANSLATION_PID_D,
-            new Constraints(0.5, 1) // TODO drivetest
+            new Constraints(
+                ChassisConstants.AUTO_DRIVE_MAX_VEL,
+                ChassisConstants.AUTO_DRIVE_MAX_ACCEL
+            )
         );
 
         rotationController.enableContinuousInput(0, Math.PI * 2);

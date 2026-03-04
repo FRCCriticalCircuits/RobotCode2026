@@ -20,9 +20,5 @@ public class HopperConstants {
     public class TUNING{
         public static final int HOPPER_STALL_LIMIT = 30;
         public static final int HOPPER_FREE_LIMIT = 20;
-
-        public static final double HOPPER_PID_P = 0;
-        public static final double HOPPER_PID_I = 0;
-        public static final double HOPPER_PID_D = 0;
     }
 }

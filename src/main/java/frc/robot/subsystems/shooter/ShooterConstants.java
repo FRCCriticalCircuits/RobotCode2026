@@ -28,7 +28,9 @@ public class ShooterConstants {
     public static final double SHOOTER_KS = 0.17861;
 
     public class HAL{
+        // TODO tune-hardware: verify against measured hood reduction on the real robot.
         public static final double HOOD_GEARING = 40;
+        // TODO tune-hardware: verify against measured flywheel reduction on the real robot.
         public static final double SHOOTER_GEARING = 24.0 / 18.0;
 
         public static final boolean HOOD_INVERT = true;
@@ -38,7 +40,9 @@ public class ShooterConstants {
 
     public class TUNING{
         // Allowed control error before shooter is considered ready to feed.
+        // TODO tune-controls: adjust once hood MotionMagic gains are tuned.
         public static final double HOOD_STABLE_TOLERANCE_RAD = Math.toRadians(1.5);
+        // TODO tune-controls: adjust once shooter velocity loop gains are tuned.
         public static final double SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC = 8.0;
 
         /*
@@ -62,12 +66,16 @@ public class ShooterConstants {
         public static final double HOOD_PID_D = 0;
 
         public static final double HOOD_VEL_FF = 0.0;
+        // MotionMagic profile in mechanism rotations per second.
         public static final double HOOD_MAX_VEL = 0.5;
+        // MotionMagic profile in mechanism rotations per second^2.
         public static final double HOOD_MAX_ACCEL = 0.5;
 
         public static final double SHOOTER_PID_P = 1;
         public static final double SHOOTER_PID_I = 0;
         public static final double SHOOTER_PID_D = 0;
+        // Optional feedforward for flywheel velocity control (CTRE Slot0.kV).
+        public static final double SHOOTER_VEL_FF = 0.0;
     }
 
     public class CAD{

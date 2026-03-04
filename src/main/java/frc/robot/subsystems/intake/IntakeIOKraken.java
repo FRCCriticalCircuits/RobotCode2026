@@ -63,6 +63,7 @@ public class IntakeIOKraken implements IntakeIO{
         this.armConfig.Slot0.kD = TUNING.ARM_PID_D;
 
         this.armConfig.Slot0.kV = TUNING.ARM_VEL_FF;
+        this.armConfig.Slot0.kG = TUNING.ARM_GRAVITY_FF;
         this.armConfig.MotionMagic.MotionMagicCruiseVelocity = TUNING.ARM_MAX_VEL;  
         this.armConfig.MotionMagic.MotionMagicAcceleration = TUNING.ARM_MAX_ACCEL; 
 
@@ -77,6 +78,7 @@ public class IntakeIOKraken implements IntakeIO{
         this.rollerConfig.Slot0.kP = TUNING.ROLLER_PID_P;
         this.rollerConfig.Slot0.kI = TUNING.ROLLER_PID_I;
         this.rollerConfig.Slot0.kD = TUNING.ROLLER_PID_D;
+        this.rollerConfig.Slot0.kV = TUNING.ROLLER_VEL_FF;
 
         this.rollerConfig.MotorOutput.Inverted =
             HAL.ROLLER_INVERT

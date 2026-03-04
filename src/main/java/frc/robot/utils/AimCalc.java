@@ -29,7 +29,7 @@ public class AimCalc {
     public AimCalc(Drive drive){
         this.state = drive.getState();
 
-        // TODO drivetest
+        // TODO tune-aim: replace with measured distance-to-hood-angle interpolation data.
         hoodAngle.put(0.0, Math.toRadians(20));
         hoodAngle.put(10.0, Math.toRadians(5));
     }

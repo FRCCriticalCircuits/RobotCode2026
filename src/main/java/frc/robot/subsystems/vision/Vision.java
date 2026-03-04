@@ -23,7 +23,8 @@ public class Vision extends SubsystemBase{
             for (var observedData : inputs.poseObservation) {
                 drivetrain.addVisionMeasurement(
                     observedData.robotPose(),
-                    observedData.timeStamp()
+                    observedData.timeStamp(),
+                    VisionConstants.VISION_STD_DEVS
                 );
             }
         }
