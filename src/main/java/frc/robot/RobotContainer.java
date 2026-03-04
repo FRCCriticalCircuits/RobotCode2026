@@ -5,7 +5,6 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
-import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -63,10 +62,8 @@ public class RobotContainer {
     private final SwerveTelemetry swerveLogger = new SwerveTelemetry();     
     private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
 
-    // AutoAIm (Toggle/Hold)
-    private Boolean autoAimEnabled = false;
-    private final Trigger autoAimTrigger = driverController.rightBumper().debounce(0.02);
-    private Supplier<Boolean> autoAim = () -> autoAimTrigger.getAsBoolean() || autoAimEnabled;
+    // AutoAim
+    private final Trigger autoAimTrigger = driverController.rightTrigger(0.15).debounce(0.02);
     
     private final AimCalc calculationUtil = new AimCalc(drivetrain);
 
@@ -75,7 +72,7 @@ public class RobotContainer {
         () -> -driverController.getLeftY(),
         () -> -driverController.getLeftX(),
         () -> -driverController.getRightX(),
-        autoAim,
+        () -> autoAimTrigger.getAsBoolean(),
         AxisConfigLoader.loadTable(GlobalConstants.LEFT_AXIS_CONFIG),
         AxisConfigLoader.loadTable(GlobalConstants.RIGHT_AXIS_CONFIG),
         () -> calculationUtil.getAimParams()
@@ -96,9 +93,9 @@ public class RobotContainer {
     private final Vision visionSubsystem = new Vision(drivetrain, leftCam, rightCam);
 
     // SuperStructure    
-    private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOKraken();
-    private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOKraken();
-    private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : new HopperIOSpark();
+    private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOSim();
+    private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOSim();
+    private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : new HopperIOSim();
     private final ClimberIO climberIO = Utils.isSimulation() ? new ClimberIOSim() : new ClimberIOVortex(); // TODO
     private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO, climberIO);
 
@@ -215,7 +212,7 @@ public class RobotContainer {
             upperParts.runIntake()
         );
 
-        driverController.rightTrigger(0.15).debounce(0.02).whileTrue(
+        autoAimTrigger.whileTrue(
             upperParts.runShooter(() -> calculationUtil.getAimParams().pitch)
         );
 

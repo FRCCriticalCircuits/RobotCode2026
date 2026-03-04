@@ -29,6 +29,8 @@ public class IntakeIOSim implements IntakeIO {
             IntakeConstants.ROLLER_STATE_SPACE,
             IntakeConstants.ROLLER_GEARBOX
         );
+
+        arm.setState(Math.toRadians(-50), 0.0);
     }
 
     @Override
@@ -98,8 +100,7 @@ public class IntakeIOSim implements IntakeIO {
     }
 
     @Override
-    public void stopIntake() {
-        desiredArmPositionRad = 0.0;
+    public void stopRoller() {
         rollerClosedLoopEnabled = false;
     }
 }

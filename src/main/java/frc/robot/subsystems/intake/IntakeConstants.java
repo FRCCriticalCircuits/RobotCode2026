@@ -30,6 +30,8 @@ public class IntakeConstants {
         public static final double ARM_GEARING = 23.0 * 1.2587890624;
         // TODO tune-hardware: update to match measured roller-to-mechanism ratio.
         public static final double ROLLER_GEARING = 1.0;
+        // TODO tune-hardware: update to match what's required by CTRE, horizontal at position 0
+        public static final double DEFAULT_ARM_POSITION_ROT = -1.0;
 
         public static final boolean ARM_INVERT = false;
         public static final boolean SECONDARY_ARM_INVERT = true;
@@ -77,6 +79,6 @@ public class IntakeConstants {
         public static final double ORIGIN_OFFSET_Y = -0.349; 
         public static final double ORIGIN_OFFSET_Z = 0.194;
 
-        public static final double PITCH_OFFSET = Math.toRadians(-50);
+        public static final double PITCH_OFFSET = Math.toRadians(-5);
     }
 }

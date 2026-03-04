@@ -140,8 +140,9 @@ public class IntakeIOKraken implements IntakeIO{
         secondaryArmMotor.getConfigurator().apply(armConfig);
         rollerMotor.getConfigurator().apply(rollerConfig);
 
-        armMotor.setPosition(0.0);
-        secondaryArmMotor.setPosition(0.0);
+        armMotor.setPosition(HAL.DEFAULT_ARM_POSITION_ROT);
+        // doesnt matter for the second motor cuz we're using follower control
+        secondaryArmMotor.setPosition(HAL.DEFAULT_ARM_POSITION_ROT);
 
         secondaryArmMotor.setControl(
             new Follower(
@@ -222,8 +223,7 @@ public class IntakeIOKraken implements IntakeIO{
     }
 
     @Override
-    public void stopIntake() {
-        desiredArmPositionRot = 0.0;
+    public void stopRoller() {
         rollerClosedLoopEnabled = false;
     }
 }

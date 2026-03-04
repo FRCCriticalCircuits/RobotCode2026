@@ -32,5 +32,5 @@ public interface IntakeIO {
     default void setRollerVelocity(double velocityRadPerSec) {}
     default void runRollerVoltage(double voltage) {}
 
-    default void stopIntake() {}
+    default void stopRoller() {}
 }

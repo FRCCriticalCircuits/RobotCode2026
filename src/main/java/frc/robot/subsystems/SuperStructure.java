@@ -99,10 +99,13 @@ public class SuperStructure extends SubsystemBase{
     public Command runIntake() {
         return Commands.startEnd(
             () -> {
-                intakeIO.setArmPosition(SuperStructureConstants.INTAKE_ARM_POS);
+                intakeIO.setArmPosition(SuperStructureConstants.INTAKE_ARM_DOWN);
                 intakeIO.setRollerVelocity(SuperStructureConstants.INTAKE_ROLLER_VEL);
             },
-            () -> intakeIO.stopIntake()
+            () -> {
+                intakeIO.setArmPosition(SuperStructureConstants.INTAKE_ARM_UP);
+                intakeIO.stopRoller();
+            }
         ).withName("SuperStructure.runIntake");
     }
 
