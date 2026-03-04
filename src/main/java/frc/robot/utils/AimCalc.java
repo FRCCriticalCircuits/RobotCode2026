@@ -31,7 +31,7 @@ public class AimCalc {
 
         // TODO tune-aim: replace with measured distance-to-hood-angle interpolation data.
         hoodAngle.put(0.0, Math.toRadians(20));
-        hoodAngle.put(10.0, Math.toRadians(5));
+        hoodAngle.put(3.0, Math.toRadians(0));
     }
 
     private double fastSqrt(float number) {

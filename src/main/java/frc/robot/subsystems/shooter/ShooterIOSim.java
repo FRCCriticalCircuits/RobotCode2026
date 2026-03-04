@@ -12,7 +12,6 @@ public class ShooterIOSim implements ShooterIO {
     private final DCMotorSim hood, shooter;
 
     private final PIDController hoodController = new PIDController(10, 0, 0);
-    private final PIDController shooterController = new PIDController(0.1, 0, 0);
 
     private double appliedVoltsHood = 0, appliedVoltsShooter = 0;
     private double hoodPositionRads = 0, shooterVelocityRadsPerSec = 0;
@@ -64,10 +63,7 @@ public class ShooterIOSim implements ShooterIO {
 
         if(shooterCloseLoopEnabled){
             this.appliedVoltsShooter = MathUtil.clamp(
-                shooterController.calculate(
-                    shooter.getAngularVelocityRadPerSec(),
-                    this.shooterVelocityRadsPerSec
-                ),
+                this.shooterVelocityRadsPerSec * 0.018,
                 -12.0,
                 12.0
             );  

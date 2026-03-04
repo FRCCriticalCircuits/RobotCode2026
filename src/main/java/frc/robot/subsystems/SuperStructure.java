@@ -66,6 +66,7 @@ public class SuperStructure extends SubsystemBase{
     @Override
     public void periodic() {
         intakeIO.applyOutputs();
+        shooterIO.applyOutputs();
 
         shooterIO.updateInputs(shooterInputs);
         intakeIO.updateInputs(intakeInputs);
