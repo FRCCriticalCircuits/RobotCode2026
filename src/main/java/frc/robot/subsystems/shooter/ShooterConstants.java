@@ -66,6 +66,9 @@ public class ShooterConstants {
         public static final double HOOD_PID_D = 0;
 
         public static final double HOOD_VEL_FF = 0.0;
+        public static final double HOOD_GRAVITY_FF = 0.0;
+        public static final double HOOD_GRAVITY_ANGLE_OFFSET_RAD = 0.0;
+
         // MotionMagic profile in mechanism rotations per second.
         public static final double HOOD_MAX_VEL = 0.5;
         // MotionMagic profile in mechanism rotations per second^2.

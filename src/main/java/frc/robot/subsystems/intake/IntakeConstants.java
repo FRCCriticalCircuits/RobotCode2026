@@ -64,6 +64,7 @@ public class IntakeConstants {
         public static final double ARM_VEL_FF = 0.3;
         // Optional gravity term for arm MotionMagic.
         public static final double ARM_GRAVITY_FF = 0.0;
+        public static final double ARM_GRAVITY_ANGLE_OFFSET_RAD = 0.0;
         public static final double ARM_MAX_VEL = 4;
         public static final double ARM_MAX_ACCEL = 8;
 

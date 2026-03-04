@@ -13,6 +13,7 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -63,8 +64,13 @@ public class ShooterIOKraken implements ShooterIO{
         this.hoodConfig.Slot0.kP = TUNING.HOOD_PID_P;
         this.hoodConfig.Slot0.kI = TUNING.HOOD_PID_I;
         this.hoodConfig.Slot0.kD = TUNING.HOOD_PID_D;
-
+        
         this.hoodConfig.Slot0.kV = TUNING.HOOD_VEL_FF;
+        this.hoodConfig.Slot0.kG = TUNING.HOOD_GRAVITY_FF;
+        
+        this.hoodConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
+        this.hoodConfig.Slot0.GravityArmPositionOffset = TUNING.HOOD_GRAVITY_ANGLE_OFFSET_RAD;
+
         this.hoodConfig.MotionMagic.MotionMagicCruiseVelocity = TUNING.HOOD_MAX_VEL;  
         this.hoodConfig.MotionMagic.MotionMagicAcceleration = TUNING.HOOD_MAX_ACCEL; 
         

@@ -12,6 +12,7 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -64,6 +65,10 @@ public class IntakeIOKraken implements IntakeIO{
 
         this.armConfig.Slot0.kV = TUNING.ARM_VEL_FF;
         this.armConfig.Slot0.kG = TUNING.ARM_GRAVITY_FF;
+
+        this.armConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
+        this.armConfig.Slot0.GravityArmPositionOffset = TUNING.ARM_GRAVITY_ANGLE_OFFSET_RAD;
+
         this.armConfig.MotionMagic.MotionMagicCruiseVelocity = TUNING.ARM_MAX_VEL;  
         this.armConfig.MotionMagic.MotionMagicAcceleration = TUNING.ARM_MAX_ACCEL; 
 
