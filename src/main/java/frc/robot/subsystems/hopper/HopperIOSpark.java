@@ -33,7 +33,7 @@ public class HopperIOSpark implements HopperIO{
             .inverted(HAL.HOPPER_INVERT);
 
         hopperConfig
-            .smartCurrentLimit(TUNING.CLIMBER_STALL_LIMIT, TUNING.CLIMBER_FREE_LIMIT)
+            .smartCurrentLimit(TUNING.HOPPER_STALL_LIMIT, TUNING.HOPPER_FREE_LIMIT)
             .voltageCompensation(12.0);
         
         hopperConfig.encoder
