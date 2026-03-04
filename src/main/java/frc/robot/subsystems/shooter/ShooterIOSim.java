@@ -63,7 +63,8 @@ public class ShooterIOSim implements ShooterIO {
 
         if(shooterCloseLoopEnabled){
             this.appliedVoltsShooter = MathUtil.clamp(
-                this.shooterVelocityRadsPerSec * 0.018,
+                // not the right way to handle kS but assume we dont need voltage request < 0.18v
+                this.shooterVelocityRadsPerSec * 0.018 + 0.18, 
                 -12.0,
                 12.0
             );  
