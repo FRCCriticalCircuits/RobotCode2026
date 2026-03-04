@@ -30,15 +30,18 @@ public class HopperIOSim implements HopperIO{
     }
 
     /* Feed voltage into simulation state-spate, considering KS */
-    private void feedVoltage(double voltage){
-        hopper.setInputVoltage(voltage - HopperConstants.HOPPER_KS);
+    private void feedHopperVoltage(double voltage){
+        if(Math.abs(voltage) < HopperConstants.HOPPER_KS){
+            voltage = 0.0;
+        }
+        hopper.setInputVoltage(voltage - Math.signum(voltage) * HopperConstants.HOPPER_KS);
     }
 
     @Override
     public Command runHopper(double voltage) {
         return Commands.run(
             () -> {
-                feedVoltage(voltage);
+                feedHopperVoltage(voltage);
             }
         ).withName("hopper.runRollerVoltage");
     }
@@ -47,7 +50,7 @@ public class HopperIOSim implements HopperIO{
     public void runHopperVoltage(double voltage) {
         this.appliedVoltsHopper = voltage;
         // will ignore `hopperStopped` variable
-        feedVoltage(voltage);
+        feedHopperVoltage(voltage);
     }
 
     @Override

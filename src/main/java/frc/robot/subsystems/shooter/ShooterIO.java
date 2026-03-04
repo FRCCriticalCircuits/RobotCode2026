@@ -4,9 +4,6 @@ import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.AutoLog;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-
 public interface ShooterIO {
     @AutoLog
     public class ShooterIOInputs {
@@ -32,10 +29,12 @@ public interface ShooterIO {
     }
 
     default void updateInputs(ShooterIOInputs inputs) {}
+    default void applyOutputs() {}
     
-    default Command runHood(DoubleSupplier positionRad) {return Commands.none();}
-    default Command runShooter(double velocity) {return Commands.none();}
+    default void runHood(DoubleSupplier positionRad) {}
+    default void runShooter(double velocity) {}
     default void runShooterVoltage(double voltage) {}
+
     default Boolean isStable() {return false;}
-    default void stopMotors() {}
+    default void stopShooter() {}
 }

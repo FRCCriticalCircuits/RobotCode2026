@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.GlobalConstants;
 import frc.robot.subsystems.climber.ClimberIO;
@@ -111,15 +110,13 @@ public class SuperStructure extends SubsystemBase{
 
     public Command runShooter(DoubleSupplier hoodPosition){
         return new ParallelCommandGroup(
-            shooterIO.runShooter(SuperStructureConstants.SHOOT_FLYWHEEL_VEL),
-            new RepeatCommand(shooterIO.runHood(hoodPosition)),
+            Commands.runOnce(() -> shooterIO.runShooter(SuperStructureConstants.SHOOT_FLYWHEEL_VEL)),
+            Commands.run(() ->shooterIO.runHood(hoodPosition)),
             Commands.waitUntil(shooterIO::isStable).andThen(hopperIO.runHopper(SuperStructureConstants.SHOOT_SEQUENCER_VOLTS))
         ).finallyDo(
             (interrupted) -> {
-                // we actually dont need stopMotors() for shooter
-                // because it stops(NeutralOut) itself when no futher requests are made
-                shooterIO.stopMotors();
-                hopperIO.stopMotors();
+                // not setting new hood positions
+                shooterIO.stopShooter();
             }
         ).withName("SuperStructure.runShooter");
     }

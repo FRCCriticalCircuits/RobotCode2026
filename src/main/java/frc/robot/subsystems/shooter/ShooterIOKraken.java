@@ -3,8 +3,6 @@ package frc.robot.subsystems.shooter;
 import edu.wpi.first.units.measure.*;
 import frc.robot.subsystems.shooter.ShooterConstants.*;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import java.util.function.DoubleSupplier;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
@@ -47,9 +45,11 @@ public class ShooterIOKraken implements ShooterIO{
         .withUpdateFreqHz(50.0);
     private final VelocityVoltage shooterVelocityVoltage = new VelocityVoltage(0.0)
         .withUpdateFreqHz(50.0);
-    // Cached last commanded targets, used by isStable() feed gating.
+    
+    // Cached last commanded targets, used by isStable() feed gating and applyOutputs().
     private double hoodSetpointRad = 0.0;
     private double shooterSetpointRadPerSec = 0.0;
+    private Boolean shooterCloseLoopEnabled = false;
 
     public ShooterIOKraken(){
         this.hoodMotor = new TalonFX(40, GlobalConstants.BUS);
@@ -193,29 +193,29 @@ public class ShooterIOKraken implements ShooterIO{
     }
 
     @Override
-    public Command runHood(DoubleSupplier positionRad) {
-        return Commands.run(
-            () -> {
-                // Track target locally so readiness logic can compare measured error.
-                hoodSetpointRad = positionRad.getAsDouble();
-                hoodMotor.setControl(
-                    hoodPositionVoltage.withPosition(hoodSetpointRad / (Math.PI * 2))
-                );
-            }
-        ).withName("Shooter.runHoodPosition");
+    public void applyOutputs() {
+        hoodMotor.setControl(
+            hoodPositionVoltage.withPosition(hoodSetpointRad / (Math.PI * 2))
+        );
+
+        if (shooterCloseLoopEnabled) {
+            shooter.setControl(
+                shooterVelocityVoltage.withVelocity(shooterSetpointRadPerSec / (Math.PI * 2))
+            );
+        } else {
+            shooter.setControl(new NeutralOut());
+        }
     }
 
     @Override
-    public Command runShooter(double velocity) {
-        return Commands.run(
-            () -> {
-                // Track target locally so readiness logic can compare measured error.
-                shooterSetpointRadPerSec = velocity;
-                shooter.setControl(
-                    shooterVelocityVoltage.withVelocity(shooterSetpointRadPerSec / (Math.PI * 2))
-                );
-            }
-        ).withName("Shooter.runShooterVelocity");
+    public void runHood(DoubleSupplier positionRad) {
+        hoodSetpointRad = positionRad.getAsDouble();
+    }
+
+    @Override
+    public void runShooter(double velocity) {
+        shooterSetpointRadPerSec = velocity;
+        shooterCloseLoopEnabled = true;
     }
 
     @Override
@@ -234,8 +234,7 @@ public class ShooterIOKraken implements ShooterIO{
     }
 
     @Override
-    public void stopMotors() {
-        hoodMotor.setControl(new NeutralOut());
-        shooter.setControl(new NeutralOut());
+    public void stopShooter() {
+        shooterCloseLoopEnabled = false;
     }
 }
