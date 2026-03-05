@@ -9,7 +9,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.ChassisConstants;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.utils.AimCalc.ShootingParams;
+import frc.robot.utils.calc.AimCalc.ShootingParams;
 
 public class PPDriveCommand extends Command{
     private final Drive drive;

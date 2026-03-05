@@ -1,4 +1,4 @@
-package frc.robot.utils;
+package frc.robot.utils.calc;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.GlobalConstants;
 import frc.robot.GlobalVars;
@@ -19,20 +18,12 @@ import frc.robot.GlobalConstants.FIELD_CONSTANTS;
 import frc.robot.subsystems.drive.Drive;
 
 public class AimCalc {
-    // TODO tune for actual robot
-    private static final double shotTime = 0.1;
     private final SwerveDriveState state;
-
-    InterpolatingDoubleTreeMap hoodAngle = new InterpolatingDoubleTreeMap();
 
     private final Transform2d heading = new Transform2d(new Translation2d(5, 0), Rotation2d.kZero);
 
     public AimCalc(Drive drive){
         this.state = drive.getState();
-
-        // TODO tune-aim: replace with measured distance-to-hood-angle interpolation data.
-        hoodAngle.put(0.0, Math.toRadians(20));
-        hoodAngle.put(3.0, Math.toRadians(0));
     }
 
     private double fastSqrt(float number) {
@@ -82,8 +73,8 @@ public class AimCalc {
         // Current ChassisSpeed
         ChassisSpeeds fieldSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(state.Speeds, state.Pose.getRotation());
         
-        double dx = tx - cx - (shotTime * fieldSpeeds.vxMetersPerSecond);
-        double dy = ty - cy - (shotTime * fieldSpeeds.vyMetersPerSecond);
+        double dx = tx - cx - (CalculatorConstants.shotTime * fieldSpeeds.vxMetersPerSecond);
+        double dy = ty - cy - (CalculatorConstants.shotTime * fieldSpeeds.vyMetersPerSecond);
 
         // Derivative of atan2
         double r_square = dx*dx + dy*dy;
@@ -116,7 +107,7 @@ public class AimCalc {
         final var ret = new ShootingParams();
         ret.yaw = Math.atan2(dy, dx);
         ret.yaw_ff = rotationFF;
-        ret.pitch = hoodAngle.get(dist);
+        ret.pitch = CalculatorConstants.hoodAngle.get(dist);
         
         return ret;
     }

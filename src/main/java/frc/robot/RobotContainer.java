@@ -49,7 +49,7 @@ import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionPhoton;
-import frc.robot.utils.AimCalc;
+import frc.robot.utils.calc.AimCalc;
 import frc.robot.utils.axis.AxisConfigLoader;
 
 public class RobotContainer {

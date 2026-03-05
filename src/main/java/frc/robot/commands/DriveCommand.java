@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.ChassisConstants;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.utils.AimCalc.ShootingParams;
+import frc.robot.utils.calc.AimCalc.ShootingParams;
 import frc.robot.utils.axis.AxisMappingTable;
 
 public class DriveCommand extends Command{
