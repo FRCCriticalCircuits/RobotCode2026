@@ -45,8 +45,8 @@ public class AutoDrive extends Command {
             0,
             ChassisConstants.TRANSLATION_PID_D,
             new Constraints(
-                ChassisConstants.AUTO_DRIVE_MAX_VEL,
-                ChassisConstants.AUTO_DRIVE_MAX_ACCEL
+                ChassisConstants.AUTO_DRIVE_MAX_VEL_X,
+                ChassisConstants.AUTO_DRIVE_MAX_ACCEL_X
             )
         );
 
@@ -55,8 +55,8 @@ public class AutoDrive extends Command {
             0,
             ChassisConstants.TRANSLATION_PID_D,
             new Constraints(
-                ChassisConstants.AUTO_DRIVE_MAX_VEL,
-                ChassisConstants.AUTO_DRIVE_MAX_ACCEL
+                ChassisConstants.AUTO_DRIVE_MAX_VEL_Y,
+                ChassisConstants.AUTO_DRIVE_MAX_ACCEL_Y
             )
         );
 

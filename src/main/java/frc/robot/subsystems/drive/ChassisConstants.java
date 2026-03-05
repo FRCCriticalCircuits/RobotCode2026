@@ -14,9 +14,6 @@ public class ChassisConstants {
         // TODO tune-drive: PathPlanner/AutoDrive rotation PID for simulation.
         private static final double ROTATION_PID_P = 15.0;
         private static final double ROTATION_PID_D = 0.0;
-        // TODO tune-drive: AutoDrive trapezoid limits (m/s and m/s^2).
-        private static final double AUTO_DRIVE_MAX_VEL = 0.5;
-        private static final double AUTO_DRIVE_MAX_ACCEL = 1.0;
     }
 
     private class REAL {
@@ -26,9 +23,6 @@ public class ChassisConstants {
         // TODO tune-drive: PathPlanner/AutoDrive rotation PID on robot.
         private static final double ROTATION_PID_P = 0.0;
         private static final double ROTATION_PID_D = 0.0;
-        // TODO tune-drive: AutoDrive trapezoid limits (m/s and m/s^2).
-        private static final double AUTO_DRIVE_MAX_VEL = 0.5;
-        private static final double AUTO_DRIVE_MAX_ACCEL = 1.0;
     }
 
     private class AUTOAIM_ROTATION{
@@ -53,7 +47,14 @@ public class ChassisConstants {
     );
     //#endregion
 
-    //#region Pathplanner & AutoDrive
+    //#region PP & AutoDrive
+    // TODO tune-drive: AutoDrive trapezoid limits (m/s and m/s^2).
+    // X needs to converge first
+    public static final double AUTO_DRIVE_MAX_VEL_X = 1;
+    public static final double AUTO_DRIVE_MAX_ACCEL_X = 2.0;
+    public static final double AUTO_DRIVE_MAX_VEL_Y = 0.5;
+    public static final double AUTO_DRIVE_MAX_ACCEL_Y = 1.0;
+
     public static final double TRANSLATION_PID_P = 
         Utils.isSimulation() 
             ? SIMULATION.TRANSLATION_PID_P 
@@ -73,16 +74,6 @@ public class ChassisConstants {
         Utils.isSimulation()
             ? SIMULATION.ROTATION_PID_D
             : REAL.ROTATION_PID_D;
-
-    public static final double AUTO_DRIVE_MAX_VEL =
-        Utils.isSimulation()
-            ? SIMULATION.AUTO_DRIVE_MAX_VEL
-            : REAL.AUTO_DRIVE_MAX_VEL;
-
-    public static final double AUTO_DRIVE_MAX_ACCEL =
-        Utils.isSimulation()
-            ? SIMULATION.AUTO_DRIVE_MAX_ACCEL
-            : REAL.AUTO_DRIVE_MAX_ACCEL;
     //#endregion
 
     //#region AutoAim
