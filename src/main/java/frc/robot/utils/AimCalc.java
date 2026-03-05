@@ -19,6 +19,7 @@ import frc.robot.GlobalConstants.FIELD_CONSTANTS;
 import frc.robot.subsystems.drive.Drive;
 
 public class AimCalc {
+    // TODO tune for actual robot
     private static final double shotTime = 0.1;
     private final SwerveDriveState state;
 
