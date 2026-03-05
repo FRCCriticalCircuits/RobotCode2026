@@ -36,6 +36,10 @@ public class ClimbCalc {
         // PQ: the vector PQ
         // a: the limit, open angle of the cone
 
+        // indeed the other side of cone also satisfy this dot product check  
+        // but no need to test it because
+        // the closest climbing point is always on the side n vector heading.
+
         Translation2d pq = state.Pose.getTranslation().minus(ret.getTranslation());
         Translation2d n = new Translation2d(1, 0).rotateBy(ret.getRotation().plus(Rotation2d.k180deg));
         double dotProduct = pq.dot(n) / pq.getSquaredNorm();
