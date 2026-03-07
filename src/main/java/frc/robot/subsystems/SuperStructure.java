@@ -78,6 +78,8 @@ public class SuperStructure extends SubsystemBase{
         Logger.processInputs("HopperIO", hopperInputs);
         Logger.processInputs("ClimberIO", climberInputs);
         
+        Logger.recordOutput("isStable", shooterIO.isStable());
+
         hoodDisconnected.set(!hoodConnectedDebouncer.calculate(shooterInputs.hoodConnected));
         shooterDisconnected.set(!shooterConnectedDebouncer.calculate(shooterInputs.shooterConnected));
         armDisconnected.set(!armConnectedDebouncer.calculate(intakeInputs.armConnected));
@@ -113,8 +115,8 @@ public class SuperStructure extends SubsystemBase{
         return new ParallelCommandGroup(
             Commands.runOnce(() -> shooterIO.runShooter(SuperStructureConstants.SHOOT_FLYWHEEL_VEL)),
             Commands.run(() ->shooterIO.runHood(hoodPosition)),
-            Commands.waitUntil(shooterIO::isStable).andThen(hopperIO.runHopper(SuperStructureConstants.SHOOT_SEQUENCER_VOLTS))
-        ).finallyDo(
+            hopperIO.runHopper(SuperStructureConstants.SHOOT_SEQUENCER_VOLTS))
+        .finallyDo(
             (interrupted) -> {
                 // not setting new hood positions
                 shooterIO.stopShooter();

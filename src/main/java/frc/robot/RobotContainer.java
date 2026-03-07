@@ -87,9 +87,9 @@ public class RobotContainer {
     );
 
     // Vision
-    private final VisionLimelight ll3 = new VisionLimelight("limelight", VisionConstants.VISION_STD_DEVS_LL);
-    @SuppressWarnings("unused")
-    private final Vision visionSubsystem = new Vision(drivetrain, ll3);
+    //private final VisionLimelight ll3 = new VisionLimelight("limelight", VisionConstants.VISION_STD_DEVS_LL);
+    //@SuppressWarnings("unused")
+    //private final Vision visionSubsystem = new Vision(drivetrain, ll3);
 
     // SuperStructure    
     private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOKraken();
