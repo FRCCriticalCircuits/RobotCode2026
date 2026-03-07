@@ -48,7 +48,7 @@ import frc.robot.subsystems.shooter.ShooterIOKraken;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
-import frc.robot.subsystems.vision.VisionPhoton;
+import frc.robot.subsystems.vision.VisionLimelight;
 import frc.robot.utils.calc.AimCalc;
 import frc.robot.utils.axis.AxisConfigLoader;
 
@@ -87,10 +87,9 @@ public class RobotContainer {
     );
 
     // Vision
-    private final VisionPhoton leftCam = new VisionPhoton("cameraLeft", VisionConstants.leftCam);
-    private final VisionPhoton rightCam = new VisionPhoton("cameraRight", VisionConstants.rightCam);
+    private final VisionLimelight ll3 = new VisionLimelight("limelight", VisionConstants.VISION_STD_DEVS_LL);
     @SuppressWarnings("unused")
-    private final Vision visionSubsystem = new Vision(drivetrain, leftCam, rightCam);
+    private final Vision visionSubsystem = new Vision(drivetrain, ll3);
 
     // SuperStructure    
     private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOKraken();
