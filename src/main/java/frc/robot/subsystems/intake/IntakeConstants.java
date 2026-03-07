@@ -28,7 +28,7 @@ public class IntakeConstants {
     public class HAL{
         // Keep gearbox and linkage conversion split so measurement updates stay clear.
         public static final double ARM_GEARING = 23.0 * 1.2587890624;
-        public static final double ROLLER_GEARING = 11.7;
+        public static final double ROLLER_GEARING = 5;
         // TODO tune-hardware: update to match what's required by CTRE, horizontal at position 0
         public static final double DEFAULT_ARM_POSITION_ROT = 0;
 
@@ -56,22 +56,22 @@ public class IntakeConstants {
          * kD : the proportion for velocity error
          * *_VEL_FF -> kV : voltage per velocity unit
          */
-        public static final double ARM_PID_P = 2.0;
+        public static final double ARM_PID_P = 6.0;
         public static final double ARM_PID_I = 0;
         public static final double ARM_PID_D = 0.05;
 
-        public static final double ARM_VEL_FF = 0.15;
+        public static final double ARM_VEL_FF = 0.2;
         // Optional gravity term for arm MotionMagic.
         public static final double ARM_GRAVITY_FF = 0.0;
         public static final double ARM_GRAVITY_ANGLE_OFFSET_RAD = 0.0;
-        public static final double ARM_MAX_VEL = 10.0;
+        public static final double ARM_MAX_VEL = 30.0;
         public static final double ARM_MAX_ACCEL = 2.0;
 
-        public static final double ROLLER_PID_P = 0.4;
+        public static final double ROLLER_PID_P = 10;
         public static final double ROLLER_PID_I = 0;
         public static final double ROLLER_PID_D = 0;
         // Optional velocity feedforward for roller closed-loop velocity.
-        public static final double ROLLER_VEL_FF = 0.1;
+        public static final double ROLLER_VEL_FF = 5;
     }
 
     public class CAD{

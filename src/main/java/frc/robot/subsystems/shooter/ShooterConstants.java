@@ -35,7 +35,7 @@ public class ShooterConstants {
 
         public static final boolean HOOD_INVERT = true;
         public static final boolean SHOOTER_INVERT = true;
-        public static final boolean SECONDARY_SHOOTER_INVERT = true;
+        public static final boolean SECONDARY_SHOOTER_INVERT = false;
     }
 
     public class TUNING{

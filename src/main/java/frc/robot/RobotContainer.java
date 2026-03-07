@@ -216,7 +216,6 @@ public class RobotContainer {
             upperParts.runShooter(() -> calculationUtil.getAimParams().pitch)
         );
 
-        /*
         driverController.b().whileTrue(
             upperParts.openClimber() 
         );
@@ -225,24 +224,19 @@ public class RobotContainer {
             upperParts.closeClimber()
         ); 
 
-        autoAim.whileTrue(
-            shooterCommand
-        );
-        */
-
         // TODO drivetest, a climb position manager maybe
-        driverController.a().onTrue(autoDrive.withTarget(new Pose2d(5, 5, Rotation2d.fromDegrees(0))));
+        // driverController.a().onTrue(autoDrive.withTarget(new Pose2d(5, 5, Rotation2d.fromDegrees(0))));
         
-        driverController.x().onTrue(
-            drivetrain.runOnce(
-                () -> drivetrain.resetPose(new Pose2d(2.5, 4.5, Rotation2d.kZero)) // BLUE
-            )
-        );
-        driverController.b().onTrue(
-            drivetrain.runOnce(
-                () -> drivetrain.resetPose(new Pose2d(14, 4.5, Rotation2d.k180deg)) // RED
-            )
-        );
+        // driverController.x().onTrue(
+        //     drivetrain.runOnce(
+        //         () -> drivetrain.resetPose(new Pose2d(2.5, 4.5, Rotation2d.kZero)) // BLUE
+        //     )
+        // );
+        // driverController.b().onTrue(
+        //     drivetrain.runOnce(
+        //         () -> drivetrain.resetPose(new Pose2d(14, 4.5, Rotation2d.k180deg)) // RED
+        //     )
+        // );
         //#endregion
     }
 
