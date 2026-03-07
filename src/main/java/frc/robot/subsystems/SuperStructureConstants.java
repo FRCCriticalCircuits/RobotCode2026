@@ -1,9 +1,8 @@
 package frc.robot.subsystems;
 
 public class SuperStructureConstants {
-    // TODO tune-superstructure: retune after intake linkage is fully mounted.
-    public static final double INTAKE_ARM_UP = Math.toRadians(-80);
-    public static final double INTAKE_ARM_DOWN = 0;
+    public static final double INTAKE_ARM_UP = -6;
+    public static final double INTAKE_ARM_DOWN = 43;
 
     // TODO tune-superstructure: verify intake roller speed under load.
     public static final double INTAKE_ROLLER_VEL = 10.9;

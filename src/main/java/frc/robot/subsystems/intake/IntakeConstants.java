@@ -57,22 +57,22 @@ public class IntakeConstants {
          * kD : the proportion for velocity error
          * *_VEL_FF -> kV : voltage per velocity unit
          */
-        public static final double ARM_PID_P = 2;
+        public static final double ARM_PID_P = 1.0;
         public static final double ARM_PID_I = 0;
-        public static final double ARM_PID_D = 0;
+        public static final double ARM_PID_D = 0.05;
 
-        public static final double ARM_VEL_FF = 0.3;
+        public static final double ARM_VEL_FF = 0.15;
         // Optional gravity term for arm MotionMagic.
         public static final double ARM_GRAVITY_FF = 0.0;
         public static final double ARM_GRAVITY_ANGLE_OFFSET_RAD = 0.0;
-        public static final double ARM_MAX_VEL = 4;
-        public static final double ARM_MAX_ACCEL = 8;
+        public static final double ARM_MAX_VEL = 1.0;
+        public static final double ARM_MAX_ACCEL = 2.0;
 
-        public static final double ROLLER_PID_P = 10;
+        public static final double ROLLER_PID_P = 0.4;
         public static final double ROLLER_PID_I = 0;
         public static final double ROLLER_PID_D = 0;
         // Optional velocity feedforward for roller closed-loop velocity.
-        public static final double ROLLER_VEL_FF = 0.0;
+        public static final double ROLLER_VEL_FF = 0.1;
     }
 
     public class CAD{
