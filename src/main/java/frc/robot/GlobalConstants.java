@@ -34,7 +34,7 @@ public class GlobalConstants {
     // public static final String LEFT_AXIS_CONFIG = "tanh";
     // public static final String RIGHT_AXIS_CONFIG = "tanhRightAxis";
     // TODO tune-driver: pick final axis mapping with driver input (currently safety mode).
-    public static final String LEFT_AXIS_CONFIG = "LinearWithDeadbandPadded";
+    public static final String LEFT_AXIS_CONFIG = "driveROBODROME";
     public static final String RIGHT_AXIS_CONFIG = "tanhRightAxis";
 
     public static final CANBus BUS = new CANBus("rio");

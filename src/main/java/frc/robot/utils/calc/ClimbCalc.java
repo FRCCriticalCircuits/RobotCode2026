@@ -40,14 +40,14 @@ public class ClimbCalc {
         // but no need to test it because
         // the closest climbing point is always on the side n vector heading.
 
-        Translation2d pq = state.Pose.getTranslation().minus(ret.getTranslation());
-        Translation2d n = new Translation2d(1, 0).rotateBy(ret.getRotation().plus(Rotation2d.k180deg));
-        double dotProduct = pq.dot(n) / pq.getSquaredNorm();
+        // Translation2d pq = state.Pose.getTranslation().minus(ret.getTranslation());
+        // Translation2d n = new Translation2d(1, 0).rotateBy(ret.getRotation().plus(Rotation2d.k180deg));
+        // double dotProduct = pq.dot(n) / pq.getSquaredNorm();
 
-        // if the limit is not satisfied, fall back to current position
-        if(dotProduct < CalculatorConstants.COS_A_LIMIT){
-            return state.Pose;
-        }
+        // // if the limit is not satisfied, fall back to current position
+        // if(dotProduct < CalculatorConstants.COS_A_LIMIT){
+        //     return state.Pose;
+        // }
 
         return ret;
     }

@@ -18,10 +18,10 @@ public class ChassisConstants {
 
     private class REAL {
         // TODO tune-drive: PathPlanner/AutoDrive translation PID on robot.
-        private static final double TRANSLATION_PID_P = 0.0;
+        private static final double TRANSLATION_PID_P = 8.0;
         private static final double TRANSLATION_PID_D = 0.0;
         // TODO tune-drive: PathPlanner/AutoDrive rotation PID on robot.
-        private static final double ROTATION_PID_P = 0.0;
+        private static final double ROTATION_PID_P = 15.0;
         private static final double ROTATION_PID_D = 0.0;
     }
 
@@ -50,10 +50,10 @@ public class ChassisConstants {
     //#region PP & AutoDrive
     // TODO tune-drive: AutoDrive trapezoid limits (m/s and m/s^2).
     // X needs to converge first
-    public static final double AUTO_DRIVE_MAX_VEL_X = 1;
-    public static final double AUTO_DRIVE_MAX_ACCEL_X = 2.0;
-    public static final double AUTO_DRIVE_MAX_VEL_Y = 0.5;
-    public static final double AUTO_DRIVE_MAX_ACCEL_Y = 1.0;
+    public static final double AUTO_DRIVE_MAX_VEL_X = 2.0;
+    public static final double AUTO_DRIVE_MAX_ACCEL_X = 4.0;
+    public static final double AUTO_DRIVE_MAX_VEL_Y = 0.2;
+    public static final double AUTO_DRIVE_MAX_ACCEL_Y = 0.5;
 
     public static final double TRANSLATION_PID_P = 
         Utils.isSimulation() 

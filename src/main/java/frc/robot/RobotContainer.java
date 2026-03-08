@@ -226,7 +226,7 @@ public class RobotContainer {
         ); 
 
         // TODO drivetest, a climb position manager maybe
-        // driverController.a().onTrue(autoDrive.withTarget(new Pose2d(5, 5, Rotation2d.fromDegrees(0))));
+        driverController.x().onTrue(autoDrive.withTarget(new Pose2d(14.8, 5.5, Rotation2d.fromDegrees(-180))));
         
         // driverController.x().onTrue(
         //     drivetrain.runOnce(
