@@ -19,7 +19,6 @@ public class VisionPhoton implements VisionIO {
 
     private final List<PhotonPipelineResult> rawResults = new ArrayList<>();
     private final List<PoseObservation> result = new ArrayList<>();
-    
     private Matrix<N3, N1> stdDevs;
 
     public VisionPhoton(String cameraName, Transform3d robotToCamera, Matrix<N3, N1> stdDevs) {
@@ -29,12 +28,7 @@ public class VisionPhoton implements VisionIO {
         this.cameraName = cameraName;
         this.stdDevs = stdDevs;
     }
-
-    @Override
-    public Matrix<N3, N1> getStdDevs() {
-        return this.stdDevs;
-    }
-
+    
     @Override
     public void feedPose(Pose2d pose2d) {}
 
@@ -50,7 +44,8 @@ public class VisionPhoton implements VisionIO {
                 .ifPresent(est -> result.add(
                     new PoseObservation(
                         est.timestampSeconds,
-                        est.estimatedPose.toPose2d()
+                        est.estimatedPose.toPose2d(),
+                        this.stdDevs
                     )
                 ));
         }

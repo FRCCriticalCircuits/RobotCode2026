@@ -1106,6 +1106,12 @@ public class LimelightHelpers {
         else return VecBuilder.fill(stdDevs[0], stdDevs[1], stdDevs[5]);
     }
 
+    public static Matrix<N3, N1> getMT2StdDevs(String limelightName){
+        double[] stdDevs = getLimelightNTDoubleArray(limelightName, "stddevs");
+        if(stdDevs.length < 12) return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        else return VecBuilder.fill(stdDevs[6], stdDevs[7], stdDevs[11]);
+    }
+
     /**
      * Switch to getBotPose
      * 

@@ -87,14 +87,14 @@ public class RobotContainer {
     );
 
     // Vision
-    //private final VisionLimelight ll3 = new VisionLimelight("limelight", VisionConstants.VISION_STD_DEVS_LL);
-    //@SuppressWarnings("unused")
-    //private final Vision visionSubsystem = new Vision(drivetrain, ll3);
+    private final VisionLimelight ll3 = new VisionLimelight("limelight");
+    @SuppressWarnings("unused")
+    private final Vision visionSubsystem = new Vision(drivetrain, ll3);
 
     // SuperStructure    
-    private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOKraken();
-    private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOKraken();
-    private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : new HopperIOSpark();
+    private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOSim();
+    private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOSim();
+    private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : new HopperIOSim();
     private final ClimberIO climberIO = Utils.isSimulation() ? new ClimberIOSim() : new ClimberIOVortex(); // TODO
     private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO, climberIO);
 
@@ -121,6 +121,8 @@ public class RobotContainer {
     );
 
     public RobotContainer() {
+        drivetrain.resetPose(new Pose2d(14, 6, Rotation2d.k180deg));
+
         drivetrain.registerTelemetry(swerveLogger::telemeterize);
 
         NamedCommands.registerCommand("runIntake", autoIntakeCommand);

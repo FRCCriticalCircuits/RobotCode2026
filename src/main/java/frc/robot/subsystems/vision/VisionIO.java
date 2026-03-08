@@ -14,10 +14,10 @@ public interface VisionIO {
 
     public static record PoseObservation(
         double timeStamp,
-        Pose2d robotPose
+        Pose2d robotPose,
+        Matrix<N3, N1> stdDev
     ) {}
 
-    public default Matrix<N3, N1> getStdDevs() {return VisionConstants.VISION_STD_DEVS_DEFAULT;}
     public default void feedPose(Pose2d pose2d) {}
     public default void updateInputs(VisionIOInputs inputs) {}
 }

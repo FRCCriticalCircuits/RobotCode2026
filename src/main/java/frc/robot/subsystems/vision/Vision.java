@@ -32,7 +32,7 @@ public class Vision extends SubsystemBase{
                 drivetrain.addVisionMeasurement(
                     observedData.robotPose(),
                     observedData.timeStamp(),
-                    visionIO.getStdDevs()
+                    observedData.stdDev()
                 );
             }
         }
