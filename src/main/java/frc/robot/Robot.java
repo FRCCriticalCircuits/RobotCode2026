@@ -12,6 +12,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import com.ctre.phoenix6.SignalLogger;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -24,6 +25,16 @@ public class Robot extends LoggedRobot {
     private Boolean hasAppliedAlliance = false;
 
     public Robot() {
+        while(!hasAppliedAlliance){
+            Timer.delay(1.0);
+            System.out.printf("Waiting for DriverStation [%b]\n", DriverStation.isDSAttached());
+
+            DriverStation.getAlliance().ifPresent(allianceColor -> {
+                GlobalVars.BLUE_ALLIANCE = (allianceColor == Alliance.Blue);
+                hasAppliedAlliance = true;
+            });
+        }
+
         m_robotContainer = new RobotContainer();
         SignalLogger.setPath(GlobalConstants.CTRE_LOG_PATH);
     
@@ -53,13 +64,6 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        
-        if(!hasAppliedAlliance && DriverStation.isDSAttached()){
-            DriverStation.getAlliance().ifPresent(allianceColor -> {
-                GlobalVars.BLUE_ALLIANCE = (allianceColor == Alliance.Blue);
-                hasAppliedAlliance = true;
-            });                
-        }
     }
 
     @Override
