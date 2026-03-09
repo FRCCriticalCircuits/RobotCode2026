@@ -67,11 +67,11 @@ public class IntakeConstants {
         public static final double ARM_MAX_VEL = 100.0;
         public static final double ARM_MAX_ACCEL = 10.0;
 
-        public static final double ROLLER_PID_P = 10;
+        public static final double ROLLER_PID_P = 0;
         public static final double ROLLER_PID_I = 0;
         public static final double ROLLER_PID_D = 0;
         // Optional velocity feedforward for roller closed-loop velocity.
-        public static final double ROLLER_VEL_FF = 5;
+        public static final double ROLLER_VEL_FF = 0.10;
     }
 
     public class CAD{

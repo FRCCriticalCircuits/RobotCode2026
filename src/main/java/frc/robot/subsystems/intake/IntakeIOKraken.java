@@ -99,9 +99,9 @@ public class IntakeIOKraken implements IntakeIO{
         this.armConfig.CurrentLimits.SupplyCurrentLimit = 30;
 
         this.rollerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        this.rollerConfig.CurrentLimits.StatorCurrentLimit = 80;
+        this.rollerConfig.CurrentLimits.StatorCurrentLimit = 40;
         this.rollerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        this.rollerConfig.CurrentLimits.SupplyCurrentLimit = 30;
+        this.rollerConfig.CurrentLimits.SupplyCurrentLimit = 20;
 
         // Status Signals
         this.armPosition = armMotor.getPosition();
