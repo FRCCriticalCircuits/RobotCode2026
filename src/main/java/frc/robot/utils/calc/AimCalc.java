@@ -93,6 +93,7 @@ public class AimCalc {
             Pose2d futurPose2d = new Pose2d(-dx + tx, -dy + ty, Rotation2d.fromRadians(Math.atan2(dy, dx)));
 
             try {
+                Logger.recordOutput("AutoAim/Dist", dist);
                 Logger.recordOutput("Visualization/AimTarget", new Pose2d(tx, ty, Rotation2d.kZero));
                 Logger.recordOutput("Visualization/CurrentHeading", state.Pose.plus(heading));
                 Logger.recordOutput("Visualization/FuturePose", futurPose2d);
