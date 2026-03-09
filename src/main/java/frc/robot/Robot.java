@@ -26,8 +26,8 @@ public class Robot extends LoggedRobot {
 
     public Robot() {
         while(!hasAppliedAlliance){
-            Timer.delay(1.0);
-            System.out.printf("Waiting for DriverStation [%b]\n", DriverStation.isDSAttached());
+            Timer.delay(2.0);
+            System.out.printf("[Double It] Waiting for DriverStation [%b]\n", DriverStation.isDSAttached());
 
             DriverStation.getAlliance().ifPresent(allianceColor -> {
                 GlobalVars.BLUE_ALLIANCE = (allianceColor == Alliance.Blue);

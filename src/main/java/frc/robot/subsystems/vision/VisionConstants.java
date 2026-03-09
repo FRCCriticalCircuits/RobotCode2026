@@ -16,7 +16,6 @@ public class VisionConstants {
 
     // TODO tune-vision: adjust by camera quality and tag count.
     public static final Matrix<N3, N1> VISION_STD_DEVS_DEFAULT = VecBuilder.fill(0.7, 0.7, 1.5);
-    public static final Matrix<N3, N1> VISION_STD_DEVS_LL = VecBuilder.fill(0.5, 0.5, 99999);
 
     public static final Transform3d leftCam = new Transform3d(
         -0.258,

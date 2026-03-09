@@ -47,7 +47,6 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOKraken;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.vision.Vision;
-import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionLimelight;
 import frc.robot.utils.calc.AimCalc;
 import frc.robot.utils.axis.AxisConfigLoader;
@@ -121,8 +120,6 @@ public class RobotContainer {
     );
 
     public RobotContainer() {
-        drivetrain.resetPose(new Pose2d(14, 6, Rotation2d.k180deg));
-
         drivetrain.registerTelemetry(swerveLogger::telemeterize);
 
         NamedCommands.registerCommand("runIntake", autoIntakeCommand);
@@ -191,7 +188,6 @@ public class RobotContainer {
             autoChooser.addOption("Shooter SysID | QF", flywheelRoutine.quasistatic(Direction.kForward));
             autoChooser.addOption("Shooter SysID | QR", flywheelRoutine.quasistatic(Direction.kReverse));
         }
-
         //#endregion
 
         drivetrain.setDefaultCommand(teleDrive);
@@ -217,31 +213,24 @@ public class RobotContainer {
             upperParts.runShooter(() -> calculationUtil.getAimParams().pitch)
         );
 
-        driverController.b().whileTrue(
+        driverController.povUp().whileTrue(
             upperParts.openClimber() 
         );
 
-        driverController.a().whileTrue(
+        driverController.povDown().whileTrue(
             upperParts.closeClimber()
         ); 
 
         // TODO drivetest, a climb position manager maybe
         driverController.x().whileTrue(autoDrive.withTarget(new Pose2d(14.8, 5.5, Rotation2d.fromDegrees(-180))));
-        
-        // driverController.x().onTrue(
-        //     drivetrain.runOnce(
-        //         () -> drivetrain.resetPose(new Pose2d(2.5, 4.5, Rotation2d.kZero)) // BLUE
-        //     )
-        // );
-        // driverController.b().onTrue(
-        //     drivetrain.runOnce(
-        //         () -> drivetrain.resetPose(new Pose2d(14, 4.5, Rotation2d.k180deg)) // RED
-        //     )
-        // );
         //#endregion
     }
 
+    /**
+     * execute the command, then re-enable vision
+     * @return
+     */
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
+        return autoChooser.getSelected().andThen(() -> visionSubsystem.setVisionDisabled(false));
     }
 }
