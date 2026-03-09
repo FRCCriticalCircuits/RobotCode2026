@@ -28,16 +28,12 @@ public class VisionLimelight implements VisionIO{
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(this.cameraName);
         
         m_results.clear();
-
-        /*
-        if (mt2 != null) {
-            if (mt2.tagCount == 0) inputs.poseObservation = null;
+        
+        if (mt2 != null && (mt2.tagCount > 0)) {
             m_results.add(new PoseObservation(mt2.timestampSeconds, mt2.pose, LimelightHelpers.getMT2StdDevs(cameraName)));
         }
-        */
 
         if (mt1 != null && (mt1.tagCount > 0)) {
-            // if (mt1.pose.getTranslation().getSquaredNorm() < 1) inputs.poseObservation = null;
             m_results.add(new PoseObservation(mt1.timestampSeconds, mt1.pose, LimelightHelpers.getMT1StdDevs(cameraName)));
         }
 

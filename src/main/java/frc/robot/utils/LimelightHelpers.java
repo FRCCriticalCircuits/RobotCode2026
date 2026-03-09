@@ -1096,7 +1096,7 @@ public class LimelightHelpers {
     }
 
     /**
-     * get StdDev of the measurement
+     * get StdDev of the MT1 measurement
      * @param limelightName
      * @return
      */
@@ -1106,10 +1106,16 @@ public class LimelightHelpers {
         else return VecBuilder.fill(stdDevs[0], stdDevs[1], stdDevs[5]);
     }
 
+    /**
+     * get StdDev of the MT2 measurement
+     * ignoring rotation by giving it an extreme large stdDev
+     * @param limelightName
+     * @return
+     */
     public static Matrix<N3, N1> getMT2StdDevs(String limelightName){
         double[] stdDevs = getLimelightNTDoubleArray(limelightName, "stddevs");
         if(stdDevs.length < 12) return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        else return VecBuilder.fill(stdDevs[6], stdDevs[7], stdDevs[11]);
+        else return VecBuilder.fill(stdDevs[6], stdDevs[7], 99999);
     }
 
     /**
