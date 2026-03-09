@@ -67,6 +67,7 @@ public class SuperStructure extends SubsystemBase{
     public void periodic() {
         intakeIO.applyOutputs();
         shooterIO.applyOutputs();
+        hopperIO.applyOutputs();
 
         shooterIO.updateInputs(shooterInputs);
         intakeIO.updateInputs(intakeInputs);
@@ -115,11 +116,12 @@ public class SuperStructure extends SubsystemBase{
         return new ParallelCommandGroup(
             Commands.runOnce(() -> shooterIO.runShooter(SuperStructureConstants.SHOOT_FLYWHEEL_VEL)),
             Commands.run(() ->shooterIO.runHood(hoodPosition)),
-            Commands.waitUntil(shooterIO::isStable).andThen(hopperIO.runHopper(SuperStructureConstants.SHOOT_SEQUENCER_VOLTS))
+            Commands.waitUntil(shooterIO::isStable).andThen(() -> hopperIO.runHopper(SuperStructureConstants.SHOOT_SEQUENCER_VOLTS))
         ).finallyDo(
             (interrupted) -> {
                 // not setting new hood positions
                 shooterIO.stopShooter();
+                hopperIO.stopMotors();
             }
         ).withName("SuperStructure.runShooter");
     }

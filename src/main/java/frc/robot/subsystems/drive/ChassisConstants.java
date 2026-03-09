@@ -43,7 +43,7 @@ public class ChassisConstants {
     public static final Pose2d TOLORANCE_AUTO_DRIVE = new Pose2d(
         0.02,
         0.02,
-        Rotation2d.fromDegrees(1)
+        Rotation2d.fromDegrees(0.5)
     );
     //#endregion
 
@@ -52,7 +52,7 @@ public class ChassisConstants {
     // X needs to converge first
     public static final double AUTO_DRIVE_MAX_VEL_X = 2.0;
     public static final double AUTO_DRIVE_MAX_ACCEL_X = 4.0;
-    public static final double AUTO_DRIVE_MAX_VEL_Y = 0.2;
+    public static final double AUTO_DRIVE_MAX_VEL_Y = 0.5;
     public static final double AUTO_DRIVE_MAX_ACCEL_Y = 0.5;
 
     public static final double TRANSLATION_PID_P = 

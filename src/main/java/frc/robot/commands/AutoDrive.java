@@ -37,7 +37,7 @@ public class AutoDrive extends Command {
             ChassisConstants.ROTATION_PID_P,
             0,
             ChassisConstants.ROTATION_PID_D,
-            new Constraints(Math.PI * 2, Math.PI * 4)
+            new Constraints(Math.PI, Math.PI * 2)
         );
 
         xController = new ProfiledPIDController(
@@ -89,6 +89,11 @@ public class AutoDrive extends Command {
         this.targetX.position = targetPose2d.getX();
         this.targetY.position = targetPose2d.getY();
 
+        speeds.omegaRadiansPerSecond = rotationController.calculate(
+            state.Pose.getRotation().getRadians(),
+            targetRotation
+        );
+
         speeds.vxMetersPerSecond = xController.calculate(
             state.Pose.getX(),
             targetX
@@ -97,11 +102,6 @@ public class AutoDrive extends Command {
         speeds.vyMetersPerSecond = yController.calculate(
             state.Pose.getY(),
             targetY
-        );
-
-        speeds.omegaRadiansPerSecond = rotationController.calculate(
-            state.Pose.getRotation().getRadians(),
-            targetRotation
         );
 
         drive.setControl(

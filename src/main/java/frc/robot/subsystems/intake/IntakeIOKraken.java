@@ -114,7 +114,7 @@ public class IntakeIOKraken implements IntakeIO{
 
         this.appliedVoltsRoller = rollerMotor.getMotorVoltage();
         this.supplyCurrentRoller = rollerMotor.getSupplyCurrent();
-        this.torqueCurrentRoller = rollerMotor.getSupplyCurrent();
+        this.torqueCurrentRoller = rollerMotor.getTorqueCurrent();
         
         this.tempArm = armMotor.getDeviceTemp();
         this.tempSecondaryArm = secondaryArmMotor.getDeviceTemp();
