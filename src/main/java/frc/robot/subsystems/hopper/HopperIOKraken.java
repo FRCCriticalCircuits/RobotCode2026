@@ -42,7 +42,7 @@ public class HopperIOKraken implements HopperIO {
     private boolean hopperClosedLoopEnabled = false;
 
     public HopperIOKraken() {
-        this.hopperMotor = new TalonFX(32, GlobalConstants.BUS);
+        this.hopperMotor = new TalonFX(50, GlobalConstants.BUS);
 
         // Configuration
         this.hopperConfig = new TalonFXConfiguration();
