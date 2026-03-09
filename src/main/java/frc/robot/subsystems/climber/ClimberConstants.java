@@ -20,9 +20,6 @@ public class ClimberConstants {
         public static final int CLIMBER_STALL_LIMIT = 60;
         public static final int CLIMBER_FREE_LIMIT = 50;
 
-        public static final double CLIMBER_PID_P = 0.08;
-        public static final double CLIMBER_PID_I = 0;
-        public static final double CLIMBER_PID_D = 0.01;
         public static final double ENCODER_POSTION = 0;
     }
 }

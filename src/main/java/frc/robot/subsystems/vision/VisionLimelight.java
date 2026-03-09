@@ -8,7 +8,6 @@ import java.util.List;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.utils.LimelightHelpers;
 
 public class VisionLimelight implements VisionIO{

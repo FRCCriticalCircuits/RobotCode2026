@@ -68,12 +68,6 @@ public class ClimberIOVortex implements ClimberIO{
             .maxMotionSetpointPositionAlwaysOn(false)
             .maxMotionSetpointVelocityAlwaysOn(false);
         */
-        
-        climberConfig.closedLoop
-            .p(TUNING.CLIMBER_PID_P)
-            .i(TUNING.CLIMBER_PID_I)
-            .d(TUNING.CLIMBER_PID_D)
-            .outputRange(-1.0, 1.0);
 
         tryUntilOk(
             climberSparkFlex,
