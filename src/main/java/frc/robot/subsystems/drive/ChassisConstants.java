@@ -34,7 +34,7 @@ public class ChassisConstants {
 
         private class REAL{
             // TODO tune-drive: auto-aim PID on robot.
-            private static final double ROTATION_PID_P = 5.0;
+            private static final double ROTATION_PID_P = 7.0;
             private static final double ROTATION_PID_D = 0.0;
         }
     }

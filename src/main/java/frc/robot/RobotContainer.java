@@ -47,6 +47,7 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOKraken;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionLimelight;
 import frc.robot.utils.calc.AimCalc;
 import frc.robot.utils.axis.AxisConfigLoader;
@@ -225,7 +226,7 @@ public class RobotContainer {
         ); 
 
         // TODO drivetest, a climb position manager maybe
-        driverController.x().onTrue(autoDrive.withTarget(new Pose2d(14.8, 5.5, Rotation2d.fromDegrees(-180))));
+        driverController.x().whileTrue(autoDrive.withTarget(new Pose2d(14.8, 5.5, Rotation2d.fromDegrees(-180))));
         
         // driverController.x().onTrue(
         //     drivetrain.runOnce(
