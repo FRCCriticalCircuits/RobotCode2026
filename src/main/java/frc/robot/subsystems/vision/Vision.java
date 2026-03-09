@@ -13,6 +13,8 @@ public class Vision extends SubsystemBase{
 
     private final VisionIOInputs inputs = new VisionIOInputs();
 
+    private boolean m_visionDisabled = true;
+
     public Vision(Drive drivetrain, VisionIO... visionIOs){
         this.drivetrain = drivetrain;
         this.listVisionIO = visionIOs;
@@ -20,8 +22,14 @@ public class Vision extends SubsystemBase{
         this.driveState = drivetrain.getState();
     }
 
+    public void setVisionDisabled(boolean disabled) {
+        m_visionDisabled = disabled;
+    }
+
     @Override
     public void periodic() {
+        if(m_visionDisabled) return;
+
         for (VisionIO visionIO : listVisionIO) {
             visionIO.feedPose(driveState.Pose);
             visionIO.updateInputs(inputs);

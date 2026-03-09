@@ -1,9 +1,14 @@
 package frc.robot.subsystems.vision;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.utils.LimelightHelpers;
 
 public class VisionLimelight implements VisionIO{
@@ -31,10 +36,25 @@ public class VisionLimelight implements VisionIO{
         
         if (mt2 != null && (mt2.tagCount > 0)) {
             m_results.add(new PoseObservation(mt2.timestampSeconds, mt2.pose, LimelightHelpers.getMT2StdDevs(cameraName)));
+
+            try {
+                Logger.recordOutput("Vision/mt2", mt2.pose);
+            } catch (BufferOverflowException e) {
+                System.out.print("Buffer Overflow @ AutoAim.java Logging");
+            } catch (BufferUnderflowException e){
+                System.out.print("Buffer UnderFlow @ AutoAim.java Logging");
+            }
         }
 
         if (mt1 != null && (mt1.tagCount > 0)) {
             m_results.add(new PoseObservation(mt1.timestampSeconds, mt1.pose, LimelightHelpers.getMT1StdDevs(cameraName)));
+            try {
+                Logger.recordOutput("Vision/mt1", mt1.pose);
+            } catch (BufferOverflowException e) {
+                System.out.print("Buffer Overflow @ AutoAim.java Logging");
+            } catch (BufferUnderflowException e){
+                System.out.print("Buffer UnderFlow @ AutoAim.java Logging");
+            }
         }
 
         inputs.poseObservation = m_results;
