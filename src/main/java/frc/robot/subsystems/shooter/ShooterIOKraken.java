@@ -100,9 +100,9 @@ public class ShooterIOKraken implements ShooterIO{
         this.hoodConfig.CurrentLimits.SupplyCurrentLimit = 30;
 
         this.shooterConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        this.shooterConfig.CurrentLimits.StatorCurrentLimit = 140;
+        this.shooterConfig.CurrentLimits.StatorCurrentLimit = 100;
         this.shooterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        this.shooterConfig.CurrentLimits.SupplyCurrentLimit = 60;
+        this.shooterConfig.CurrentLimits.SupplyCurrentLimit = 40;
 
         // Status Signals
         this.hoodPosition = hoodMotor.getPosition();
