@@ -11,8 +11,8 @@ public class CalculatorConstants {
     // TODO tune-aim: replace with measured distance-to-hood-angle interpolation data.
     // max 0.11, min 0.005
     public static InterpolatingDoubleTreeMap hoodAngle = InterpolatingDoubleTreeMap.ofEntries(
-        Map.entry(0.0, 10.0),
-        Map.entry(.0, 20.0)
+        Map.entry(0.0, 0.01),
+        Map.entry(3.0, 0.10)
     );
 
     // TODO decide open angle of the cone check for climbing position calculator
