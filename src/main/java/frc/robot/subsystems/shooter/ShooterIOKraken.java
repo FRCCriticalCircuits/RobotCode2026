@@ -80,7 +80,7 @@ public class ShooterIOKraken implements ShooterIO{
                 : InvertedValue.Clockwise_Positive;
         this.hoodConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         this.hoodConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-        this.hoodConfig.Feedback.RotorToSensorRatio = HAL.HOOD_GEARING;
+        this.hoodConfig.Feedback.SensorToMechanismRatio = HAL.HOOD_GEARING;
 
         this.shooterConfig.Slot0.kP = TUNING.SHOOTER_PID_P;
         this.shooterConfig.Slot0.kI = TUNING.SHOOTER_PID_I;
@@ -92,7 +92,7 @@ public class ShooterIOKraken implements ShooterIO{
                 : InvertedValue.Clockwise_Positive;
         this.shooterConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         this.shooterConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-        this.shooterConfig.Feedback.RotorToSensorRatio = HAL.SHOOTER_GEARING;
+        this.shooterConfig.Feedback.SensorToMechanismRatio = HAL.SHOOTER_GEARING;
 
         this.hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         this.hoodConfig.CurrentLimits.StatorCurrentLimit = 80;

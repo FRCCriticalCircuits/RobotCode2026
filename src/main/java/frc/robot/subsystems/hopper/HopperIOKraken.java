@@ -56,7 +56,7 @@ public class HopperIOKraken implements HopperIO {
                 : InvertedValue.Clockwise_Positive;
         this.hopperConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         this.hopperConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-        this.hopperConfig.Feedback.RotorToSensorRatio = HAL.HOPPER_GEARING;
+        this.hopperConfig.Feedback.SensorToMechanismRatio = HAL.HOPPER_GEARING;
 
         this.hopperConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         this.hopperConfig.CurrentLimits.StatorCurrentLimit = 40;
