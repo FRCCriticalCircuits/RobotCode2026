@@ -6,8 +6,8 @@ package frc.robot.subsystems;
  * which CTRE requires for their API
  */
 public class SuperStructureConstants {
-    public static final double INTAKE_ARM_UP = 10;
-    public static final double INTAKE_ARM_DOWN = 45.7;
+    public static final double INTAKE_ARM_UP = 0.1;
+    public static final double INTAKE_ARM_DOWN = 0.1;
 
     // TODO tune-superstructure: verify intake roller speed under load.
     public static final double INTAKE_ROLLER_VEL = 40; // 45 maximum
