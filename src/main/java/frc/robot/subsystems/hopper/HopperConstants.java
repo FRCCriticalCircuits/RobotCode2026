@@ -14,7 +14,7 @@ public class HopperConstants {
     public class HAL{
         public static final double HOPPER_GEARING = 1.0;
 
-        public static final boolean HOPPER_INVERT = true;
+        public static final boolean HOPPER_INVERT = false;
     }
 
     public class TUNING{

@@ -35,7 +35,7 @@ public class ShooterConstants {
 
         public static final boolean HOOD_INVERT = true;
         public static final boolean SHOOTER_INVERT = true;
-        public static final boolean SECONDARY_SHOOTER_INVERT = false;
+        public static final boolean SECONDARY_SHOOTER_INVERT = true;
     }
 
     public class TUNING{
@@ -74,11 +74,11 @@ public class ShooterConstants {
         // MotionMagic profile in mechanism rotations per second^2.
         public static final double HOOD_MAX_ACCEL = 2.0;
 
-        public static final double SHOOTER_PID_P = 0.12;
+        public static final double SHOOTER_PID_P = 0;
         public static final double SHOOTER_PID_I = 0;
         public static final double SHOOTER_PID_D = 0;
         // Optional feedforward for flywheel velocity control (CTRE Slot0.kV).
-        public static final double SHOOTER_VEL_FF = 0.12;
+        public static final double SHOOTER_VEL_FF = 0.161;
     }
 
     public class CAD{
