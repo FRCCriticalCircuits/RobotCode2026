@@ -39,7 +39,6 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.SwerveTelemetry;
 import frc.robot.subsystems.hopper.HopperIO;
 import frc.robot.subsystems.hopper.HopperIOSim;
-import frc.robot.subsystems.hopper.HopperIOSpark;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOKraken;
 import frc.robot.subsystems.intake.IntakeIOSim;
@@ -91,8 +90,8 @@ public class RobotContainer {
     private final Vision visionSubsystem = new Vision(drivetrain, ll3);
 
     // SuperStructure    
-    private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOKraken();
-    private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOKraken();
+    private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOSim();
+    private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOSim();
     private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : new HopperIOSim();
     private final ClimberIO climberIO = Utils.isSimulation() ? new ClimberIOSim() : new ClimberIOVortex(); // TODO
     private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO, climberIO);
