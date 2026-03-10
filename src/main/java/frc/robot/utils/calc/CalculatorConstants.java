@@ -9,6 +9,7 @@ public class CalculatorConstants {
     public static final double shotTime = 0.1;
 
     // TODO tune-aim: replace with measured distance-to-hood-angle interpolation data.
+    // max 0.11, min 0.005
     public static InterpolatingDoubleTreeMap hoodAngle = InterpolatingDoubleTreeMap.ofEntries(
         Map.entry(0.0, 10.0),
         Map.entry(.0, 20.0)

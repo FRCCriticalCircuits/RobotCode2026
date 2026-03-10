@@ -29,7 +29,7 @@ public class ShooterConstants {
 
     public class HAL{
         // TODO tune-hardware: verify against measured hood reduction on the real robot.
-        public static final double HOOD_GEARING = 40;
+        public static final double HOOD_GEARING = 28.235294;
         // TODO tune-hardware: verify against measured flywheel reduction on the real robot.
         public static final double SHOOTER_GEARING = 24.0 / 18.0;
 
@@ -61,18 +61,18 @@ public class ShooterConstants {
          * kD : the proportion for velocity error
          * *_VEL_FF -> kV : voltage per velocity unit
          */
-        public static final double HOOD_PID_P = 1.0;
-        public static final double HOOD_PID_I = 0;
-        public static final double HOOD_PID_D = 0.05;
+        public static final double HOOD_PID_P = 20.0;
+        public static final double HOOD_PID_I = 0.0;
+        public static final double HOOD_PID_D = 10.0;
 
-        public static final double HOOD_VEL_FF = 0.08;
+        public static final double HOOD_VEL_FF = 5.0;
         public static final double HOOD_GRAVITY_FF = 0.0;
         public static final double HOOD_GRAVITY_ANGLE_OFFSET_RAD = 0.0;
 
         // MotionMagic profile in mechanism rotations per second.
-        public static final double HOOD_MAX_VEL = 0.25;
+        public static final double HOOD_MAX_VEL = 1.0;
         // MotionMagic profile in mechanism rotations per second^2.
-        public static final double HOOD_MAX_ACCEL = 0.5;
+        public static final double HOOD_MAX_ACCEL = 2.0;
 
         public static final double SHOOTER_PID_P = 0.12;
         public static final double SHOOTER_PID_I = 0;
