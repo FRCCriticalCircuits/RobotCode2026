@@ -110,7 +110,7 @@ public class RobotContainer {
     // SysID Routine for arm, ramp rate and voltage unverified
     private final SysIdRoutine armRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(
-            Units.Volts.of(0.05).per(Units.Second),
+            Units.Volts.of(0.02).per(Units.Second),
             Voltage.ofRelativeUnits(2, Units.Volts),
             null,
             (state) -> Logger.recordOutput("armRoutine", state.toString())
@@ -126,7 +126,7 @@ public class RobotContainer {
     // SysID Routine for hood, ramp rate and voltage verified
     private final SysIdRoutine hoodRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(
-            Units.Volts.of(0.03).per(Units.Second),
+            Units.Volts.of(0.01).per(Units.Second),
             Voltage.ofRelativeUnits(0.26, Units.Volts),
             null,
             (state) -> Logger.recordOutput("hoodRoutine", state.toString())
