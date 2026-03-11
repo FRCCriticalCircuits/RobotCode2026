@@ -88,7 +88,7 @@ public class RobotContainer {
     // SuperStructure    
     private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOKraken();
     private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOKraken();
-    private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : new HopperIOKraken();
+    private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIO() {} : new HopperIOKraken();
     private final ClimberIO climberIO = Utils.isSimulation() ? new ClimberIO(){} : new ClimberIOVortex(); // TODO
     private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO, climberIO);
 

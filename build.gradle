@@ -2,6 +2,7 @@ plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2026.2.1"
     id "com.peterabeles.gversion" version "1.10.3"
+    id "com.palantir.java-format" version "2.38.0"
 }
 
 project.compileJava.dependsOn(createVersionFile)

@@ -1,16 +1,6 @@
 package frc.robot.subsystems.hopper;
 
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N2;
-import edu.wpi.first.math.system.LinearSystem;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
-
 public class HopperConstants {
-    public static final DCMotor HOPPER_GEARBOX = DCMotor.getNEO(1);
-    public static final LinearSystem<N2, N1, N2> HOPPER_STATE_SPACE = LinearSystemId.createDCMotorSystem(0.02, 0.0006);
-    public static final double HOPPER_KS_SIM = 0.13;
-
     public class HAL{
         public static final double HOPPER_GEARING = 1.0;
 
