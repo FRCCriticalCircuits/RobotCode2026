@@ -40,7 +40,7 @@ public class ShooterConstants {
     public class TUNING{
         // Allowed control error before shooter is considered ready to feed.
         // TODO tune-controls: adjust once hood MotionMagic gains are tuned.
-        public static final double HOOD_STABLE_TOLERANCE_RAD = Math.toRadians(4.0 / 360.0);
+        public static final double HOOD_STABLE_TOLERANCE_RAD = Math.toRadians(4.5 / 360.0);
         // TODO tune-controls: adjust once shooter velocity loop gains are tuned.
         public static final double SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC = 10.0;
 
@@ -64,7 +64,9 @@ public class ShooterConstants {
         public static final double HOOD_PID_I = 0.0;
         public static final double HOOD_PID_D = 10.0;
 
-        public static final double HOOD_KV = 5.0;
+        // use elevator KS ff to appoximate that
+        public static final double HOOD_KS = 0.2;
+        public static final double HOOD_KV = 2.5;
         public static final double HOOD_KG = 0.0;
         public static final double HOOD_GRAVITY_ANGLE_OFFSET_RAD = 0.0;
 

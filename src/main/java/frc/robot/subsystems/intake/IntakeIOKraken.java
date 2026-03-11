@@ -45,6 +45,13 @@ public class IntakeIOKraken implements IntakeIO{
     private final VelocityVoltage rollerVelocityVoltage = new VelocityVoltage(0.0)
         .withUpdateFreqHz(50.0);
 
+    private final Follower followerRequest = new Follower(
+        30,
+        HAL.SECONDARY_ARM_INVERT 
+            ? MotorAlignmentValue.Opposed
+            : MotorAlignmentValue.Aligned
+    ).withUpdateFreqHz(50.0);
+
     // Cached Desired States
     private double desiredArmPositionRot = 0.0;      // rotations
     private double desiredRollerVelocityRps = 0.0;   // rotations per second
@@ -152,15 +159,6 @@ public class IntakeIOKraken implements IntakeIO{
         armMotor.setPosition(HAL.DEFAULT_ARM_POSITION_ROT);
         // doesnt matter for the second motor cuz we're using follower control
         secondaryArmMotor.setPosition(HAL.DEFAULT_ARM_POSITION_ROT);
-
-        secondaryArmMotor.setControl(
-            new Follower(
-                armMotor.getDeviceID(),
-                HAL.SECONDARY_ARM_INVERT 
-                    ? MotorAlignmentValue.Opposed
-                    : MotorAlignmentValue.Aligned
-            )
-        );
     }
 
     @Override
@@ -208,6 +206,10 @@ public class IntakeIOKraken implements IntakeIO{
             armMotor.setControl(
                 armPostionVoltage.withPosition(desiredArmPositionRot)
             );
+
+            secondaryArmMotor.setControl(
+                followerRequest
+            );
         }
 
         if (rollerClosedLoopEnabled) {
@@ -232,6 +234,9 @@ public class IntakeIOKraken implements IntakeIO{
     @Override
     public void runArmVoltage(double voltage) {
         armMotor.setVoltage(voltage);
+        secondaryArmMotor.setControl(
+            followerRequest
+        );
     }
 
     @Override
@@ -242,10 +247,13 @@ public class IntakeIOKraken implements IntakeIO{
     @Override
     public void stopArm() {
         armClosedLoopEnabled = false;
+        armMotor.stopMotor();
+        secondaryArmMotor.stopMotor();
     }
 
     @Override
     public void stopRoller() {
         rollerClosedLoopEnabled = false;
+        rollerMotor.stopMotor();
     }
 }

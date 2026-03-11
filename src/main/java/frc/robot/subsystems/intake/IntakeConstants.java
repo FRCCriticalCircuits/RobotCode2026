@@ -27,12 +27,12 @@ public class IntakeConstants {
 
     public class HAL{
         // Keep gearbox and linkage conversion split so measurement updates stay clear.
-        public static final double ARM_GEARING = 23.0 * 1.2587890624;
+        public static final double ARM_GEARING = 23.0 * 1.213253664608;
         public static final double ROLLER_GEARING = 2.75;
         // TODO tune-hardware: update to match what's required by CTRE, horizontal at position 0
-        public static final double DEFAULT_ARM_POSITION_ROT = 0;
+        public static final double DEFAULT_ARM_POSITION_ROT = 0.02;
 
-        public static final boolean ARM_INVERT = false;
+        public static final boolean ARM_INVERT = true;
         public static final boolean SECONDARY_ARM_INVERT = true;
         public static final boolean ROLLER_INVERT = true;
     }
@@ -56,24 +56,24 @@ public class IntakeConstants {
          * kD : the proportion for velocity error
          * kV : voltage per velocity unit
          */
-        public static final double ARM_PID_P = 0;
+        public static final double ARM_PID_P = 10;
         public static final double ARM_PID_I = 0;
-        public static final double ARM_PID_D = 0;
+        public static final double ARM_PID_D = 1;
 
         public static final double ARM_KS = 0;
-        public static final double ARM_KV = 0;
+        public static final double ARM_KV = 2.55;
         // Optional gravity term for arm MotionMagic.
-        public static final double ARM_KG = 0.0;
-        public static final double ARM_GRAVITY_ANGLE_OFFSET_RAD = 0.0;
-        public static final double ARM_MAX_VEL = 0;
-        public static final double ARM_MAX_ACCEL = 0;
+        public static final double ARM_KG = 0.337;
+        public static final double ARM_GRAVITY_ANGLE_OFFSET_RAD = 0.25;
+        public static final double ARM_MAX_VEL = 0.3;
+        public static final double ARM_MAX_ACCEL = 0.8;
 
         // +- 2rps error, there's no kS at all, but it's good enough
         public static final double ROLLER_PID_P = 0;
         public static final double ROLLER_PID_I = 0;
         public static final double ROLLER_PID_D = 0;
         // Optional velocity feedforward for roller closed-loop velocity.
-        public static final double ROLLER_KS = 0.0;
+        public static final double ROLLER_KS = 0.2;
         public static final double ROLLER_KV = 0.26;
     }
 

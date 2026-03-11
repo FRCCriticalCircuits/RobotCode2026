@@ -64,10 +64,12 @@ public class ShooterIOKraken implements ShooterIO{
         this.hoodConfig.Slot0.kI = TUNING.HOOD_PID_I;
         this.hoodConfig.Slot0.kD = TUNING.HOOD_PID_D;
         
+        this.hoodConfig.Slot0.kS = TUNING.HOOD_KS;
         this.hoodConfig.Slot0.kV = TUNING.HOOD_KV;
         this.hoodConfig.Slot0.kG = TUNING.HOOD_KG;
         
-        this.hoodConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
+        // this should be arm, just because the difference is not that big
+        this.hoodConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
         this.hoodConfig.Slot0.GravityArmPositionOffset = TUNING.HOOD_GRAVITY_ANGLE_OFFSET_RAD;
 
         this.hoodConfig.MotionMagic.MotionMagicCruiseVelocity = TUNING.HOOD_MAX_VEL;  
@@ -248,10 +250,12 @@ public class ShooterIOKraken implements ShooterIO{
     @Override
     public void stopHood() {
         hoodCloseLoopEnabled = false;
+        hoodMotor.stopMotor();
     }
 
     @Override
     public void stopShooter() {
         shooterCloseLoopEnabled = false;
+        shooter.stopMotor();
     }
 }

@@ -85,8 +85,8 @@ public class RobotContainer {
     private final Vision visionSubsystem = new Vision(drivetrain, ll3);
 
     // SuperStructure    
-    private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOSim();
-    private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOSim();
+    private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOKraken();
+    private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOKraken();
     private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIOSim() : new HopperIOSim();
     private final ClimberIO climberIO = Utils.isSimulation() ? new ClimberIO(){} : new ClimberIOVortex(); // TODO
     private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO, climberIO);
@@ -110,8 +110,8 @@ public class RobotContainer {
     // SysID Routine for arm, ramp rate and voltage unverified
     private final SysIdRoutine armRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(
-            Units.Volts.of(0.02).per(Units.Second),
-            Voltage.ofRelativeUnits(2, Units.Volts),
+            Units.Volts.of(0.08).per(Units.Second),
+            Voltage.ofRelativeUnits(0.4, Units.Volts),
             null,
             (state) -> Logger.recordOutput("armRoutine", state.toString())
         ),
@@ -126,14 +126,14 @@ public class RobotContainer {
     // SysID Routine for hood, ramp rate and voltage verified
     private final SysIdRoutine hoodRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(
-            Units.Volts.of(0.01).per(Units.Second),
-            Voltage.ofRelativeUnits(0.26, Units.Volts),
+            Units.Volts.of(0.1).per(Units.Second),
+            Voltage.ofRelativeUnits(0.3, Units.Volts),
             null,
             (state) -> Logger.recordOutput("hoodRoutine", state.toString())
         ),
         new SysIdRoutine.Mechanism(
             // Change this line to characterize other motors
-            (voltage) -> shooterIO.runShooterVoltage(voltage.in(Volts)), 
+            (voltage) -> shooterIO.runHoodVoltage(voltage.in(Volts)), 
             null, // No log consumer, since data is recorded by AdvantageKit
             upperParts
         )
@@ -269,6 +269,6 @@ public class RobotContainer {
      * @return
      */
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected().andThen(() -> visionSubsystem.setVisionDisabled(false));
+        return autoChooser.getSelected();//.andThen(() -> visionSubsystem.setVisionDisabled(false));
     }
 }

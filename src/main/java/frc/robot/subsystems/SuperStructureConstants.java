@@ -6,14 +6,14 @@ package frc.robot.subsystems;
  * which CTRE requires for their API
  */
 public class SuperStructureConstants {
-    public static final double INTAKE_ARM_UP = 0.1;
-    public static final double INTAKE_ARM_DOWN = 0.1;
+    public static final double INTAKE_ARM_UP = -0.081 * Math.PI * 2;
+    public static final double INTAKE_ARM_DOWN = -0.25 * Math.PI * 2;
 
-    // TODO tune-superstructure: verify intake roller speed under load.
-    public static final double INTAKE_ROLLER_VEL = 40; // 45 maximum
+    // TODO tune-superstructure: verify intake roller speed(radians) under load.
+    public static final double INTAKE_ROLLER_VEL = 40 * Math.PI * 2; // 45 rotation maximum
 
     // TODO tune-superstructure: this was estimated from ~8V operation.
-    public static final double SHOOT_FLYWHEEL_VEL = 57.0; // Maximum
+    public static final double SHOOT_FLYWHEEL_VEL = 30.0 * Math.PI * 2; // Maximum
     // Hopper Velocity, Tuned Feedforward so it's easier to adjust speed to feed the ball into the shooter
     public static final double HOPPER_VELOCITY = 0.0;
 

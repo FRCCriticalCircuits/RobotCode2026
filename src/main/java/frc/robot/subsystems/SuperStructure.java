@@ -108,7 +108,7 @@ public class SuperStructure extends SubsystemBase{
             () -> {
                 intakeIO.setArmPosition(SuperStructureConstants.INTAKE_ARM_UP);
                 intakeIO.stopRoller();
-                intakeIO.stopArm();
+                // intakeIO.stopArm(); // when test SYSID add it back
             }
         ).withName("SuperStructure.runIntake");
     }
@@ -123,7 +123,7 @@ public class SuperStructure extends SubsystemBase{
                 // not setting new hood positions
                 shooterIO.stopHood();
                 shooterIO.stopShooter();
-                hopperIO.stopMotors();
+                hopperIO.stopMotors(); 
             }
         ).withName("SuperStructure.runShooter");
     }
