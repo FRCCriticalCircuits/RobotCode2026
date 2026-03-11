@@ -165,7 +165,7 @@ public class SuperStructure extends SubsystemBase{
                 IntakeConstants.CAD.ORIGIN_OFFSET_Z,
                 new Rotation3d(
                     0,
-                    IntakeConstants.CAD.PITCH_OFFSET + intakeInputs.armPosition,
+                    IntakeConstants.CAD.PITCH_OFFSET,
                     0
                 )
             )

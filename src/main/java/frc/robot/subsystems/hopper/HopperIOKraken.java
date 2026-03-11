@@ -131,5 +131,6 @@ public class HopperIOKraken implements HopperIO {
     @Override
     public void stopMotors() {
         this.hopperClosedLoopEnabled = false;
+        hopperMotor.stopMotor();
     }
 }

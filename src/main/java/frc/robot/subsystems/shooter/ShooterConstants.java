@@ -40,7 +40,7 @@ public class ShooterConstants {
     public class TUNING{
         // Allowed control error before shooter is considered ready to feed.
         // TODO tune-controls: adjust once hood MotionMagic gains are tuned.
-        public static final double HOOD_STABLE_TOLERANCE_RAD = Math.toRadians(4.5 / 360.0);
+        public static final double HOOD_STABLE_TOLERANCE_RAD = Math.toRadians(4.5);
         // TODO tune-controls: adjust once shooter velocity loop gains are tuned.
         public static final double SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC = 10.0;
 
