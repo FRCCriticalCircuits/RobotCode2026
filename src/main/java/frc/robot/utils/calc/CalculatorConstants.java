@@ -14,7 +14,7 @@ public class CalculatorConstants {
     public static InterpolatingDoubleTreeMap hoodAngle = InterpolatingDoubleTreeMap.ofEntries(
         Map.entry(0.0, 0.01 * Math.PI * 2),
         Map.entry(3.0, 0.09 * Math.PI * 2),
-        Map.entry(30.0, 0.09 * Math.PI * 2)
+        Map.entry(300.0, 0.09 * Math.PI * 2)
     );
 
     // TODO decide open angle of the cone check for climbing position calculator
