@@ -47,6 +47,7 @@ pdh 60
 Not updating it anymore as the robot is built already
 
 # Units / SysID
+!!! Stop Shooter/Hood state machine when you want to do sysID for them
 all units on software level should be in radians,
 so divide them with 2PI when using SysID
 all units ctre control request get or encoder returns should be in rotations.
