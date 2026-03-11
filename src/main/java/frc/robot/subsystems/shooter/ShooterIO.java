@@ -33,8 +33,12 @@ public interface ShooterIO {
     
     default void runHood(DoubleSupplier positionRad) {}
     default void runShooter(double velocity) {}
+    
+    default void runHoodVoltage(double voltage) {}
     default void runShooterVoltage(double voltage) {}
 
     default Boolean isStable() {return false;}
+
+    default void stopHood() {}
     default void stopShooter() {}
 }

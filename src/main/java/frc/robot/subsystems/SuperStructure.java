@@ -121,6 +121,7 @@ public class SuperStructure extends SubsystemBase{
         ).finallyDo(
             (interrupted) -> {
                 // not setting new hood positions
+                shooterIO.stopHood();
                 shooterIO.stopShooter();
                 hopperIO.stopMotors();
             }

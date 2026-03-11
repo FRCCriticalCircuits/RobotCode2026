@@ -49,7 +49,7 @@ public class ShooterIOKraken implements ShooterIO{
     // Cached last commanded targets, used by isStable() feed gating and applyOutputs().
     private double hoodSetpointRad = 0.0;
     private double shooterSetpointRadPerSec = 0.0;
-    private Boolean shooterCloseLoopEnabled = false;
+    private Boolean shooterCloseLoopEnabled = false, hoodCloseLoopEnabled = false;
 
     public ShooterIOKraken(){
         this.hoodMotor = new TalonFX(40, GlobalConstants.BUS);
@@ -199,9 +199,12 @@ public class ShooterIOKraken implements ShooterIO{
 
     @Override
     public void applyOutputs() {
-        hoodMotor.setControl(
-            hoodPositionVoltage.withPosition(hoodSetpointRad / (Math.PI * 2))
-        );
+        if(hoodCloseLoopEnabled){
+            hoodMotor.setControl(
+                hoodPositionVoltage.withPosition(hoodSetpointRad / (Math.PI * 2))
+            );
+        }
+        
 
         if (shooterCloseLoopEnabled) {
             shooter.setControl(
@@ -213,12 +216,18 @@ public class ShooterIOKraken implements ShooterIO{
     @Override
     public void runHood(DoubleSupplier positionRad) {
         hoodSetpointRad = positionRad.getAsDouble();
+        hoodCloseLoopEnabled = true;
     }
 
     @Override
     public void runShooter(double velocity) {
         shooterSetpointRadPerSec = velocity;
         shooterCloseLoopEnabled = true;
+    }
+
+    @Override
+    public void runHoodVoltage(double voltage) {
+        hoodMotor.setVoltage(voltage);
     }
 
     @Override
@@ -234,6 +243,11 @@ public class ShooterIOKraken implements ShooterIO{
             Math.abs((shooterVelocity.getValueAsDouble() * Math.PI * 2.0) - shooterSetpointRadPerSec);
         return hoodErrorRad <= TUNING.HOOD_STABLE_TOLERANCE_RAD
             && shooterErrorRadPerSec <= TUNING.SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC;
+    }
+
+    @Override
+    public void stopHood() {
+        hoodCloseLoopEnabled = false;
     }
 
     @Override

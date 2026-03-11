@@ -113,7 +113,7 @@ public class RobotContainer {
         )
     );
 
-    // SysID Routine for arm
+    // SysID Routine for arm, ramp rate and voltage unverified
     private final SysIdRoutine armRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(
             Units.Volts.of(0.05).per(Units.Second),
@@ -124,6 +124,22 @@ public class RobotContainer {
         new SysIdRoutine.Mechanism(
             // Change this line to characterize other motors
             (voltage) -> intakeIO.runArmVoltage(voltage.in(Volts)), 
+            null, // No log consumer, since data is recorded by AdvantageKit
+            upperParts
+        )
+    );
+
+    // SysID Routine for hood, ramp rate and voltage verified
+    private final SysIdRoutine hoodRoutine = new SysIdRoutine(
+        new SysIdRoutine.Config(
+            Units.Volts.of(0.03).per(Units.Second),
+            Voltage.ofRelativeUnits(0.26, Units.Volts),
+            null,
+            (state) -> Logger.recordOutput("hoodRoutine", state.toString())
+        ),
+        new SysIdRoutine.Mechanism(
+            // Change this line to characterize other motors
+            (voltage) -> shooterIO.runShooterVoltage(voltage.in(Volts)), 
             null, // No log consumer, since data is recorded by AdvantageKit
             upperParts
         )
@@ -210,6 +226,11 @@ public class RobotContainer {
             autoChooser.addOption("Arm SysID | DR", armRoutine.dynamic(Direction.kReverse));
             autoChooser.addOption("Arm SysID | QF", armRoutine.quasistatic(Direction.kForward));
             autoChooser.addOption("Arm SysID | QR", armRoutine.quasistatic(Direction.kReverse));
+
+            autoChooser.addOption("Hood SysID | DF", hoodRoutine.dynamic(Direction.kForward));
+            autoChooser.addOption("Hood SysID | DR", hoodRoutine.dynamic(Direction.kReverse));
+            autoChooser.addOption("Hood SysID | QF", hoodRoutine.quasistatic(Direction.kForward));
+            autoChooser.addOption("Hood SysID | QR", hoodRoutine.quasistatic(Direction.kReverse));
         }
         //#endregion
 
