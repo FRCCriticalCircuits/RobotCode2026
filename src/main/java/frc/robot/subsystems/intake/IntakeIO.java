@@ -30,6 +30,8 @@ public interface IntakeIO {
     
     default void setArmPosition(double positionRad) {}
     default void setRollerVelocity(double velocityRadPerSec) {}
+
+    default void runArmVoltage(double voltage) {}
     default void runRollerVoltage(double voltage) {}
 
     default void stopRoller() {}

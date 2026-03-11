@@ -14,8 +14,8 @@ public class SuperStructureConstants {
 
     // TODO tune-superstructure: this was estimated from ~8V operation.
     public static final double SHOOT_FLYWHEEL_VEL = 57.0; // Maximum
-    // Hopper voltage is intentionally left as-is.
-    public static final double SHOOT_SEQUENCER_VOLTS = 5.17;
+    // Hopper Velocity, Tuned Feedforward so it's easier to adjust speed to feed the ball into the shooter
+    public static final double HOPPER_VELOCITY = 0.0;
 
     // TODO tune-superstructure: verify climb voltages with final mechanism load.
     public static final double CLIMBER_FORWARD = 8.0;

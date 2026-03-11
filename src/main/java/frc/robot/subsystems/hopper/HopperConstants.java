@@ -18,8 +18,8 @@ public class HopperConstants {
     }
 
     public class TUNING{
-        public static final double HOPPER_KS = 0.13;
-        public static final double HOPPER_KV = 0.02;
+        public static final double HOPPER_KS = 0.0;
+        public static final double HOPPER_KV = 0.0;
 
         public static final int HOPPER_STALL_LIMIT = 30;
         public static final int HOPPER_FREE_LIMIT = 20;

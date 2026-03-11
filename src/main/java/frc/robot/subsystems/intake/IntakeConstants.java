@@ -67,7 +67,7 @@ public class IntakeConstants {
         public static final double ARM_MAX_VEL = 0;
         public static final double ARM_MAX_ACCEL = 0;
 
-        // +- 2rps error
+        // +- 2rps error, there's no kS at all, but it's good enough
         public static final double ROLLER_PID_P = 0;
         public static final double ROLLER_PID_I = 0;
         public static final double ROLLER_PID_D = 0;
