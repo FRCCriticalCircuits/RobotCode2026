@@ -9,7 +9,6 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -65,8 +64,8 @@ public class ShooterIOKraken implements ShooterIO{
         this.hoodConfig.Slot0.kI = TUNING.HOOD_PID_I;
         this.hoodConfig.Slot0.kD = TUNING.HOOD_PID_D;
         
-        this.hoodConfig.Slot0.kV = TUNING.HOOD_VEL_FF;
-        this.hoodConfig.Slot0.kG = TUNING.HOOD_GRAVITY_FF;
+        this.hoodConfig.Slot0.kV = TUNING.HOOD_KV;
+        this.hoodConfig.Slot0.kG = TUNING.HOOD_KG;
         
         this.hoodConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         this.hoodConfig.Slot0.GravityArmPositionOffset = TUNING.HOOD_GRAVITY_ANGLE_OFFSET_RAD;
@@ -85,7 +84,7 @@ public class ShooterIOKraken implements ShooterIO{
         this.shooterConfig.Slot0.kP = TUNING.SHOOTER_PID_P;
         this.shooterConfig.Slot0.kI = TUNING.SHOOTER_PID_I;
         this.shooterConfig.Slot0.kD = TUNING.SHOOTER_PID_D;
-        this.shooterConfig.Slot0.kV = TUNING.SHOOTER_VEL_FF;
+        this.shooterConfig.Slot0.kV = TUNING.SHOOTER_KV;
         this.shooterConfig.MotorOutput.Inverted =
             HAL.SHOOTER_INVERT
                 ? InvertedValue.CounterClockwise_Positive
@@ -208,8 +207,6 @@ public class ShooterIOKraken implements ShooterIO{
             shooter.setControl(
                 shooterVelocityVoltage.withVelocity(shooterSetpointRadPerSec / (Math.PI * 2))
             );
-        } else {
-            shooter.setControl(new NeutralOut());
         }
     }
 

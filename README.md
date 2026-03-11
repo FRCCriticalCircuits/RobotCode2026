@@ -42,3 +42,9 @@ pdh 60
 
 # 2026/2/19 - 2/21 drive tests
 "// TODO drivetest", changes will be revert later
+
+# Units / SysID
+all units on software level should be in radians,
+so divide them with 2PI when using SysID
+all units ctre control request get or encoder returns should be in rotations.
+climber is the only REV product we got and we dont care its position/velocity.

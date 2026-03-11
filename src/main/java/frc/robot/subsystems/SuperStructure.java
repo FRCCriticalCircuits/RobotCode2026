@@ -108,6 +108,7 @@ public class SuperStructure extends SubsystemBase{
             () -> {
                 intakeIO.setArmPosition(SuperStructureConstants.INTAKE_ARM_UP);
                 intakeIO.stopRoller();
+                intakeIO.stopArm();
             }
         ).withName("SuperStructure.runIntake");
     }

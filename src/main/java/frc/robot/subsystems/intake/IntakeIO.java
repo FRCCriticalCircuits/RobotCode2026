@@ -6,6 +6,7 @@ public interface IntakeIO {
     @AutoLog
     public class IntakeIOInputs {
         public double armPosition = 0;
+        public double armVelocity = 0;
         public double rollerPosition = 0;
         public double rollerVelocity = 0;
 
@@ -34,5 +35,6 @@ public interface IntakeIO {
     default void runArmVoltage(double voltage) {}
     default void runRollerVoltage(double voltage) {}
 
+    default void stopArm() {}
     default void stopRoller() {}
 }

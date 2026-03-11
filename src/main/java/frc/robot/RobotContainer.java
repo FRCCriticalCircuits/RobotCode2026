@@ -16,6 +16,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -99,12 +100,30 @@ public class RobotContainer {
     // SysID Routine for flywheels(shooter/hopper/intake)
     private final SysIdRoutine flywheelRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(
-            null, Voltage.ofRelativeUnits(3, Units.Volts), null,
+            Units.Volts.of(0.05).per(Units.Second),
+            Voltage.ofRelativeUnits(5, Units.Volts),
+            null,
             (state) -> Logger.recordOutput("flywheelRoutine", state.toString())
         ),
         new SysIdRoutine.Mechanism(
             // Change this line to characterize other motors
             (voltage) -> shooterIO.runShooterVoltage(voltage.in(Volts)), 
+            null, // No log consumer, since data is recorded by AdvantageKit
+            upperParts
+        )
+    );
+
+    // SysID Routine for arm
+    private final SysIdRoutine armRoutine = new SysIdRoutine(
+        new SysIdRoutine.Config(
+            Units.Volts.of(0.05).per(Units.Second),
+            Voltage.ofRelativeUnits(2, Units.Volts),
+            null,
+            (state) -> Logger.recordOutput("armRoutine", state.toString())
+        ),
+        new SysIdRoutine.Mechanism(
+            // Change this line to characterize other motors
+            (voltage) -> intakeIO.runArmVoltage(voltage.in(Volts)), 
             null, // No log consumer, since data is recorded by AdvantageKit
             upperParts
         )
@@ -182,10 +201,15 @@ public class RobotContainer {
         }
 
         if(GlobalConstants.SYS_ID_FLYWHEELS && !GlobalConstants.COMP){
-            autoChooser.addOption("Shooter SysID | DF", flywheelRoutine.dynamic(Direction.kForward));
-            autoChooser.addOption("Shooter SysID | DR", flywheelRoutine.dynamic(Direction.kReverse));
-            autoChooser.addOption("Shooter SysID | QF", flywheelRoutine.quasistatic(Direction.kForward));
-            autoChooser.addOption("Shooter SysID | QR", flywheelRoutine.quasistatic(Direction.kReverse));
+            autoChooser.addOption("Flywheel SysID | DF", flywheelRoutine.dynamic(Direction.kForward));
+            autoChooser.addOption("Flywheel SysID | DR", flywheelRoutine.dynamic(Direction.kReverse));
+            autoChooser.addOption("Flywheel SysID | QF", flywheelRoutine.quasistatic(Direction.kForward));
+            autoChooser.addOption("Flywheel SysID | QR", flywheelRoutine.quasistatic(Direction.kReverse));
+
+            autoChooser.addOption("Arm SysID | DF", armRoutine.dynamic(Direction.kForward));
+            autoChooser.addOption("Arm SysID | DR", armRoutine.dynamic(Direction.kReverse));
+            autoChooser.addOption("Arm SysID | QF", armRoutine.quasistatic(Direction.kForward));
+            autoChooser.addOption("Arm SysID | QR", armRoutine.quasistatic(Direction.kReverse));
         }
         //#endregion
 

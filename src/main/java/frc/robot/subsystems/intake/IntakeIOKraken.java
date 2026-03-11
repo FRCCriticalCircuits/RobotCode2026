@@ -8,7 +8,6 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -24,6 +23,7 @@ public class IntakeIOKraken implements IntakeIO{
     
     // Status Signals
     private final StatusSignal<Angle> armPosition;
+    private final StatusSignal<AngularVelocity> armVelocity;
     private final StatusSignal<Angle> rollerPosition;
     private final StatusSignal<AngularVelocity> rollerVelocity;
     private final StatusSignal<Voltage> appliedVoltsArm;
@@ -48,7 +48,7 @@ public class IntakeIOKraken implements IntakeIO{
     // Cached Desired States
     private double desiredArmPositionRot = 0.0;      // rotations
     private double desiredRollerVelocityRps = 0.0;   // rotations per second
-    private boolean rollerClosedLoopEnabled = false;
+    private boolean rollerClosedLoopEnabled = false, armClosedLoopEnabled = false;
 
     public IntakeIOKraken(){
         this.armMotor = new TalonFX(30, GlobalConstants.BUS);
@@ -63,8 +63,9 @@ public class IntakeIOKraken implements IntakeIO{
         this.armConfig.Slot0.kI = TUNING.ARM_PID_I;
         this.armConfig.Slot0.kD = TUNING.ARM_PID_D;
 
-        this.armConfig.Slot0.kV = TUNING.ARM_VEL_FF;
-        this.armConfig.Slot0.kG = TUNING.ARM_GRAVITY_FF;
+        this.armConfig.Slot0.kS = TUNING.ARM_KS;
+        this.armConfig.Slot0.kV = TUNING.ARM_KV;
+        this.armConfig.Slot0.kG = TUNING.ARM_KG;
 
         this.armConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         this.armConfig.Slot0.GravityArmPositionOffset = TUNING.ARM_GRAVITY_ANGLE_OFFSET_RAD;
@@ -83,7 +84,8 @@ public class IntakeIOKraken implements IntakeIO{
         this.rollerConfig.Slot0.kP = TUNING.ROLLER_PID_P;
         this.rollerConfig.Slot0.kI = TUNING.ROLLER_PID_I;
         this.rollerConfig.Slot0.kD = TUNING.ROLLER_PID_D;
-        this.rollerConfig.Slot0.kV = TUNING.ROLLER_VEL_FF;
+        this.rollerConfig.Slot0.kS = TUNING.ROLLER_KS;
+        this.rollerConfig.Slot0.kV = TUNING.ROLLER_KV;
 
         this.rollerConfig.MotorOutput.Inverted =
             HAL.ROLLER_INVERT
@@ -105,6 +107,7 @@ public class IntakeIOKraken implements IntakeIO{
 
         // Status Signals
         this.armPosition = armMotor.getPosition();
+        this.armVelocity = armMotor.getVelocity();
         this.rollerPosition = rollerMotor.getPosition();
         this.rollerVelocity = rollerMotor.getVelocity();
 
@@ -123,6 +126,7 @@ public class IntakeIOKraken implements IntakeIO{
         BaseStatusSignal.setUpdateFrequencyForAll(
             100.0, 
             this.armPosition,
+            this.armVelocity,
             this.rollerPosition,
             this.rollerVelocity,
             this.appliedVoltsArm,
@@ -172,6 +176,7 @@ public class IntakeIOKraken implements IntakeIO{
 
         inputs.armConnected = BaseStatusSignal.refreshAll(
             this.armPosition,
+            this.armVelocity,
             this.appliedVoltsArm,
             this.supplyCurrentArm,
             this.torqueCurrentArm,
@@ -182,6 +187,7 @@ public class IntakeIOKraken implements IntakeIO{
         inputs.rollerPosition = this.rollerPosition.getValueAsDouble() * Math.PI * 2;
         inputs.rollerVelocity = this.rollerVelocity.getValueAsDouble() * Math.PI * 2;
         inputs.armPosition = this.armPosition.getValueAsDouble() * Math.PI * 2;
+        inputs.armVelocity = this.armVelocity.getValueAsDouble() * Math.PI * 2;
 
         inputs.appliedVoltsRoller = this.appliedVoltsRoller.getValueAsDouble();
         inputs.supplyCurrentRoller = this.supplyCurrentRoller.getValueAsDouble();
@@ -198,22 +204,23 @@ public class IntakeIOKraken implements IntakeIO{
 
     @Override
     public void applyOutputs() {
-        armMotor.setControl(
-            armPostionVoltage.withPosition(desiredArmPositionRot)
-        );
+        if(armClosedLoopEnabled) {
+            armMotor.setControl(
+                armPostionVoltage.withPosition(desiredArmPositionRot)
+            );
+        }
 
         if (rollerClosedLoopEnabled) {
             rollerMotor.setControl(
                 rollerVelocityVoltage.withVelocity(desiredRollerVelocityRps)
             );
-        } else {
-            rollerMotor.setControl(new NeutralOut());
         }
     }
 
     @Override
     public void setArmPosition(double positionRad) {
         desiredArmPositionRot = positionRad / (Math.PI * 2.0);
+        armClosedLoopEnabled = true;
     }
 
     @Override
@@ -223,8 +230,18 @@ public class IntakeIOKraken implements IntakeIO{
     }
 
     @Override
+    public void runArmVoltage(double voltage) {
+        armMotor.setVoltage(voltage);
+    }
+
+    @Override
     public void runRollerVoltage(double voltage) {
         rollerMotor.setVoltage(voltage);
+    }
+
+    @Override
+    public void stopArm() {
+        armClosedLoopEnabled = false;
     }
 
     @Override

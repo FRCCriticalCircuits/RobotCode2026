@@ -58,14 +58,14 @@ public class ShooterConstants {
          * with MotionMagic Control
          * kP : the proportion for position error
          * kD : the proportion for velocity error
-         * *_VEL_FF -> kV : voltage per velocity unit
+         * kV : voltage per velocity unit
          */
         public static final double HOOD_PID_P = 20.0;
         public static final double HOOD_PID_I = 0.0;
         public static final double HOOD_PID_D = 10.0;
 
-        public static final double HOOD_VEL_FF = 5.0;
-        public static final double HOOD_GRAVITY_FF = 0.0;
+        public static final double HOOD_KV = 5.0;
+        public static final double HOOD_KG = 0.0;
         public static final double HOOD_GRAVITY_ANGLE_OFFSET_RAD = 0.0;
 
         // MotionMagic profile in mechanism rotations per second.
@@ -76,7 +76,7 @@ public class ShooterConstants {
         public static final double SHOOTER_PID_P = 0;
         public static final double SHOOTER_PID_I = 0;
         public static final double SHOOTER_PID_D = 0;
-        public static final double SHOOTER_VEL_FF = 0.161;
+        public static final double SHOOTER_KV = 0.161;
     }
 
     public class CAD{
