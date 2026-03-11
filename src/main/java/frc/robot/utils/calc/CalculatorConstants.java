@@ -8,7 +8,7 @@ public class CalculatorConstants {
     // TODO tune for actual robot
     public static final double shotTime = 0.1;
 
-    // TODO tune-aim: replace with measured distance-to-hood-angle interpolation data.
+    // TODO tune-LUT
     // max 0.11, min 0.005 for rotations
     // these values should be in radians
     public static InterpolatingDoubleTreeMap hoodAngle = InterpolatingDoubleTreeMap.ofEntries(
@@ -17,6 +17,6 @@ public class CalculatorConstants {
         Map.entry(300.0, 0.09 * Math.PI * 2)
     );
 
-    // TODO decide open angle of the cone check for climbing position calculator
+    // TODO decide limit (in degress) of the cone-shape check for climbing calculator
     public static double COS_A_LIMIT = Math.cos(Math.toRadians(30)); 
 }

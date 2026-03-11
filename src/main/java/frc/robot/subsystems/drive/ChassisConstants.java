@@ -8,10 +8,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 public class ChassisConstants {
     //#region modifiable
     private class SIMULATION {
-        // TODO tune-drive: PathPlanner/AutoDrive translation PID for simulation.
         private static final double TRANSLATION_PID_P = 5.0;
         private static final double TRANSLATION_PID_D = 0.0;
-        // TODO tune-drive: PathPlanner/AutoDrive rotation PID for simulation.
         private static final double ROTATION_PID_P = 15.0;
         private static final double ROTATION_PID_D = 0.0;
     }
@@ -27,13 +25,11 @@ public class ChassisConstants {
 
     private class AUTOAIM_ROTATION{
         private class SIMULATION {
-            // TODO tune-drive: auto-aim PID for simulation.
             private static final double ROTATION_PID_P = 15.0;
             private static final double ROTATION_PID_D = 0.0;
         }
 
         private class REAL{
-            // TODO tune-drive: auto-aim PID on robot.
             private static final double ROTATION_PID_P = 7.0;
             private static final double ROTATION_PID_D = 0.0;
         }

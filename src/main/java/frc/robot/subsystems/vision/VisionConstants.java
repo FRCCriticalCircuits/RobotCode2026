@@ -14,7 +14,7 @@ public class VisionConstants {
         AprilTagFields.k2026RebuiltWelded
     );
 
-    // TODO tune-vision: adjust by camera quality and tag count.
+    // TODO tune-photonvision: adjust by camera quality and tag count.
     public static final Matrix<N3, N1> VISION_STD_DEVS_DEFAULT = VecBuilder.fill(0.7, 0.7, 1.5);
 
     public static final Transform3d leftCam = new Transform3d(

@@ -89,7 +89,7 @@ public class RobotContainer {
     private final ShooterIO shooterIO = Utils.isSimulation() ? new ShooterIOSim() : new ShooterIOKraken();
     private final IntakeIO intakeIO = Utils.isSimulation() ? new IntakeIOSim() : new IntakeIOKraken();
     private final HopperIO hopperIO = Utils.isSimulation() ? new HopperIO() {} : new HopperIOKraken();
-    private final ClimberIO climberIO = Utils.isSimulation() ? new ClimberIO(){} : new ClimberIOVortex(); // TODO
+    private final ClimberIO climberIO = Utils.isSimulation() ? new ClimberIO(){} : new ClimberIOVortex();
     private final SuperStructure upperParts = new SuperStructure(shooterIO, intakeIO, hopperIO, climberIO);
 
     // SysID Routine for flywheels(shooter/hopper/intake)
@@ -266,7 +266,7 @@ public class RobotContainer {
             upperParts.closeClimber()
         ); 
 
-        // TODO drivetest, a climb position manager maybe
+        // TODO integrate climb calc
         //driverController.x().whileTrue(autoDrive.withTarget(new Pose2d(14.8, 5.5, Rotation2d.fromDegrees(-180))));
         //#endregion
     }

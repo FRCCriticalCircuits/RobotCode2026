@@ -29,7 +29,7 @@ public class IntakeConstants {
         // Keep gearbox and linkage conversion split so measurement updates stay clear.
         public static final double ARM_GEARING = 23.0 * 1.213253664608;
         public static final double ROLLER_GEARING = 2.75;
-        // TODO tune-hardware: update to match what's required by CTRE, horizontal at position 0
+        // TODO if got time make vertical -0.25 instead of 0.0
         public static final double DEFAULT_ARM_POSITION_ROT = 0.02;
 
         public static final boolean ARM_INVERT = true;

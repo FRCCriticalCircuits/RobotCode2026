@@ -51,7 +51,6 @@ public class VisionPhoton implements VisionIO {
         }
 
         inputs.poseObservation = new ArrayList<>(result);
-        // TODO implement isConnected
     }
 
     @Override
