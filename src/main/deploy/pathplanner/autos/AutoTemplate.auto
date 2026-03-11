@@ -25,14 +25,14 @@
                 "data": {
                   "name": "runIntake"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "stopIntake"
-                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopIntake"
           }
         },
         {
@@ -70,12 +70,6 @@
           "type": "named",
           "data": {
             "name": "drive27"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "pathT-3"
           }
         }
       ]

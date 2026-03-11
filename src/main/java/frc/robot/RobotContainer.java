@@ -269,6 +269,6 @@ public class RobotContainer {
      * @return
      */
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected();//.andThen(() -> visionSubsystem.setVisionDisabled(false));
+        return autoChooser.getSelected().andThen(() -> visionSubsystem.setVisionDisabled(false));
     }
 }
