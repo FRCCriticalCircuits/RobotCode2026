@@ -13,7 +13,8 @@ public class CalculatorConstants {
     // these values should be in radians
     public static InterpolatingDoubleTreeMap hoodAngle = InterpolatingDoubleTreeMap.ofEntries(
         Map.entry(0.0, 0.01 * Math.PI * 2),
-        Map.entry(3.0, 0.10 * Math.PI * 2)
+        Map.entry(3.0, 0.10 * Math.PI * 2),
+        Map.entry(30.0, 0.10 * Math.PI * 2)
     );
 
     // TODO decide open angle of the cone check for climbing position calculator
