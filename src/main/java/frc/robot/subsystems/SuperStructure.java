@@ -115,7 +115,7 @@ public class SuperStructure extends SubsystemBase{
     public Command runShooter(DoubleSupplier hoodPosition){
         return new ParallelCommandGroup(
             Commands.runOnce(() -> shooterIO.runShooter(SuperStructureConstants.SHOOT_FLYWHEEL_VEL)),
-            Commands.run(() ->shooterIO.runHood(hoodPosition)),
+            Commands.run(() -> shooterIO.runHood(hoodPosition)),
             Commands.waitUntil(shooterIO::isStable).andThen(() -> hopperIO.runHopper(SuperStructureConstants.SHOOT_SEQUENCER_VOLTS))
         ).finallyDo(
             (interrupted) -> {

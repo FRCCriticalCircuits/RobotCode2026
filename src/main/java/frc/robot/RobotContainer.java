@@ -115,7 +115,7 @@ public class RobotContainer {
     private final Command autoIntakeCommand = upperParts.runIntake();
     private final Command autoShooterCommand = Commands.parallel(
         pathplannerDrive,
-        upperParts.runShooter(() -> calculationUtil.getAimParams().pitch)
+        upperParts.runShooter(() -> calculationUtil.getAimParams().pitchRads)
     );
 
     public RobotContainer() {
@@ -209,7 +209,7 @@ public class RobotContainer {
         );
 
         autoAimTrigger.whileTrue(
-            upperParts.runShooter(() -> calculationUtil.getAimParams().pitch)
+            upperParts.runShooter(() -> calculationUtil.getAimParams().pitchRads)
         );
 
         driverController.povUp().whileTrue(

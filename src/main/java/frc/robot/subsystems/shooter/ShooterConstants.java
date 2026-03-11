@@ -21,7 +21,6 @@ public class ShooterConstants {
     );
 
     public static final LinearSystem<N2, N1, N2> HOOD_STATE_SPACE = HOOD_STATE_SPACE_TEMP;
-    
 
     public static final DCMotor SHOOTER_GEARBOX = DCMotor.getKrakenX60Foc(2);
     public static final LinearSystem<N2, N1, N2> SHOOTER_STATE_SPACE = LinearSystemId.createDCMotorSystem(0.018, 0.0005);
@@ -35,13 +34,13 @@ public class ShooterConstants {
 
         public static final boolean HOOD_INVERT = true;
         public static final boolean SHOOTER_INVERT = true;
-        public static final boolean SECONDARY_SHOOTER_INVERT = true;
+        public static final boolean SECONDARY_SHOOTER_INVERT = false;
     }
 
     public class TUNING{
         // Allowed control error before shooter is considered ready to feed.
         // TODO tune-controls: adjust once hood MotionMagic gains are tuned.
-        public static final double HOOD_STABLE_TOLERANCE_RAD = (5.0 / 360.0);
+        public static final double HOOD_STABLE_TOLERANCE_RAD = Math.toRadians(4.0 / 360.0);
         // TODO tune-controls: adjust once shooter velocity loop gains are tuned.
         public static final double SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC = 10.0;
 
@@ -77,7 +76,6 @@ public class ShooterConstants {
         public static final double SHOOTER_PID_P = 0;
         public static final double SHOOTER_PID_I = 0;
         public static final double SHOOTER_PID_D = 0;
-        // Optional feedforward for flywheel velocity control (CTRE Slot0.kV).
         public static final double SHOOTER_VEL_FF = 0.161;
     }
 
