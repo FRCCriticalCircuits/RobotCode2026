@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -243,6 +244,12 @@ public class RobotContainer {
         // Reset the field-centric heading on left bumper press.
         driverController.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
+        driverController.a().debounce(0.02).onTrue(
+            new InstantCommand(
+                () -> visionSubsystem.setVisionEnabled()
+            )
+        );
+
         driverController.leftTrigger(0.15).debounce(0.02).whileTrue(
             upperParts.runIntake()
         );
@@ -260,7 +267,7 @@ public class RobotContainer {
         ); 
 
         // TODO drivetest, a climb position manager maybe
-        driverController.x().whileTrue(autoDrive.withTarget(new Pose2d(14.8, 5.5, Rotation2d.fromDegrees(-180))));
+        //driverController.x().whileTrue(autoDrive.withTarget(new Pose2d(14.8, 5.5, Rotation2d.fromDegrees(-180))));
         //#endregion
     }
 
@@ -269,6 +276,6 @@ public class RobotContainer {
      * @return
      */
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected().andThen(() -> visionSubsystem.setVisionDisabled(false));
+        return autoChooser.getSelected().andThen(() -> visionSubsystem.setVisionEnabled());
     }
 }

@@ -22,8 +22,12 @@ public class Vision extends SubsystemBase{
         this.driveState = drivetrain.getState();
     }
 
-    public void setVisionDisabled(boolean disabled) {
-        m_visionDisabled = disabled;
+    public void setVisionEnabled() {
+        m_visionDisabled = false;
+    }
+
+    public void setVisionDisabled() {
+        m_visionDisabled = true;
     }
 
     @Override
