@@ -45,6 +45,12 @@ public class ShooterIOKraken implements ShooterIO{
         .withUpdateFreqHz(50.0);
     private final VelocityVoltage shooterVelocityVoltage = new VelocityVoltage(0.0)
         .withUpdateFreqHz(50.0);
+    private final Follower followerRequest = new Follower(
+        41,
+        HAL.SECONDARY_SHOOTER_INVERT 
+            ? MotorAlignmentValue.Opposed
+            : MotorAlignmentValue.Aligned
+    ).withUpdateFreqHz(50.0);
     
     // Cached last commanded targets, used by isStable() feed gating and applyOutputs().
     private double hoodSetpointRad = 0.0;
@@ -150,15 +156,6 @@ public class ShooterIOKraken implements ShooterIO{
         secondaryShooter.getConfigurator().apply(shooterConfig);
 
         hoodMotor.setPosition(0.0);
-
-        secondaryShooter.setControl(
-            new Follower(
-                shooter.getDeviceID(), 
-                HAL.SECONDARY_SHOOTER_INVERT 
-                    ? MotorAlignmentValue.Opposed
-                    : MotorAlignmentValue.Aligned
-            )
-        );
     }
 
     @Override
@@ -212,6 +209,8 @@ public class ShooterIOKraken implements ShooterIO{
             shooter.setControl(
                 shooterVelocityVoltage.withVelocity(shooterSetpointRadPerSec / (Math.PI * 2))
             );
+
+            secondaryShooter.setControl(followerRequest);
         }
     }
 
@@ -235,6 +234,7 @@ public class ShooterIOKraken implements ShooterIO{
     @Override
     public void runShooterVoltage(double voltage) {
         shooter.setVoltage(voltage);
+        secondaryShooter.setVoltage(voltage);
     }
     
     @Override
@@ -257,5 +257,6 @@ public class ShooterIOKraken implements ShooterIO{
     public void stopShooter() {
         shooterCloseLoopEnabled = false;
         shooter.stopMotor();
+        secondaryShooter.stopMotor();
     }
 }
