@@ -29,7 +29,7 @@ public class IntakeConstants {
         // Keep gearbox and linkage conversion split so measurement updates stay clear.
         public static final double ARM_GEARING = 23.0 * 1.213253664608;
         public static final double ROLLER_GEARING = 2.75;
-        public static final double DEFAULT_ARM_POSITION_ROT = 0.02 + 0.25;
+        public static final double DEFAULT_ARM_POSITION_ROT = 1.569262 / (Math.PI * 2);
 
         public static final boolean ARM_INVERT = true;
         public static final boolean SECONDARY_ARM_INVERT = true;

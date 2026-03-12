@@ -7,7 +7,7 @@ package frc.robot.subsystems;
  */
 public class SuperStructureConstants {
     public static final double INTAKE_ARM_UP = (0.25 - 0.081) * Math.PI * 2;
-    public static final double INTAKE_ARM_DOWN = (0.0) * Math.PI * 2;
+    public static final double INTAKE_ARM_DOWN = -0.06;
 
     // TODO tune-superstructure: verify intake roller speed(radians) under load.
     public static final double INTAKE_ROLLER_VEL = 40 * Math.PI * 2; // 45 rotation maximum
