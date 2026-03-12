@@ -143,9 +143,20 @@ public class RobotContainer {
     );
 
     // Commands
-    private final AutoDrive autoDrive = new AutoDrive(drivetrain);
-    private final Command autoIntakeCommand = upperParts.runIntake();
-    private final Command autoShooterCommand = Commands.parallel(
+    private final AutoDrive autoClimbDrive = new AutoDrive(drivetrain);
+    private final Command commandDriveToClimb = autoClimbDrive
+        .withTarget(() -> climbCalc.nearestClimbPos())
+        .finallyDo(() -> {
+            CommandScheduler.getInstance().schedule(
+                autoClimbDrive.withTarget(
+                    () -> drivetrain.getState().Pose.plus(
+                        new Transform2d(0.05, 0, Rotation2d.kZero)
+                    )
+                ).withTimeout(1.0)
+            );
+        });
+    private final Command intakePathplanner = upperParts.runIntake();
+    private final Command shootPathplanner = Commands.parallel(
         pathplannerDrive,
         upperParts.runShooter(() -> autoAimCalc.getAimParams())
     );
@@ -153,22 +164,22 @@ public class RobotContainer {
     public RobotContainer() {
         drivetrain.registerTelemetry(swerveLogger::telemeterize);
 
-        NamedCommands.registerCommand("runIntake", autoIntakeCommand);
+        NamedCommands.registerCommand("runIntake", intakePathplanner);
         
         NamedCommands.registerCommand(
             "stopIntake",
             Commands.runOnce(
-                () -> CommandScheduler.getInstance().cancel(autoIntakeCommand)
+                () -> CommandScheduler.getInstance().cancel(intakePathplanner)
             )
         );
 
-        NamedCommands.registerCommand("runShooter", autoShooterCommand);
+        NamedCommands.registerCommand("runShooter", shootPathplanner);
 
         NamedCommands.registerCommand(
             "stopShooter",
             Commands.runOnce(
                 () -> {
-                    CommandScheduler.getInstance().cancel(autoShooterCommand);
+                    CommandScheduler.getInstance().cancel(shootPathplanner);
                 }
             )
         );
@@ -270,17 +281,7 @@ public class RobotContainer {
 
         // TODO integrate climb calc
         driverController.x().whileTrue(
-            autoDrive.withTarget(() -> climbCalc.nearestClimbPos()).finallyDo(
-                () -> {
-                    CommandScheduler.getInstance().schedule(
-                        autoDrive.withTarget(
-                            () -> drivetrain.getState().Pose.plus(
-                                new Transform2d(0.05, 0, Rotation2d.kZero)
-                            )
-                        ).withTimeout(1.0)
-                    );
-                }
-            )
+            commandDriveToClimb
         );
         //#endregion
     }
