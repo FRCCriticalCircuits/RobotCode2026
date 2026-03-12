@@ -65,12 +65,6 @@
           "data": {
             "name": "stopShooter"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "drive27"
-          }
         }
       ]
     }

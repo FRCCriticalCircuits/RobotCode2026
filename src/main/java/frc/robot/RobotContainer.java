@@ -13,8 +13,6 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -145,7 +143,7 @@ public class RobotContainer {
     private final Command autoIntakeCommand = upperParts.runIntake();
     private final Command autoShooterCommand = Commands.parallel(
         pathplannerDrive,
-        upperParts.runShooter(() -> calculationUtil.getAimParams().pitchRads)
+        upperParts.runShooter(() -> calculationUtil.getAimParams())
     );
 
     public RobotContainer() {
@@ -171,10 +169,10 @@ public class RobotContainer {
             )
         );
 
-        NamedCommands.registerCommand(
-            "drive27",
-            new AutoDrive(drivetrain).withTarget(new Pose2d(2, 7, Rotation2d.fromDegrees(0)))
-        );
+        // NamedCommands.registerCommand(
+        //     "drive27",
+        //     new AutoDrive(drivetrain).withTarget(new Pose2d(2, 7, Rotation2d.fromDegrees(0)))
+        // );
 
         // This will use Commands.none() as the default option.
         // Displayed as "None"
@@ -255,7 +253,7 @@ public class RobotContainer {
         );
 
         autoAimTrigger.whileTrue(
-            upperParts.runShooter(() -> calculationUtil.getAimParams().pitchRads)
+            upperParts.runShooter(() -> calculationUtil.getAimParams())
         );
 
         driverController.povUp().whileTrue(

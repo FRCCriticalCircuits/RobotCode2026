@@ -1,8 +1,10 @@
 package frc.robot.subsystems.shooter;
 
-import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.AutoLog;
+
+import frc.robot.utils.calc.AimCalc.ShootingParams;
 
 public interface ShooterIO {
     @AutoLog
@@ -31,8 +33,8 @@ public interface ShooterIO {
     default void updateInputs(ShooterIOInputs inputs) {}
     default void applyOutputs() {}
     
-    default void runHood(DoubleSupplier positionRad) {}
-    default void runShooter(double velocity) {}
+    default void runHood(Supplier<ShootingParams> params) {}
+    default void runShooter(Supplier<ShootingParams> params) {}
     
     default void runHoodVoltage(double voltage) {}
     default void runShooterVoltage(double voltage) {}

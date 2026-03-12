@@ -37,6 +37,7 @@ public class AimCalc {
         public double yaw = 0;
         public double yaw_ff = 0;
         public double pitchRads = 0;
+        public double velocityRadsPerSec = 0;
     }
 
     public ShootingParams getAimParams(){
@@ -109,6 +110,7 @@ public class AimCalc {
         ret.yaw = Math.atan2(dy, dx);
         ret.yaw_ff = rotationFF;
         ret.pitchRads = CalculatorConstants.hoodAngle.get(dist);
+        ret.velocityRadsPerSec = CalculatorConstants.shooterVelocity.get(dist);
         
         return ret;
     }

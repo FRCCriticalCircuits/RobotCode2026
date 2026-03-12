@@ -50,7 +50,7 @@
       "rotationDegrees": -90.0
     },
     {
-      "waypointRelativePos": 1.700471698113177,
+      "waypointRelativePos": 1.3561320754717163,
       "rotationDegrees": -90.0
     }
   ],
@@ -67,7 +67,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -163.55581420851124
+    "rotation": -61.164499152256894
   },
   "reversed": false,
   "folder": null,

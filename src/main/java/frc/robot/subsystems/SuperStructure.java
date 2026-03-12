@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -25,6 +25,7 @@ import frc.robot.subsystems.intake.IntakeIOInputsAutoLogged;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOInputsAutoLogged;
+import frc.robot.utils.calc.AimCalc.ShootingParams;
 
 public class SuperStructure extends SubsystemBase{
     private final ShooterIO shooterIO; 
@@ -108,15 +109,16 @@ public class SuperStructure extends SubsystemBase{
             () -> {
                 intakeIO.setArmPosition(SuperStructureConstants.INTAKE_ARM_UP);
                 intakeIO.stopRoller();
-                // intakeIO.stopArm(); // when test SYSID add it back
+                // add it back when use SysID
+                // intakeIO.stopArm(); 
             }
         ).withName("SuperStructure.runIntake");
     }
 
-    public Command runShooter(DoubleSupplier hoodPosition){
+    public Command runShooter(Supplier<ShootingParams> params){
         return new ParallelCommandGroup(
-            Commands.runOnce(() -> shooterIO.runShooter(SuperStructureConstants.SHOOT_FLYWHEEL_VEL)),
-            Commands.run(() -> shooterIO.runHood(hoodPosition)),
+            Commands.run(() -> shooterIO.runShooter(params)),
+            Commands.run(() -> shooterIO.runHood(params)),
             Commands.waitUntil(shooterIO::isStable).andThen(() -> hopperIO.runHopper(SuperStructureConstants.HOPPER_VELOCITY))
         ).finallyDo(
             (interrupted) -> {

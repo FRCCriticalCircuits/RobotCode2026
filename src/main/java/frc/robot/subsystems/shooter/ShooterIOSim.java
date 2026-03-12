@@ -1,8 +1,9 @@
 package frc.robot.subsystems.shooter;
 
 import frc.robot.subsystems.shooter.ShooterConstants.*;
+import frc.robot.utils.calc.AimCalc.ShootingParams;
 
-import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -84,13 +85,13 @@ public class ShooterIOSim implements ShooterIO {
     }
 
     @Override
-    public void runHood(DoubleSupplier positionRad) {
-        this.hoodPositionRads = positionRad.getAsDouble();
+    public void runHood(Supplier<ShootingParams> params) {
+        this.hoodPositionRads = params.get().pitchRads;
     }
 
     @Override
-    public void runShooter(double velocity) {
-        this.shooterVelocityRadsPerSec = velocity;
+    public void runShooter(Supplier<ShootingParams> params) {
+        this.shooterVelocityRadsPerSec = params.get().velocityRadsPerSec;
         this.shooterCloseLoopEnabled = true;
     }
 

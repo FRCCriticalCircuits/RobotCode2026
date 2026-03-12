@@ -29,8 +29,7 @@ public class IntakeConstants {
         // Keep gearbox and linkage conversion split so measurement updates stay clear.
         public static final double ARM_GEARING = 23.0 * 1.213253664608;
         public static final double ROLLER_GEARING = 2.75;
-        // TODO if got time make vertical -0.25 instead of 0.0
-        public static final double DEFAULT_ARM_POSITION_ROT = 0.02;
+        public static final double DEFAULT_ARM_POSITION_ROT = 0.02 + 0.25;
 
         public static final boolean ARM_INVERT = true;
         public static final boolean SECONDARY_ARM_INVERT = true;
@@ -64,9 +63,9 @@ public class IntakeConstants {
         public static final double ARM_KV = 2.55;
         // Optional gravity term for arm MotionMagic.
         public static final double ARM_KG = 0.337;
-        public static final double ARM_GRAVITY_ANGLE_OFFSET_RAD = 0.25;
-        public static final double ARM_MAX_VEL = 0.3;
-        public static final double ARM_MAX_ACCEL = 0.8;
+        public static final double ARM_GRAVITY_ANGLE_OFFSET_RAD = 0.0;
+        public static final double ARM_MAX_VEL = 0.35;
+        public static final double ARM_MAX_ACCEL = 0.5;
 
         // +- 2rps error, there's no kS at all, but it's good enough
         public static final double ROLLER_PID_P = 0;

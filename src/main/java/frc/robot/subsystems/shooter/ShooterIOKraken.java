@@ -2,8 +2,10 @@ package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.units.measure.*;
 import frc.robot.subsystems.shooter.ShooterConstants.*;
+import frc.robot.utils.calc.AimCalc.ShootingParams;
 
-import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -215,14 +217,14 @@ public class ShooterIOKraken implements ShooterIO{
     }
 
     @Override
-    public void runHood(DoubleSupplier positionRad) {
-        hoodSetpointRad = positionRad.getAsDouble();
+    public void runHood(Supplier<ShootingParams> params) {
+        hoodSetpointRad = params.get().pitchRads;
         hoodCloseLoopEnabled = true;
     }
 
     @Override
-    public void runShooter(double velocity) {
-        shooterSetpointRadPerSec = velocity;
+    public void runShooter(Supplier<ShootingParams> params) {
+        shooterSetpointRadPerSec = params.get().velocityRadsPerSec;
         shooterCloseLoopEnabled = true;
     }
 
