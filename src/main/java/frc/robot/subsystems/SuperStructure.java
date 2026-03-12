@@ -80,7 +80,7 @@ public class SuperStructure extends SubsystemBase{
         Logger.processInputs("HopperIO", hopperInputs);
         Logger.processInputs("ClimberIO", climberInputs);
         
-        Logger.recordOutput("isStable", shooterIO.isStable());
+        Logger.recordOutput("ShooterIO/isStable", shooterIO.isStable());
 
         hoodDisconnected.set(!hoodConnectedDebouncer.calculate(shooterInputs.hoodConnected));
         shooterDisconnected.set(!shooterConnectedDebouncer.calculate(shooterInputs.shooterConnected));

@@ -1100,10 +1100,10 @@ public class LimelightHelpers {
      * @param limelightName
      * @return
      */
-    public static Matrix<N3, N1> getMT1StdDevs(String limelightName){
+    public static Matrix<N3, N1> getMT1StdDevs(String limelightName, double scaling){
         double[] stdDevs = getLimelightNTDoubleArray(limelightName, "stddevs");
         if(stdDevs.length < 6) return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        else return VecBuilder.fill(stdDevs[0], stdDevs[1], stdDevs[5]);
+        else return VecBuilder.fill(stdDevs[0] * scaling, stdDevs[1] * scaling, stdDevs[5] * scaling);
     }
 
     /**
@@ -1112,10 +1112,10 @@ public class LimelightHelpers {
      * @param limelightName
      * @return
      */
-    public static Matrix<N3, N1> getMT2StdDevs(String limelightName){
+    public static Matrix<N3, N1> getMT2StdDevs(String limelightName, double scaling){
         double[] stdDevs = getLimelightNTDoubleArray(limelightName, "stddevs");
         if(stdDevs.length < 12) return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        else return VecBuilder.fill(stdDevs[6], stdDevs[7], 99999);
+        else return VecBuilder.fill(stdDevs[6] * scaling, stdDevs[7] * scaling, 99999);
     }
 
     /**

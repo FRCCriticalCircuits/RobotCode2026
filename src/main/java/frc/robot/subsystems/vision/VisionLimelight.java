@@ -34,7 +34,7 @@ public class VisionLimelight implements VisionIO{
         m_results.clear();
         
         if (mt2 != null && (mt2.tagCount > 0)) {
-            m_results.add(new PoseObservation(mt2.timestampSeconds, mt2.pose, LimelightHelpers.getMT2StdDevs(cameraName)));
+            m_results.add(new PoseObservation(mt2.timestampSeconds, mt2.pose, LimelightHelpers.getMT2StdDevs(cameraName, 2.0)));
 
             try {
                 Logger.recordOutput("Vision/mt2", mt2.pose);
@@ -46,7 +46,7 @@ public class VisionLimelight implements VisionIO{
         }
 
         if (mt1 != null && (mt1.tagCount > 0)) {
-            m_results.add(new PoseObservation(mt1.timestampSeconds, mt1.pose, LimelightHelpers.getMT1StdDevs(cameraName)));
+            m_results.add(new PoseObservation(mt1.timestampSeconds, mt1.pose, LimelightHelpers.getMT1StdDevs(cameraName, 1.5)));
             try {
                 Logger.recordOutput("Vision/mt1", mt1.pose);
             } catch (BufferOverflowException e) {
