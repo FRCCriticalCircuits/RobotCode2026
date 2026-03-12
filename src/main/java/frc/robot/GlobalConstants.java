@@ -63,10 +63,10 @@ public class GlobalConstants {
 
         // Climbing
         // TODO: Tune for actual field
-        private static final Pose2d BLUE_UP = new Pose2d(0, 0, Rotation2d.kZero);
+        private static final Pose2d BLUE_UP = new Pose2d(0, 0, Rotation2d.k180deg);
         private static final Pose2d BLUE_DOWN = new Pose2d(0, 0, Rotation2d.kZero);
         // use flipping utils if works
-        private static final Pose2d RED_UP = new Pose2d(0, 0, Rotation2d.kZero);
+        private static final Pose2d RED_UP = new Pose2d(0, 0, Rotation2d.k180deg);
         private static final Pose2d RED_DOWN = new Pose2d(0, 0, Rotation2d.kZero);
 
         public static final List<Pose2d> CLIMB_POSITIONS = Arrays.asList(
