@@ -144,7 +144,7 @@ public class RobotContainer {
 
     // Commands
     private final AutoDrive autoClimbDrive = new AutoDrive(drivetrain);
-    private final Command commandDriveToClimb = autoClimbDrive
+    private final Command driveToClimb = autoClimbDrive
         .withTarget(() -> climbCalc.nearestClimbPos())
         .finallyDo(() -> {
             CommandScheduler.getInstance().schedule(
@@ -184,10 +184,11 @@ public class RobotContainer {
             )
         );
 
-        // NamedCommands.registerCommand(
-        //     "drive27",
-        //     new AutoDrive(drivetrain).withTarget(new Pose2d(2, 7, Rotation2d.fromDegrees(0)))
-        // );
+        NamedCommands.registerCommand(
+            "climb",
+            driveToClimb.withTimeout(2.0)
+                .andThen(upperParts.closeClimber().withTimeout(0.5))
+        );
 
         // This will use Commands.none() as the default option.
         // Displayed as "None"
@@ -281,7 +282,7 @@ public class RobotContainer {
 
         // TODO integrate climb calc
         driverController.x().whileTrue(
-            commandDriveToClimb
+            driveToClimb
         );
         //#endregion
     }
