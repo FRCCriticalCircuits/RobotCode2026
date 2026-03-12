@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 
@@ -17,7 +19,7 @@ public class AutoDrive extends Command {
     private final SwerveRequest.ApplyFieldSpeeds controlRequest = new SwerveRequest.ApplyFieldSpeeds()
         .withDesaturateWheelSpeeds(true);
 
-    private Pose2d targetPose2d;
+    private Supplier<Pose2d> targetPose2d;
 
     private final Pose2d tolorance = ChassisConstants.TOLORANCE_AUTO_DRIVE;
     private final ChassisSpeeds speeds = new ChassisSpeeds();
@@ -69,7 +71,7 @@ public class AutoDrive extends Command {
         addRequirements(drive);
     }
 
-    public AutoDrive withTarget(Pose2d targetPose2d){
+    public AutoDrive withTarget(Supplier<Pose2d> targetPose2d){
         this.targetPose2d = targetPose2d;
         return this;
     }
@@ -85,9 +87,9 @@ public class AutoDrive extends Command {
 
     @Override
     public void execute() {
-        this.targetRotation.position = targetPose2d.getRotation().getRadians();
-        this.targetX.position = targetPose2d.getX();
-        this.targetY.position = targetPose2d.getY();
+        this.targetRotation.position = targetPose2d.get().getRotation().getRadians();
+        this.targetX.position = targetPose2d.get().getX();
+        this.targetY.position = targetPose2d.get().getY();
 
         speeds.omegaRadiansPerSecond = rotationController.calculate(
             state.Pose.getRotation().getRadians(),
@@ -111,9 +113,9 @@ public class AutoDrive extends Command {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(state.Pose.getX() - targetPose2d.getX()) < tolorance.getX()
-        && Math.abs(state.Pose.getY() - targetPose2d.getY()) < tolorance.getY()
-        && Math.abs(state.Pose.getRotation().getRadians() - targetPose2d.getRotation().getRadians()) < tolorance.getRotation().getRadians();
+        return Math.abs(state.Pose.getX() - targetPose2d.get().getX()) < tolorance.getX()
+        && Math.abs(state.Pose.getY() - targetPose2d.get().getY()) < tolorance.getY()
+        && Math.abs(state.Pose.getRotation().getRadians() - targetPose2d.get().getRotation().getRadians()) < tolorance.getRotation().getRadians();
     }
 
     @Override

@@ -13,6 +13,8 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -36,6 +38,7 @@ import frc.robot.subsystems.vision.VisionLimelight;
 
 import frc.robot.commands.*;
 import frc.robot.utils.calc.AimCalc;
+import frc.robot.utils.calc.ClimbCalc;
 import frc.robot.utils.axis.AxisConfigLoader;
 
 import frc.robot.subsystems.SuperStructure;
@@ -57,7 +60,8 @@ public class RobotContainer {
     // AutoAim
     private final Trigger autoAimTrigger = driverController.rightTrigger(0.15).debounce(0.02);
     
-    private final AimCalc calculationUtil = new AimCalc(drivetrain);
+    private final AimCalc autoAimCalc = new AimCalc(drivetrain);
+    private final ClimbCalc climbCalc = new ClimbCalc(drivetrain);
 
     private final DriveCommand teleDrive = new DriveCommand(
         drivetrain,
@@ -67,7 +71,7 @@ public class RobotContainer {
         () -> autoAimTrigger.getAsBoolean(),
         AxisConfigLoader.loadTable(GlobalConstants.LEFT_AXIS_CONFIG),
         AxisConfigLoader.loadTable(GlobalConstants.RIGHT_AXIS_CONFIG),
-        () -> calculationUtil.getAimParams()
+        () -> autoAimCalc.getAimParams()
     );
 
     // need this separate command because
@@ -75,7 +79,7 @@ public class RobotContainer {
     // it's the default command of drive subsystem
     private final PPDriveCommand pathplannerDrive = new PPDriveCommand(
         drivetrain,
-        () -> calculationUtil.getAimParams()
+        () -> autoAimCalc.getAimParams()
     );
 
     // Vision
@@ -143,7 +147,7 @@ public class RobotContainer {
     private final Command autoIntakeCommand = upperParts.runIntake();
     private final Command autoShooterCommand = Commands.parallel(
         pathplannerDrive,
-        upperParts.runShooter(() -> calculationUtil.getAimParams())
+        upperParts.runShooter(() -> autoAimCalc.getAimParams())
     );
 
     public RobotContainer() {
@@ -253,7 +257,7 @@ public class RobotContainer {
         );
 
         autoAimTrigger.whileTrue(
-            upperParts.runShooter(() -> calculationUtil.getAimParams())
+            upperParts.runShooter(() -> autoAimCalc.getAimParams())
         );
 
         driverController.povUp().whileTrue(
@@ -265,7 +269,19 @@ public class RobotContainer {
         ); 
 
         // TODO integrate climb calc
-        //driverController.x().whileTrue(autoDrive.withTarget(new Pose2d(14.8, 5.5, Rotation2d.fromDegrees(-180))));
+        driverController.x().whileTrue(
+            autoDrive.withTarget(() -> climbCalc.nearestClimbPos()).finallyDo(
+                () -> {
+                    CommandScheduler.getInstance().schedule(
+                        autoDrive.withTarget(
+                            () -> drivetrain.getState().Pose.plus(
+                                new Transform2d(0.05, 0, Rotation2d.kZero)
+                            )
+                        ).withTimeout(1.0)
+                    );
+                }
+            )
+        );
         //#endregion
     }
 
