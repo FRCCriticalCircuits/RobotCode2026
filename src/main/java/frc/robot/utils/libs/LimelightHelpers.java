@@ -1,4 +1,4 @@
-package frc.robot.utils;
+package frc.robot.utils.libs;
 
 import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.NetworkTable;

@@ -3,19 +3,19 @@ package frc.robot.subsystems.vision;
 import java.util.ArrayList;
 import java.util.List;
 import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.*;
+import frc.robot.utils.vision.AdvancedPhotonEstimator;
 
 public class VisionPhoton implements VisionIO {
     private final String cameraName;
 
     private final PhotonCamera camera;
-    private final PhotonPoseEstimator photonEstimator;
+    private final AdvancedPhotonEstimator photonEstimator;
 
     private final List<PhotonPipelineResult> rawResults = new ArrayList<>();
     private final List<PoseObservation> result = new ArrayList<>();
@@ -23,7 +23,7 @@ public class VisionPhoton implements VisionIO {
 
     public VisionPhoton(String cameraName, Transform3d robotToCamera, Matrix<N3, N1> stdDevsBase) {
         camera = new PhotonCamera(cameraName);
-        photonEstimator = new PhotonPoseEstimator(VisionConstants.tagLayout, robotToCamera);
+        photonEstimator = new AdvancedPhotonEstimator(VisionConstants.tagLayout, robotToCamera);
 
         this.cameraName = cameraName;
         this.stdDevsBase = stdDevsBase;
@@ -45,7 +45,7 @@ public class VisionPhoton implements VisionIO {
                     new PoseObservation(
                         est.timestampSeconds,
                         est.estimatedPose.toPose2d(),
-                        this.stdDevsBase
+                        AdvancedPhotonEstimator.estimateStdDev(est.targetsUsed, stdDevsBase, VisionConstants.PV_SCALING)
                     )
                 ));
         }
