@@ -15,7 +15,7 @@ public class VisionConstants {
     );
 
     // TODO tune-photonvision: adjust by camera quality and tag count.
-    public static final Matrix<N3, N1> VISION_STD_DEVS_DEFAULT = VecBuilder.fill(0.7, 0.7, 1.5);
+    public static final Matrix<N3, N1> PV_STDDEV_BASE = VecBuilder.fill(0.7, 0.7, 1.5);
     public static final double LL_MT1_SCALING = 2.0;
     public static final double LL_MT2_SCALING = 1.5;
 
