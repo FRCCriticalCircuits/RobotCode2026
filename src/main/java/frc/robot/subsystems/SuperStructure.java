@@ -120,6 +120,7 @@ public class SuperStructure extends SubsystemBase{
             Commands.run(() -> shooterIO.runShooter(params)),
             Commands.run(() -> shooterIO.runHood(params)),
             Commands.waitUntil(shooterIO::isStable).andThen(() -> hopperIO.runHopper(SuperStructureConstants.HOPPER_VELOCITY))
+            //Commands.run(() -> hopperIO.runHopper(SuperStructureConstants.HOPPER_VELOCITY))
         ).finallyDo(
             (interrupted) -> {
                 // not setting new hood positions

@@ -22,8 +22,8 @@ public class VisionConstants {
 
     // works a little bit different
     // estimated stdDev from LL3G * SCLAING_CONSTANT
-    public static final double LL_MT1_SCALING = 2.0; 
-    public static final double LL_MT2_SCALING = 1.5;
+    public static final double LL_MT1_SCALING = 999999.0; 
+    public static final double LL_MT2_SCALING = 2.0;
 
     public static final Transform3d leftCam = new Transform3d(
         -0.258,

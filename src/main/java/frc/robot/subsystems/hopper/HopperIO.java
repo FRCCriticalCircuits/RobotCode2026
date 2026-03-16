@@ -17,6 +17,8 @@ public interface HopperIO {
         public boolean hopperConnected = false;
     }
 
+    default void setStep(double stepRadians) {}
+
     default void updateInputs(HopperIOInputs inputs) {}
     default void applyOutputs() {}
     

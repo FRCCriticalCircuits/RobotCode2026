@@ -40,6 +40,9 @@ public class HopperIOKraken implements HopperIO {
     private double desiredHopperVelocityRps = 0.0;   // rotations per second
     private boolean hopperClosedLoopEnabled = false;
 
+    private double currentCosineValue = 0;
+    private double cosineStep = Math.PI / 50.0;
+
     public HopperIOKraken() {
         this.hopperMotor = new TalonFX(50, GlobalConstants.BUS);
 
@@ -88,6 +91,11 @@ public class HopperIOKraken implements HopperIO {
     }
 
     @Override
+    public void setStep(double stepRadians) {
+        this.cosineStep = stepRadians;
+    }
+
+    @Override
     public void updateInputs(HopperIOInputs inputs) {
         inputs.hopperConnected = BaseStatusSignal.refreshAll(
             this.hopperPosition,
@@ -110,9 +118,13 @@ public class HopperIOKraken implements HopperIO {
 
     @Override
     public void applyOutputs() {
+        currentCosineValue += cosineStep;
+
         if (hopperClosedLoopEnabled) {
             hopperMotor.setControl(
-                hopperVelocityVoltage.withVelocity(desiredHopperVelocityRps)
+                hopperVelocityVoltage.withVelocity(
+                    (0.05 * Math.cos(currentCosineValue) + 0.95) * desiredHopperVelocityRps
+                )
             );
         }
     }

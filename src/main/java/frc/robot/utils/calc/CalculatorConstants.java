@@ -6,19 +6,20 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
 public class CalculatorConstants {
     // TODO tune for actual robot
-    public static final double shotTime = 0.1;
+    public static final double shotTime = 0.3;
 
     // TODO tune-LUT
     // max 0.11, min 0.005 for rotations
     // these values should be in radians
     public static InterpolatingDoubleTreeMap hoodAngle = InterpolatingDoubleTreeMap.ofEntries(
         Map.entry(0.0, 0.01 * Math.PI * 2),
-        Map.entry(3.0, 0.09 * Math.PI * 2)
+        Map.entry(3.0, 0.01 * Math.PI * 2),
+        Map.entry(8.0, 0.10 * Math.PI * 2) // passing
     );
 
     public static InterpolatingDoubleTreeMap shooterVelocity = InterpolatingDoubleTreeMap.ofEntries(
-        Map.entry(0.0, 40.0 * Math.PI * 2),
-        Map.entry(3.0, 50.0 * Math.PI * 2)
+        Map.entry(1.953, 43.0 * Math.PI * 2),
+        Map.entry(3.04, 50.5 * Math.PI * 2)
     );
 
     // TODO decide limit (in degress) of the cone-shape check for climbing calculator
