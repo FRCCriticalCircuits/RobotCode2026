@@ -38,7 +38,7 @@ public class ShooterConstants {
     public class TUNING{
         // Allowed control error before shooter is considered ready to feed.
         public static final double HOOD_STABLE_TOLERANCE_RAD = Math.toRadians(4.5);
-        public static final double SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC = 10.0;
+        public static final double SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC = 1.0 * Math.PI * 2;
 
         /*
             // Hood torque current caps used in HOOD Kraken configuration.
@@ -74,7 +74,8 @@ public class ShooterConstants {
         public static final double SHOOTER_PID_P = 0;
         public static final double SHOOTER_PID_I = 0;
         public static final double SHOOTER_PID_D = 0;
-        public static final double SHOOTER_KV = 0.161;
+        public static final double SHOOTER_KS = 0.2;
+        public static final double SHOOTER_KV = 0.16;
     }
 
     public class CAD{

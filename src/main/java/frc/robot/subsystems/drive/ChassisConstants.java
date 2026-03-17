@@ -16,10 +16,10 @@ public class ChassisConstants {
 
     private class REAL {
         // TODO tune-drive: PathPlanner/AutoDrive translation PID on robot.
-        private static final double TRANSLATION_PID_P = 8.0;
+        private static final double TRANSLATION_PID_P = 3.0;
         private static final double TRANSLATION_PID_D = 0.0;
         // TODO tune-drive: PathPlanner/AutoDrive rotation PID on robot.
-        private static final double ROTATION_PID_P = 15.0;
+        private static final double ROTATION_PID_P = 2.0;
         private static final double ROTATION_PID_D = 0.0;
     }
 
@@ -37,8 +37,8 @@ public class ChassisConstants {
 
     // TODO tune-drive: AutoDrive completion tolerance.
     public static final Pose2d TOLORANCE_AUTO_DRIVE = new Pose2d(
-        0.02,
-        0.02,
+        0.01,
+        0.01,
         Rotation2d.fromDegrees(0.5)
     );
     //#endregion

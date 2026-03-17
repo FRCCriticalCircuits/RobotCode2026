@@ -12,14 +12,15 @@ public class CalculatorConstants {
     // max 0.11, min 0.005 for rotations
     // these values should be in radians
     public static InterpolatingDoubleTreeMap hoodAngle = InterpolatingDoubleTreeMap.ofEntries(
-        Map.entry(0.0, 0.01 * Math.PI * 2),
-        Map.entry(3.0, 0.01 * Math.PI * 2),
-        Map.entry(8.0, 0.10 * Math.PI * 2) // passing
+        Map.entry(0.0, 0.005 * Math.PI * 2),
+        Map.entry(3.0, 0.005 * Math.PI * 2),
+        Map.entry(8.0, 0.9 * Math.PI * 2) // passing
     );
 
     public static InterpolatingDoubleTreeMap shooterVelocity = InterpolatingDoubleTreeMap.ofEntries(
-        Map.entry(1.953, 43.0 * Math.PI * 2),
-        Map.entry(3.04, 50.5 * Math.PI * 2)
+        Map.entry(1.7, 42.3 * Math.PI * 2),    
+        Map.entry(1.953, 43.3 * Math.PI * 2),
+        Map.entry(3.04, 49.5 * Math.PI * 2)
     );
 
     // TODO decide limit (in degress) of the cone-shape check for climbing calculator

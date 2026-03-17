@@ -55,3 +55,6 @@ all units on software level should be in radians,
 so divide them with 2PI when using SysID
 all units ctre control request get or encoder returns should be in rotations.
 climber is the only REV product we got and we dont care its position/velocity.
+
+16.54 * 8.07
+x 13 y 3

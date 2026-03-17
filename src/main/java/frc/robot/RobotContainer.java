@@ -13,6 +13,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.units.Units;
@@ -190,6 +191,8 @@ public class RobotContainer {
                 .andThen(upperParts.closeClimber().withTimeout(0.5))
         );
 
+        NamedCommands.registerCommand("visionEnable", new InstantCommand(() -> visionSubsystem.setVisionEnabled()));
+
         // This will use Commands.none() as the default option.
         // Displayed as "None"
         autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
@@ -284,6 +287,24 @@ public class RobotContainer {
         driverController.x().whileTrue(
             driveToClimb
         );
+
+        driverController.b().whileTrue(
+            //15.0 4.5
+            new AutoDrive(drivetrain).withTarget(() -> new Pose2d(15.0, 4.5, Rotation2d.k180deg))
+        );
+
+        driverController.povLeft().debounce(0.02).whileTrue(
+            new AutoDrive(drivetrain).withTarget(() -> new Pose2d(15.0, 4.5, Rotation2d.k180deg))//() -> climbCalc.nearestClimbPos())
+            .finallyDo(() -> {
+                CommandScheduler.getInstance().schedule(
+                    new AutoDrive(drivetrain).withTarget(
+                        () -> drivetrain.getState().Pose.plus(
+                            new Transform2d(0.05, 0, Rotation2d.kZero)
+                        )
+                    ).withTimeout(3.0)
+                );
+            })
+        );
         //#endregion
     }
 
@@ -292,6 +313,6 @@ public class RobotContainer {
      * @return
      */
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected().andThen(() -> visionSubsystem.setVisionEnabled());
+        return autoChooser.getSelected();
     }
 }

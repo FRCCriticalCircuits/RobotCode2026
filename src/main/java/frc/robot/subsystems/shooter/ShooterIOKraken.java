@@ -95,6 +95,8 @@ public class ShooterIOKraken implements ShooterIO{
         this.shooterConfig.Slot0.kI = TUNING.SHOOTER_PID_I;
         this.shooterConfig.Slot0.kD = TUNING.SHOOTER_PID_D;
         this.shooterConfig.Slot0.kV = TUNING.SHOOTER_KV;
+        this.shooterConfig.Slot0.kS = TUNING.SHOOTER_KS;
+
         this.shooterConfig.MotorOutput.Inverted =
             HAL.SHOOTER_INVERT
                 ? InvertedValue.CounterClockwise_Positive
