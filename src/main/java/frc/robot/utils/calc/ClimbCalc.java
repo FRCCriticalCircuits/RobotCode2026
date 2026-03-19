@@ -42,7 +42,11 @@ public class ClimbCalc {
 
         Translation2d pq = state.Pose.getTranslation().minus(ret.getTranslation());
         Translation2d n = new Translation2d(1, 0).rotateBy(ret.getRotation().plus(Rotation2d.kCW_90deg));
-        double dotProduct = pq.dot(n) / pq.getSquaredNorm();
+
+        if (pq.getNorm() < 1e-6) {
+            return ret;
+        }
+        double dotProduct = pq.dot(n) / pq.getNorm();
 
         // if the limit is not satisfied, fall back to current position
         if(dotProduct < CalculatorConstants.COS_A_LIMIT){
