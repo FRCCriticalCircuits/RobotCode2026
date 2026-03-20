@@ -18,7 +18,7 @@ public class GlobalConstants {
      * Only load autos with prefix "comp_"
      * Publish AKit Logging data
      */
-    public static final Boolean COMP = false;
+    public static final Boolean COMP = true;
     
     /*
      * SYSID: (commands will be added to autoChooser)
@@ -28,7 +28,7 @@ public class GlobalConstants {
     public static final Boolean SYS_ID_SWERVE = false;
     public static final String CTRE_LOG_PATH = "/media/sda1/ctre-logs/";
 
-    public static final Boolean SYS_ID_FLYWHEELS = true;
+    public static final Boolean SYS_ID_FLYWHEELS = false;
 
     // Driver Preferences
     // public static final String LEFT_AXIS_CONFIG = "tanh";
