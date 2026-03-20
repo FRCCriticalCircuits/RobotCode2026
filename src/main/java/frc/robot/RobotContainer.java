@@ -283,28 +283,23 @@ public class RobotContainer {
             upperParts.closeClimber()
         ); 
 
-        // TODO integrate climb calc
-        driverController.x().whileTrue(
-            driveToClimb
-        );
+        // driverController.b().whileTrue(
+        //     //15.0 4.5
+        //     new AutoDrive(drivetrain).withTarget(() -> new Pose2d(15.0, 4.5, Rotation2d.k180deg))
+        // );
 
-        driverController.b().whileTrue(
-            //15.0 4.5
-            new AutoDrive(drivetrain).withTarget(() -> new Pose2d(15.0, 4.5, Rotation2d.k180deg))
-        );
-
-        driverController.povLeft().debounce(0.02).whileTrue(
-            new AutoDrive(drivetrain).withTarget(() -> new Pose2d(15.0, 4.5, Rotation2d.k180deg))//() -> climbCalc.nearestClimbPos())
-            .finallyDo(() -> {
-                CommandScheduler.getInstance().schedule(
-                    new AutoDrive(drivetrain).withTarget(
-                        () -> drivetrain.getState().Pose.plus(
-                            new Transform2d(0.05, 0, Rotation2d.kZero)
-                        )
-                    ).withTimeout(3.0)
-                );
-            })
-        );
+        // driverController.povLeft().debounce(0.02).whileTrue(
+        //     new AutoDrive(drivetrain).withTarget(() -> new Pose2d(15.0, 4.5, Rotation2d.k180deg))//() -> climbCalc.nearestClimbPos())
+        //     .finallyDo(() -> {
+        //         CommandScheduler.getInstance().schedule(
+        //             new AutoDrive(drivetrain).withTarget(
+        //                 () -> drivetrain.getState().Pose.plus(
+        //                     new Transform2d(0.05, 0, Rotation2d.kZero)
+        //                 )
+        //             ).withTimeout(3.0)
+        //         );
+        //     })
+        // );
         //#endregion
     }
 
