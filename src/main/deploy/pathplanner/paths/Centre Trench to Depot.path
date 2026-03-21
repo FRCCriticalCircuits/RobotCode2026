@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.8,
-        "y": 5.8
+        "x": 7.7,
+        "y": 5.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.483159968479117,
-        "y": 7.183412135539795
+        "x": 6.456,
+        "y": 7.559570175438598
       },
       "isLocked": false,
       "linkedName": null
@@ -54,7 +54,21 @@
       "rotationDegrees": -90.0
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.8519480519480516,
+      "maxWaypointRelativePos": 1.3755844155844152,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -73,7 +87,7 @@
   "folder": "Back To Alliance Side",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": -50.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

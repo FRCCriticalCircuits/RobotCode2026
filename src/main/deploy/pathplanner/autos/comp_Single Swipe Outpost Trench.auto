@@ -5,21 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "runIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Outpost Trench to Centre"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Outpost Swipe"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Outpost Trench to Centre"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "runIntake"
+                }
+              }
+            ]
           }
         },
         {

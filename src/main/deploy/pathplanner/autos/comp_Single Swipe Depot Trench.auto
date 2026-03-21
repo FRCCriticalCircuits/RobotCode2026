@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Depot Swipe"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Depot Trench To Centre"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "runIntake"
+                }
+              }
+            ]
           }
         },
         {
