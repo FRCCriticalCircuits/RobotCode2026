@@ -7,7 +7,38 @@
         {
           "type": "path",
           "data": {
-            "pathName": "PathA-0"
+            "pathName": "Depot Trench To Centre"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Depot Swipe"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "runIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Centre Trench to Depot"
           }
         },
         {
@@ -17,7 +48,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 6.0
+                  "waitTime": 5.0
                 }
               },
               {

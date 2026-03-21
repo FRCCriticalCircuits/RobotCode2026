@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "PathT-0"
+            "pathName": "Outpost Trench to Centre"
           }
         },
         {
@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "pathT-1"
+                  "pathName": "Outpost Swipe"
                 }
               },
               {
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "pathT-2"
+            "pathName": "Centre Trench to Outpost"
           }
         },
         {

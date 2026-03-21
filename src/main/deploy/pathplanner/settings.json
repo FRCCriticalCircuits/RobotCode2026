@@ -2,7 +2,12 @@
   "robotWidth": 0.768,
   "robotLength": 0.768,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "Own Side",
+    "Back To Alliance Side",
+    "Swipes",
+    "To Centre"
+  ],
   "autoFolders": [],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 3.0,

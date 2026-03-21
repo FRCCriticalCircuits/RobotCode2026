@@ -1,0 +1,95 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.8,
+        "y": 2.0
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 8.233667128298508,
+        "y": 3.0832335909719286
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.249386363636363,
+        "y": 3.5608863636363637
+      },
+      "prevControl": {
+        "x": 8.288742024970022,
+        "y": 3.30999402263429
+      },
+      "nextControl": {
+        "x": 8.084477272727272,
+        "y": 4.612181818181819
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.558829545454545,
+        "y": 3.7464090909090917
+      },
+      "prevControl": {
+        "x": 7.579443181818181,
+        "y": 4.333897727272728
+      },
+      "nextControl": {
+        "x": 7.519788467914195,
+        "y": 2.633738381009107
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.6,
+        "y": 2.0
+      },
+      "prevControl": {
+        "x": 7.068571663406921,
+        "y": 2.4219038207749586
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.943396226415083,
+      "rotationDegrees": 106.96231808979724
+    },
+    {
+      "waypointRelativePos": 2.0990566037736023,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 1.5,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 1.5,
+    "rotation": 145.0
+  },
+  "reversed": false,
+  "folder": "Swipes",
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": 75.0
+  },
+  "useDefaultConstraints": false
+}
