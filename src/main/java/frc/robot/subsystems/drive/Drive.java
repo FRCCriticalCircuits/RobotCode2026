@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -40,10 +42,12 @@ public class Drive extends TunerSwerveDrivetrain implements Subsystem {
     private static Drive instance = null;
 
     private static final double kSimLoopPeriod = 0.004; // 4 ms
+    private static final String kFieldWidgetName = "Field";
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
     private Boolean m_hasAppliedOperatorPerspective = false;
+    private final Field2d m_field = new Field2d();
 
     /* Swerve requests to apply during SysId characterization */
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
@@ -133,6 +137,8 @@ public class Drive extends TunerSwerveDrivetrain implements Subsystem {
         if (Utils.isSimulation()) {
             startSimThread();
         }
+
+        SmartDashboard.putData(kFieldWidgetName, m_field);
 
         try{
             config = RobotConfig.fromGUISettings();
@@ -268,6 +274,8 @@ public class Drive extends TunerSwerveDrivetrain implements Subsystem {
 
     @Override
     public void periodic() {
+        m_field.setRobotPose(getState().Pose);
+
         if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
             DriverStation.getAlliance().ifPresent(allianceColor -> {
                 setOperatorPerspectiveForward(
