@@ -23,6 +23,6 @@ public class ClimberConstants {
         // Spark relative encoder position is left in motor rotations so these
         // soft limits can be tuned directly from the encoder reading.
         public static final double CLIMBER_MIN_POSITION = 0.0;
-        public static final double CLIMBER_MAX_POSITION = 100.0;
+        public static final double CLIMBER_MAX_POSITION = 264.0;
     }
 }

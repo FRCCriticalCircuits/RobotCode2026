@@ -101,7 +101,7 @@ public class ClimberIOVortex implements ClimberIO{
     }
 
     private void setClimberVoltage(double requestedVoltage) {
-        double position = climberEncoder.getPosition();
+        double position = climberEncoder.getPosition(); 
         boolean atLowerLimit = position <= TUNING.CLIMBER_MIN_POSITION;
         boolean atUpperLimit = position >= TUNING.CLIMBER_MAX_POSITION;
 
