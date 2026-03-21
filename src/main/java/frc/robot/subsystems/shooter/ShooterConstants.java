@@ -63,7 +63,7 @@ public class ShooterConstants {
          * kD : the proportion for velocity error
          * kV : voltage per velocity unit
          */
-        public static final double HOOD_PID_P = 1.0;
+        public static final double HOOD_PID_P = 1.3;
         public static final double HOOD_PID_I = 0.0;
         public static final double HOOD_PID_D = 10.0;
 
