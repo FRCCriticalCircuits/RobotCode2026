@@ -5,28 +5,21 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "runIntake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Depot Trench To Centre"
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Depot Swipe"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "runIntake"
-                }
-              }
-            ]
+            "pathName": "Depot Swipe"
           }
         },
         {

@@ -84,4 +84,9 @@ public class ChassisConstants {
             ? AUTOAIM_ROTATION.SIMULATION.ROTATION_PID_D
             : AUTOAIM_ROTATION.REAL.ROTATION_PID_D;
     //#endregion
+
+    //#region Teleop
+    public static final double TELEOP_TRANSLATION_SLEW_RATE = 15;
+    public static final double TELEOP_ROTATION_SLEW_RATE = 15;
+    //#endregion
 }

@@ -8,6 +8,7 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.ChassisConstants;
@@ -32,6 +33,9 @@ public class DriveCommand extends Command{
     private final Supplier<ShootingParams> yawSupplier;
 
     private final PIDController rotationController;
+    private final SlewRateLimiter xLimiter = new SlewRateLimiter(ChassisConstants.TELEOP_TRANSLATION_SLEW_RATE);
+    private final SlewRateLimiter yLimiter = new SlewRateLimiter(ChassisConstants.TELEOP_TRANSLATION_SLEW_RATE);
+    private final SlewRateLimiter rotationLimiter = new SlewRateLimiter(ChassisConstants.TELEOP_ROTATION_SLEW_RATE);
 
     private SwerveDriveState state;
     private double rotationSpeed;
@@ -72,26 +76,34 @@ public class DriveCommand extends Command{
 
     @Override
     public void initialize() {
-        state = drive.getState();    
+        state = drive.getState();
+        xLimiter.reset(0.0);
+        yLimiter.reset(0.0);
+        rotationLimiter.reset(0.0);
     }
 
     @Override
     public void execute() {
+        double requestedVelocityX = leftAxisTable.get(velocityX.get()) * MaxSpeed;
+        double requestedVelocityY = leftAxisTable.get(velocityY.get()) * MaxSpeed;
+
         if(aiming.get()){
             rotationSpeed = yawSupplier.get().yaw_ff + rotationController.calculate(
                 state.Pose.getRotation().getRadians(),
                 yawSupplier.get().yaw
             );
         }else{
-            rotationSpeed = rightAxisTable.get(rotationalRate.get()) * MaxAngularRate;
+            rotationSpeed = rotationLimiter.calculate(
+                rightAxisTable.get(rotationalRate.get()) * MaxAngularRate
+            );
         }
 
         drive.setControl(
             fieldCentric
                 .withVelocityX(
-                    leftAxisTable.get(velocityX.get()) * MaxSpeed
+                    xLimiter.calculate(requestedVelocityX)
                 ).withVelocityY(
-                    leftAxisTable.get(velocityY.get()) * MaxSpeed
+                    yLimiter.calculate(requestedVelocityY)
                 ).withRotationalRate(
                     rotationSpeed
                 )
