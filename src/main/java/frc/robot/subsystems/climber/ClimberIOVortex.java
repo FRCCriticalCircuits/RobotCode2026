@@ -39,8 +39,6 @@ public class ClimberIOVortex implements ClimberIO{
             .voltageCompensation(12.0);
         
         climberConfig.encoder
-            .positionConversionFactor((1 / HAL.CLIMBER_GEARING) * Math.PI * 2)
-            .velocityConversionFactor((1 / HAL.CLIMBER_GEARING) * Math.PI * 2 / 60)
             .uvwMeasurementPeriod(10)
             .uvwAverageDepth(4);
         
@@ -93,12 +91,25 @@ public class ClimberIOVortex implements ClimberIO{
     @Override
     public Command runClimber(double voltage) {
         return Commands.run(
-            () -> climberSparkFlex.setVoltage(voltage)
+            () -> setClimberVoltage(voltage)
         );
     }
     
     @Override
     public void stopMotors() {
         climberSparkFlex.stopMotor();
+    }
+
+    private void setClimberVoltage(double requestedVoltage) {
+        double position = climberEncoder.getPosition();
+        boolean atLowerLimit = position <= TUNING.CLIMBER_MIN_POSITION;
+        boolean atUpperLimit = position >= TUNING.CLIMBER_MAX_POSITION;
+
+        if ((requestedVoltage < 0.0 && atLowerLimit) || (requestedVoltage > 0.0 && atUpperLimit)) {
+            climberSparkFlex.stopMotor();
+            return;
+        }
+
+        climberSparkFlex.setVoltage(requestedVoltage);
     }
 }
