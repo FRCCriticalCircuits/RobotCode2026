@@ -5,18 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "runIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Depot Trench To Centre"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Depot Swipe"
