@@ -125,7 +125,7 @@ public class SuperStructure extends SubsystemBase{
             //Commands.run(() -> hopperIO.runHopper(SuperStructureConstants.HOPPER_VELOCITY))
         ).finallyDo(
             (interrupted) -> {
-                // not setting new hood positions
+                // Return to a small offset above zero instead of parking on the stop.
                 shooterIO.stopHood();
                 shooterIO.stopShooter();
                 hopperIO.stopMotors(); 

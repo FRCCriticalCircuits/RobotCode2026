@@ -19,6 +19,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.MathUtil;
 import frc.robot.GlobalConstants;
 
 public class ShooterIOKraken implements ShooterIO{
@@ -109,6 +110,10 @@ public class ShooterIOKraken implements ShooterIO{
         this.hoodConfig.CurrentLimits.StatorCurrentLimit = 80;
         this.hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         this.hoodConfig.CurrentLimits.SupplyCurrentLimit = 30;
+        this.hoodConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        this.hoodConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = TUNING.HOOD_MAX_POSITION_ROT;
+        this.hoodConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        this.hoodConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = TUNING.HOOD_MIN_POSITION_ROT;
 
         this.shooterConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         this.shooterConfig.CurrentLimits.StatorCurrentLimit = 120;
@@ -220,7 +225,11 @@ public class ShooterIOKraken implements ShooterIO{
 
     @Override
     public void runHood(Supplier<ShootingParams> params) {
-        hoodSetpointRad = params.get().pitchRads;
+        hoodSetpointRad = MathUtil.clamp(
+            params.get().pitchRads,
+            TUNING.HOOD_MIN_POSITION_RAD,
+            TUNING.HOOD_MAX_POSITION_RAD
+        );
         hoodCloseLoopEnabled = true;
     }
 
@@ -253,8 +262,12 @@ public class ShooterIOKraken implements ShooterIO{
 
     @Override
     public void stopHood() {
-        hoodCloseLoopEnabled = false;
-        hoodMotor.stopMotor();
+        hoodSetpointRad = MathUtil.clamp(
+            TUNING.HOOD_STOW_POSITION_RAD,
+            TUNING.HOOD_MIN_POSITION_RAD,
+            TUNING.HOOD_MAX_POSITION_RAD
+        );
+        hoodCloseLoopEnabled = true;
     }
 
     @Override

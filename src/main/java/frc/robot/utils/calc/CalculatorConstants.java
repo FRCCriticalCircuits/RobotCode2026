@@ -3,6 +3,7 @@ package frc.robot.utils.calc;
 import java.util.Map;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import frc.robot.subsystems.shooter.ShooterConstants.TUNING;
 
 public class CalculatorConstants {
     // TODO tune for actual robot
@@ -12,9 +13,9 @@ public class CalculatorConstants {
     // max 0.11, min 0.005 for rotations
     // these values should be in radians
     public static InterpolatingDoubleTreeMap hoodAngle = InterpolatingDoubleTreeMap.ofEntries(
-        Map.entry(0.0, 0.005 * Math.PI * 2),
-        Map.entry(3.0, 0.005 * Math.PI * 2),
-        Map.entry(8.0, 0.9 * Math.PI * 2) // passing
+        Map.entry(0.0, TUNING.HOOD_MIN_POSITION_RAD),
+        Map.entry(3.0, TUNING.HOOD_MIN_POSITION_RAD),
+        Map.entry(8.0, TUNING.HOOD_MAX_POSITION_RAD) // passing
     );
 
     public static InterpolatingDoubleTreeMap shooterVelocity = InterpolatingDoubleTreeMap.ofEntries(

@@ -86,7 +86,11 @@ public class ShooterIOSim implements ShooterIO {
 
     @Override
     public void runHood(Supplier<ShootingParams> params) {
-        this.hoodPositionRads = params.get().pitchRads;
+        this.hoodPositionRads = MathUtil.clamp(
+            params.get().pitchRads,
+            TUNING.HOOD_MIN_POSITION_RAD,
+            TUNING.HOOD_MAX_POSITION_RAD
+        );
     }
 
     @Override
@@ -109,6 +113,15 @@ public class ShooterIOSim implements ShooterIO {
         double shooterErrorRadPerSec = Math.abs(shooter.getAngularVelocityRadPerSec() - shooterVelocityRadsPerSec);
         return hoodErrorRad <= TUNING.HOOD_STABLE_TOLERANCE_RAD
             && shooterErrorRadPerSec <= TUNING.SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC;
+    }
+
+    @Override
+    public void stopHood() {
+        this.hoodPositionRads = MathUtil.clamp(
+            TUNING.HOOD_STOW_POSITION_RAD,
+            TUNING.HOOD_MIN_POSITION_RAD,
+            TUNING.HOOD_MAX_POSITION_RAD
+        );
     }
 
     @Override

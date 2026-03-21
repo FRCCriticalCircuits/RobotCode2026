@@ -18,7 +18,7 @@ public class GlobalConstants {
      * Only load autos with prefix "comp_"
      * Publish AKit Logging data
      */
-    public static final Boolean COMP = true;
+    public static final Boolean COMP = false;
     
     /*
      * SYSID: (commands will be added to autoChooser)
@@ -34,7 +34,7 @@ public class GlobalConstants {
     // public static final String LEFT_AXIS_CONFIG = "tanh";
     // public static final String RIGHT_AXIS_CONFIG = "tanhRightAxis";
     // TODO: pick final axis mapping with driver input (currently safety mode).
-    public static final String LEFT_AXIS_CONFIG = "McMaster";
+    public static final String LEFT_AXIS_CONFIG = "McMasterCubic";
     public static final String RIGHT_AXIS_CONFIG = "tanhRightAxis";
 
     public static final CANBus BUS = new CANBus("rio");
