@@ -50,6 +50,7 @@ import frc.robot.subsystems.shooter.*;
 
 public class RobotContainer {
     private final CommandXboxController driverController = new CommandXboxController(0);
+    private final HubStatusMonitor hubStatusMonitor = new HubStatusMonitor(driverController.getHID());
     private final SendableChooser<Command> autoChooser;
     private final SendableChooser<Boolean> rotationSysID = new SendableChooser<>();
 
@@ -309,5 +310,9 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
+    }
+
+    public void periodic() {
+        hubStatusMonitor.update();
     }
 }
