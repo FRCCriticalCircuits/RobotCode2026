@@ -1,10 +1,13 @@
 package frc.robot.subsystems.intake;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class IntakeConstants {
@@ -25,7 +28,11 @@ public class IntakeConstants {
     public static final DCMotor ROLLER_GEARBOX = DCMotor.getKrakenX60(1);
     public static final LinearSystem<N2, N1, N2> ROLLER_STATE_SPACE = LinearSystemId.createDCMotorSystem(0.1, 0.01);
 
-    public class HAL{
+    public static final Angle INTAKE_STOWED_POS = Degrees.of(0);
+    public static final Angle INTAKE_DEPLOYED_POS = Degrees.of(93);
+    public static final double INTAKE_ROLLER_VOLTAGE = 8;
+
+    public class HAL {
         // Keep gearbox and linkage conversion split so measurement updates stay clear.
         public static final double ARM_GEARING = 23.0 * 1.213253664608;
         public static final double ROLLER_GEARING = 2.75;
@@ -55,9 +62,9 @@ public class IntakeConstants {
          * kD : the proportion for velocity error
          * kV : voltage per velocity unit
          */
-        public static final double ARM_PID_P = 10;
+        public static final double ARM_PID_P = 28;
         public static final double ARM_PID_I = 0;
-        public static final double ARM_PID_D = 1;
+        public static final double ARM_PID_D = 0.7;
 
         public static final double ARM_KS = 0;
         public static final double ARM_KV = 2.55;

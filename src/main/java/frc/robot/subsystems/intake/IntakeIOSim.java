@@ -1,7 +1,10 @@
 package frc.robot.subsystems.intake;
 
+import static edu.wpi.first.units.Units.Radians;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.subsystems.intake.IntakeConstants.HAL;
 
@@ -83,8 +86,8 @@ public class IntakeIOSim implements IntakeIO {
     }
 
     @Override
-    public void setArmPosition(double positionRad) {
-        desiredArmPositionRad = positionRad;
+    public void setArmPosition(Angle angle) {
+        desiredArmPositionRad = angle.in(Radians);
     }
 
     @Override

@@ -105,11 +105,11 @@ public class SuperStructure extends SubsystemBase{
     public Command runIntake() {
         return Commands.startEnd(
             () -> {
-                intakeIO.setArmPosition(SuperStructureConstants.INTAKE_ARM_DOWN);
-                intakeIO.setRollerVelocity(SuperStructureConstants.INTAKE_ROLLER_VEL);
+                intakeIO.setArmPosition(IntakeConstants.INTAKE_DEPLOYED_POS);
+                intakeIO.runRollerVoltage(IntakeConstants.INTAKE_ROLLER_VOLTAGE);
             },
             () -> {
-                intakeIO.setArmPosition(SuperStructureConstants.INTAKE_ARM_UP);
+                intakeIO.setArmPosition(IntakeConstants.INTAKE_STOWED_POS);
                 intakeIO.stopRoller();
                 // add it back when use SysID
                 // intakeIO.stopArm(); 

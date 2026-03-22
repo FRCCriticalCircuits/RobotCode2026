@@ -3,12 +3,16 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.units.measure.*;
 import frc.robot.subsystems.intake.IntakeConstants.*;
 
+import static edu.wpi.first.units.Units.Rotations;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -40,16 +44,15 @@ public class IntakeIOKraken implements IntakeIO{
     private final TalonFXConfiguration armConfig, rollerConfig;
 
     // Control Requests
-    private final MotionMagicVoltage armPostionVoltage = new MotionMagicVoltage(0.0)
+    private final PositionVoltage armPostionVoltage = new PositionVoltage(0.0)
         .withUpdateFreqHz(50.0);
     private final VelocityVoltage rollerVelocityVoltage = new VelocityVoltage(0.0)
         .withUpdateFreqHz(50.0);
+        private final VoltageOut vout = new VoltageOut(12);
 
     private final Follower followerRequest = new Follower(
         30,
-        HAL.SECONDARY_ARM_INVERT 
-            ? MotorAlignmentValue.Opposed
-            : MotorAlignmentValue.Aligned
+        MotorAlignmentValue.Opposed
     ).withUpdateFreqHz(50.0);
 
     // Cached Desired States
@@ -67,23 +70,20 @@ public class IntakeIOKraken implements IntakeIO{
         this.rollerConfig = new TalonFXConfiguration();
     
         this.armConfig.Slot0.kP = TUNING.ARM_PID_P;
-        this.armConfig.Slot0.kI = TUNING.ARM_PID_I;
+        this.armConfig.Slot0.kI = 0; // not used for FRC
         this.armConfig.Slot0.kD = TUNING.ARM_PID_D;
+        armConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-        this.armConfig.Slot0.kS = TUNING.ARM_KS;
-        this.armConfig.Slot0.kV = TUNING.ARM_KV;
-        this.armConfig.Slot0.kG = TUNING.ARM_KG;
+        this.armConfig.Slot0.kS = 0;
+        this.armConfig.Slot0.kV = 0;
+        this.armConfig.Slot0.kG = 0;
 
-        this.armConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
-        this.armConfig.Slot0.GravityArmPositionOffset = TUNING.ARM_GRAVITY_ANGLE_OFFSET_RAD;
+        // this.armConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
+        // this.armConfig.Slot0.GravityArmPositionOffset = TUNING.ARM_GRAVITY_ANGLE_OFFSET_RAD;
 
         this.armConfig.MotionMagic.MotionMagicCruiseVelocity = TUNING.ARM_MAX_VEL;  
         this.armConfig.MotionMagic.MotionMagicAcceleration = TUNING.ARM_MAX_ACCEL; 
 
-        this.armConfig.MotorOutput.Inverted = 
-            HAL.ARM_INVERT
-                ? InvertedValue.CounterClockwise_Positive
-                : InvertedValue.Clockwise_Positive;
         this.armConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         this.armConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         this.armConfig.Feedback.SensorToMechanismRatio = HAL.ARM_GEARING;
@@ -156,9 +156,11 @@ public class IntakeIOKraken implements IntakeIO{
         secondaryArmMotor.getConfigurator().apply(armConfig);
         rollerMotor.getConfigurator().apply(rollerConfig);
 
-        armMotor.setPosition(HAL.DEFAULT_ARM_POSITION_ROT);
+        // armMotor.setPosition(HAL.DEFAULT_ARM_POSITION_ROT);
+        armMotor.setPosition(0);
         // doesnt matter for the second motor cuz we're using follower control
-        secondaryArmMotor.setPosition(HAL.DEFAULT_ARM_POSITION_ROT);
+        // secondaryArmMotor.setPosition(HAL.DEFAULT_ARM_POSITION_ROT);
+        secondaryArmMotor.setPosition(0);
     }
 
     @Override
@@ -220,8 +222,8 @@ public class IntakeIOKraken implements IntakeIO{
     }
 
     @Override
-    public void setArmPosition(double positionRad) {
-        desiredArmPositionRot = positionRad / (Math.PI * 2.0);
+    public void setArmPosition(Angle angle) {
+        desiredArmPositionRot = angle.in(Rotations);
         armClosedLoopEnabled = true;
     }
 
@@ -233,10 +235,7 @@ public class IntakeIOKraken implements IntakeIO{
 
     @Override
     public void runArmVoltage(double voltage) {
-        armMotor.setVoltage(voltage);
-        secondaryArmMotor.setControl(
-            followerRequest
-        );
+        // DISABLED
     }
 
     @Override

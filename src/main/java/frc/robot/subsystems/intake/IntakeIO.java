@@ -2,6 +2,8 @@ package frc.robot.subsystems.intake;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.units.measure.Angle;
+
 public interface IntakeIO {
     @AutoLog
     public class IntakeIOInputs {
@@ -29,7 +31,7 @@ public interface IntakeIO {
     default void updateInputs(IntakeIOInputs inputs) {}
     default void applyOutputs() {}
     
-    default void setArmPosition(double positionRad) {}
+    default void setArmPosition(Angle angle) {}
     default void setRollerVelocity(double velocityRadPerSec) {}
 
     default void runArmVoltage(double voltage) {}
