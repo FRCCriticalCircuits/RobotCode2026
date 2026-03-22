@@ -40,7 +40,6 @@ import frc.robot.subsystems.vision.VisionLimelight;
 import frc.robot.commands.*;
 import frc.robot.utils.calc.AimCalc;
 import frc.robot.utils.calc.ClimbCalc;
-import frc.robot.utils.axis.AxisConfigLoader;
 
 import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.climber.*;
@@ -71,8 +70,6 @@ public class RobotContainer {
         () -> -driverController.getLeftX(),
         () -> -driverController.getRightX(),
         () -> autoAimTrigger.getAsBoolean(),
-        AxisConfigLoader.loadTable(GlobalConstants.LEFT_AXIS_CONFIG),
-        AxisConfigLoader.loadTable(GlobalConstants.RIGHT_AXIS_CONFIG),
         () -> autoAimCalc.getAimParams()
     );
 
