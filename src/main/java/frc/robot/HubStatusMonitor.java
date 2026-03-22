@@ -88,6 +88,10 @@ public class HubStatusMonitor {
         boolean displayedHubActive,
         boolean warningActive
     ) {
+        SmartDashboard.putNumber(
+            DASHBOARD_PREFIX + "Match Countdown (s)",
+            snapshot.matchCountdownSeconds()
+        );
         SmartDashboard.putString(DASHBOARD_PREFIX + "Hub Phase", snapshot.phaseName());
         SmartDashboard.putNumber(
             DASHBOARD_PREFIX + "Hub Countdown (s)",
@@ -109,6 +113,7 @@ public class HubStatusMonitor {
     }
 
     private record HubStatusSnapshot(
+        double matchCountdownSeconds,
         String phaseName,
         double phaseCountdownSeconds,
         boolean redHubActive,
@@ -117,16 +122,18 @@ public class HubStatusMonitor {
         double timeUntilOurHubInactiveSeconds
     ) {
         private static HubStatusSnapshot idle() {
-            return new HubStatusSnapshot("Disabled", 0.0, false, false, false, 0.0);
+            return new HubStatusSnapshot(0.0, "Disabled", 0.0, false, false, false, 0.0);
         }
 
         private static HubStatusSnapshot fromDriverStation() {
             Optional<Alliance> alliance = DriverStation.getAlliance();
+            double matchCountdownSeconds = currentMatchCountdown();
 
             if (DriverStation.isAutonomousEnabled()) {
                 return new HubStatusSnapshot(
+                    matchCountdownSeconds,
                     "Auto",
-                    clampCountdown(DriverStation.getMatchTime(), AUTO_LENGTH_SECONDS),
+                    clampCountdown(matchCountdownSeconds, AUTO_LENGTH_SECONDS),
                     true,
                     true,
                     alliance.isPresent(),
@@ -144,6 +151,7 @@ public class HubStatusMonitor {
 
             if (redInactiveFirst == null) {
                 return new HubStatusSnapshot(
+                    matchCountdownSeconds,
                     matchTimeSeconds > TRANSITION_END_TIME_SECONDS
                         ? "Hub Transition"
                         : "Teleop (No Hub Data)",
@@ -228,6 +236,7 @@ public class HubStatusMonitor {
                 .orElse(Double.POSITIVE_INFINITY);
 
             return new HubStatusSnapshot(
+                matchCountdownSeconds,
                 phaseName,
                 phaseCountdownSeconds,
                 redHubActive,
@@ -308,6 +317,14 @@ public class HubStatusMonitor {
             }
 
             return Double.POSITIVE_INFINITY;
+        }
+
+        private static double currentMatchCountdown() {
+            if (!DriverStation.isAutonomousEnabled() && !DriverStation.isTeleopEnabled()) {
+                return 0.0;
+            }
+
+            return clampCountdown(DriverStation.getMatchTime(), AUTO_LENGTH_SECONDS + 140.0);
         }
 
         private static double clampCountdown(double value, double maxValue) {
