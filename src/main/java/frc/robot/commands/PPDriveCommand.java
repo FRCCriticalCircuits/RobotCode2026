@@ -3,6 +3,8 @@ package frc.robot.commands;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -22,6 +24,8 @@ public class PPDriveCommand extends Command{
     private double rotationSpeed;
 
     private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric()
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+        .withSteerRequestType(SteerRequestType.Position)
         .withDesaturateWheelSpeeds(true);
 
     public PPDriveCommand(
@@ -45,14 +49,18 @@ public class PPDriveCommand extends Command{
 
     @Override
     public void initialize() {
-        state = drive.getState();    
+        state = drive.getState();
+        rotationController.reset();
     }
 
     @Override
     public void execute() {
-        rotationSpeed = yawSupplier.get().yaw_ff + rotationController.calculate(
+        state = drive.getState();
+        ShootingParams aimParams = yawSupplier.get();
+
+        rotationSpeed = aimParams.yaw_ff + rotationController.calculate(
             state.Pose.getRotation().getRadians(),
-            yawSupplier.get().yaw
+            aimParams.yaw
         );
 
         drive.setControl(

@@ -5,40 +5,47 @@ import static edu.wpi.first.units.Units.*;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.ChassisConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.utils.calc.AimCalc.ShootingParams;
-import frc.robot.utils.axis.AxisMappingTable;
 
 public class DriveCommand extends Command{
     private final Drive drive;
 
-    private final double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
-    private final double MaxAngularRate = RotationsPerSecond.of(1).in(RadiansPerSecond);
+    private final double maxTeleopSpeed =
+        TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * ChassisConstants.TELEOP_MAX_SPEED_SCALE;
+    private final double maxTeleopAngularRate =
+        RotationsPerSecond.of(ChassisConstants.TELEOP_MAX_ANGULAR_RATE_ROTATIONS_PER_SECOND)
+            .in(RadiansPerSecond);
     
-    private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric()
+    private final SwerveRequest.FieldCentric manualDrive = new SwerveRequest.FieldCentric()
+        .withDeadband(maxTeleopSpeed * ChassisConstants.TELEOP_TRANSLATION_DEADBAND_RATIO)
+        .withRotationalDeadband(maxTeleopAngularRate * ChassisConstants.TELEOP_ROTATION_DEADBAND_RATIO)
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+        .withSteerRequestType(SteerRequestType.Position)
+        .withDesaturateWheelSpeeds(true);
+    private final SwerveRequest.FieldCentric aimDrive = new SwerveRequest.FieldCentric()
+        .withDeadband(maxTeleopSpeed * ChassisConstants.TELEOP_TRANSLATION_DEADBAND_RATIO)
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+        .withSteerRequestType(SteerRequestType.Position)
         .withDesaturateWheelSpeeds(true);
 
     private final Supplier<Double> velocityX;
     private final Supplier<Double> velocityY;
     private final Supplier<Double> rotationalRate;
     private final Supplier<Boolean> aiming;
-    private final AxisMappingTable leftAxisTable, rightAxisTable;
     private final Supplier<ShootingParams> yawSupplier;
 
     private final PIDController rotationController;
-    private final SlewRateLimiter xLimiter = new SlewRateLimiter(ChassisConstants.TELEOP_TRANSLATION_SLEW_RATE);
-    private final SlewRateLimiter yLimiter = new SlewRateLimiter(ChassisConstants.TELEOP_TRANSLATION_SLEW_RATE);
-    private final SlewRateLimiter rotationLimiter = new SlewRateLimiter(ChassisConstants.TELEOP_ROTATION_SLEW_RATE);
 
     private SwerveDriveState state;
-    private double rotationSpeed;
 
     public DriveCommand(
         Drive drive,
@@ -46,8 +53,6 @@ public class DriveCommand extends Command{
         Supplier<Double> velocityY,
         Supplier<Double> rotationalRate,
         Supplier<Boolean> aiming,
-        AxisMappingTable leftAxisTable,
-        AxisMappingTable rightAxisTable,
         Supplier<ShootingParams> yawSupplier
     ){
         this.drive = drive;
@@ -57,9 +62,6 @@ public class DriveCommand extends Command{
         this.rotationalRate = rotationalRate;
 
         this.aiming = aiming;
-
-        this.leftAxisTable = leftAxisTable;
-        this.rightAxisTable = rightAxisTable;
 
         this.yawSupplier = yawSupplier;
 
@@ -77,37 +79,36 @@ public class DriveCommand extends Command{
     @Override
     public void initialize() {
         state = drive.getState();
-        xLimiter.reset(0.0);
-        yLimiter.reset(0.0);
-        rotationLimiter.reset(0.0);
+        rotationController.reset();
     }
 
     @Override
     public void execute() {
-        double requestedVelocityX = leftAxisTable.get(velocityX.get()) * MaxSpeed;
-        double requestedVelocityY = leftAxisTable.get(velocityY.get()) * MaxSpeed;
+        state = drive.getState();
+        double requestedVelocityX = velocityX.get() * maxTeleopSpeed;
+        double requestedVelocityY = velocityY.get() * maxTeleopSpeed;
 
         if(aiming.get()){
-            rotationSpeed = yawSupplier.get().yaw_ff + rotationController.calculate(
+            ShootingParams aimParams = yawSupplier.get();
+            double rotationSpeed = aimParams.yaw_ff + rotationController.calculate(
                 state.Pose.getRotation().getRadians(),
-                yawSupplier.get().yaw
+                aimParams.yaw
+            );
+
+            drive.setControl(
+                aimDrive
+                    .withVelocityX(requestedVelocityX)
+                    .withVelocityY(requestedVelocityY)
+                    .withRotationalRate(rotationSpeed)
             );
         }else{
-            rotationSpeed = rotationLimiter.calculate(
-                rightAxisTable.get(rotationalRate.get()) * MaxAngularRate
+            drive.setControl(
+                manualDrive
+                    .withVelocityX(requestedVelocityX)
+                    .withVelocityY(requestedVelocityY)
+                    .withRotationalRate(rotationalRate.get() * maxTeleopAngularRate)
             );
         }
-
-        drive.setControl(
-            fieldCentric
-                .withVelocityX(
-                    xLimiter.calculate(requestedVelocityX)
-                ).withVelocityY(
-                    yLimiter.calculate(requestedVelocityY)
-                ).withRotationalRate(
-                    rotationSpeed
-                )
-        );
     }
 
     @Override
