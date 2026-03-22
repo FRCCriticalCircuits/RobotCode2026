@@ -29,8 +29,10 @@ public class IntakeConstants {
     public static final LinearSystem<N2, N1, N2> ROLLER_STATE_SPACE = LinearSystemId.createDCMotorSystem(0.1, 0.01);
 
     public static final Angle INTAKE_STOWED_POS = Degrees.of(0);
+    public static final Angle INTAKE_HALF_STOWED_POS = Degrees.of(60);
     public static final Angle INTAKE_DEPLOYED_POS = Degrees.of(93);
     public static final double INTAKE_ROLLER_VOLTAGE = 8;
+    public static final double SHOOTER_RETRACT_RATE_RAD_PER_SEC = Math.toRadians(30.0);
 
     public class HAL {
         // Keep gearbox and linkage conversion split so measurement updates stay clear.

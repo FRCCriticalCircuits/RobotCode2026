@@ -18,7 +18,7 @@ public class GlobalConstants {
      * Only load autos with prefix "comp_"
      * Publish AKit Logging data
      */
-    public static final Boolean COMP = false;
+    public static final Boolean COMP = true;
     
     /*
      * SYSID: (commands will be added to autoChooser)

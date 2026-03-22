@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Radians;
+
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.util.function.Supplier;
@@ -10,6 +12,7 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -117,15 +120,64 @@ public class SuperStructure extends SubsystemBase{
         ).withName("SuperStructure.runIntake");
     }
 
+    public Command runTeleopIntake() {
+        return Commands.startEnd(
+            () -> {
+                intakeIO.setArmPosition(IntakeConstants.INTAKE_DEPLOYED_POS);
+                intakeIO.runRollerVoltage(IntakeConstants.INTAKE_ROLLER_VOLTAGE);
+            },
+            () -> {
+                intakeIO.setArmPosition(IntakeConstants.INTAKE_HALF_STOWED_POS);
+                intakeIO.stopRoller();
+                // add it back when use SysID
+                // intakeIO.stopArm(); 
+            }
+        ).withName("SuperStructure.runTeleopIntake");
+    }
+
+    public Command stowIntakeFully() {
+        return Commands.runOnce(() -> {
+            intakeIO.setArmPosition(IntakeConstants.INTAKE_STOWED_POS);
+        });
+    }
+
     public Command runShooter(Supplier<ShootingParams> params){
+        final double[] intakeRetractStartPositionRad = new double[1];
+        final double[] intakeRetractStartTimeSec = new double[1];
         return new ParallelCommandGroup(
             Commands.run(() -> shooterIO.runShooter(params)),
             Commands.run(() -> shooterIO.runHood(params)),
+            Commands.runOnce(() -> {
+                intakeRetractStartPositionRad[0] = Math.max(
+                    IntakeConstants.INTAKE_STOWED_POS.in(Radians),
+                    intakeInputs.armPosition
+                );
+                intakeRetractStartTimeSec[0] = Timer.getFPGATimestamp();
+            }).andThen(
+                Commands.run(() -> {
+                    double elapsedSec = Timer.getFPGATimestamp() - intakeRetractStartTimeSec[0];
+                    double retractTargetRad = Math.max(
+                        IntakeConstants.INTAKE_STOWED_POS.in(Radians),
+                        intakeRetractStartPositionRad[0]
+                            - (elapsedSec * IntakeConstants.SHOOTER_RETRACT_RATE_RAD_PER_SEC)
+                    );
+
+                    intakeIO.setArmPosition(Radians.of(retractTargetRad));
+                })
+            ),
             Commands.waitUntil(shooterIO::isStable).andThen(() -> hopperIO.runHopper(SuperStructureConstants.HOPPER_VELOCITY))
             //Commands.run(() -> hopperIO.runHopper(SuperStructureConstants.HOPPER_VELOCITY))
         ).finallyDo(
             (interrupted) -> {
-                // Return to a small offset above zero instead of parking on the stop.
+                // Hold the arm at its current angle when the shooter command ends.
+                intakeIO.setArmPosition(
+                    Radians.of(
+                        Math.max(
+                            IntakeConstants.INTAKE_STOWED_POS.in(Radians),
+                            intakeInputs.armPosition
+                        )
+                    )
+                );
                 shooterIO.stopHood();
                 shooterIO.stopShooter();
                 hopperIO.stopMotors(); 

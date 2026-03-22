@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.function.Supplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.Utils;
@@ -40,12 +42,14 @@ import frc.robot.subsystems.vision.VisionLimelight;
 import frc.robot.commands.*;
 import frc.robot.utils.calc.AimCalc;
 import frc.robot.utils.calc.ClimbCalc;
+import frc.robot.utils.calc.CalculatorConstants;
 
 import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.climber.*;
 import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.hopper.*;
 import frc.robot.subsystems.shooter.*;
+import frc.robot.utils.calc.AimCalc.ShootingParams;
 
 public class RobotContainer {
     private final CommandXboxController driverController = new CommandXboxController(0);
@@ -63,6 +67,14 @@ public class RobotContainer {
     
     private final AimCalc autoAimCalc = new AimCalc(drivetrain);
     private final ClimbCalc climbCalc = new ClimbCalc(drivetrain);
+    private final Supplier<ShootingParams> debugShooterParams = () -> {
+        var params = autoAimCalc.new ShootingParams();
+        params.yaw = 0.0;
+        params.yaw_ff = 0.0;
+        params.pitchRads = 0.0;
+        params.velocityRadsPerSec = CalculatorConstants.shooterVelocity.get(1.7);
+        return params;
+    };
 
     private final DriveCommand teleDrive = new DriveCommand(
         drivetrain,
@@ -266,11 +278,17 @@ public class RobotContainer {
         );
 
         driverController.leftTrigger(0.15).debounce(0.02).whileTrue(
-            upperParts.runIntake()
+            upperParts.runTeleopIntake()
         );
+
+        driverController.leftBumper().debounce(0.02).onTrue(upperParts.stowIntakeFully());
 
         autoAimTrigger.whileTrue(
             upperParts.runShooter(() -> autoAimCalc.getAimParams())
+        );
+
+        driverController.rightBumper().whileTrue(
+            upperParts.runShooter(debugShooterParams)
         );
 
         driverController.povUp().whileTrue(

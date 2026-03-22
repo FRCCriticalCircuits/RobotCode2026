@@ -88,7 +88,8 @@ public class ChassisConstants {
     //#region Teleop
     public static final double TELEOP_TRANSLATION_DEADBAND_RATIO = 0.10;
     public static final double TELEOP_ROTATION_DEADBAND_RATIO = 0.10;
-    public static final double TELEOP_MAX_SPEED_SCALE = 1.0;
+    public static final double TELEOP_MAX_SPEED_SCALE = 1;
     public static final double TELEOP_MAX_ANGULAR_RATE_ROTATIONS_PER_SECOND = 0.75;
     //#endregion
 }
+  
