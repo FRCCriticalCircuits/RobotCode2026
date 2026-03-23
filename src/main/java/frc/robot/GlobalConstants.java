@@ -36,7 +36,7 @@ public class GlobalConstants {
         public static FieldSymmetry symmetryType = FieldSymmetry.kRotational;
         public static final double FIELD_WIDTH = 8.07;
         public static final double FIELD_LENGTH = 16.54;
-        public static final double HUB_HEIGHT = 2.64; // TODO: Tune for actual field
+        public static final double HUB_HEIGHT = 1.8288; // in meters
         public static final double SHOOTER_HEIGHT = 0.8; // TODO: Tune for actual robot
 
         public static final double BLUE_ALLIANCE_ZONE_X = 4.0284;

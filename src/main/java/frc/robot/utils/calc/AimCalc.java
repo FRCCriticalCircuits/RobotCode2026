@@ -16,6 +16,7 @@ import frc.robot.GlobalConstants;
 import frc.robot.GlobalVars;
 import frc.robot.GlobalConstants.FIELD_CONSTANTS;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.shooter.ShooterConstants;
 
 public class AimCalc {
     private final SwerveDriveState state;
@@ -62,7 +63,7 @@ public class AimCalc {
         }
 
         double vSquared = (g * Math.pow(x, 2)) / denominator;
-        return metersPerSecondToRPM(fastSqrt((float) vSquared));
+        return metersPerSecondToRPM(fastSqrt((float) vSquared)) * Math.PI * 2.0 / ShooterConstants.HAL.SHOOTER_GEARING; // Convert to wheel RPM considering gearing
     }
 
     public class ShootingParams{

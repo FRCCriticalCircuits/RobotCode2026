@@ -39,8 +39,8 @@ public class ShooterConstants {
         // Allowed control error before shooter is considered ready to feed.
         public static final double HOOD_STABLE_TOLERANCE_RAD = Math.toRadians(4.5);
         public static final double SHOOTER_STABLE_TOLERANCE_RAD_PER_SEC = 1.0 * Math.PI * 2;
-        public static final double HOOD_MIN_POSITION_ROT = 0.005;
-        public static final double HOOD_MAX_POSITION_ROT = 0.1;
+        public static final double HOOD_MIN_POSITION_ROT = 0.005; // Minimum hood position in rotations
+        public static final double HOOD_MAX_POSITION_ROT = 0.1; // Maximum hood position in rotations
         public static final double HOOD_STOW_MARGIN_ROT = 0.005;
         public static final double HOOD_MIN_POSITION_RAD = HOOD_MIN_POSITION_ROT * Math.PI * 2.0;
         public static final double HOOD_MAX_POSITION_RAD = HOOD_MAX_POSITION_ROT * Math.PI * 2.0;

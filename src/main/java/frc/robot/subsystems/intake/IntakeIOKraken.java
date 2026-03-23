@@ -9,13 +9,11 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -48,7 +46,9 @@ public class IntakeIOKraken implements IntakeIO{
         .withUpdateFreqHz(50.0);
     private final VelocityVoltage rollerVelocityVoltage = new VelocityVoltage(0.0)
         .withUpdateFreqHz(50.0);
-        private final VoltageOut vout = new VoltageOut(12);
+    
+    @SuppressWarnings("unused")
+    private final VoltageOut vout = new VoltageOut(12); 
 
     private final Follower followerRequest = new Follower(
         30,
