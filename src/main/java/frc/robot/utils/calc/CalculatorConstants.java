@@ -14,15 +14,15 @@ public class CalculatorConstants {
     // max 0.11, min 0.005 for rotations
     // these values should be in radians
     public static InterpolatingDoubleTreeMap hoodAngle = InterpolatingDoubleTreeMap.ofEntries(
-        Map.entry(0.0, (TUNING.HOOD_MIN_POSITION_ROT + difference) * Math.PI * 2.0),
-        Map.entry(3.0, (TUNING.HOOD_MIN_POSITION_ROT + 6 * difference) * Math.PI * 2.0),
-        Map.entry(6.0, (TUNING.HOOD_MAX_POSITION_ROT) * Math.PI * 2.0) 
+        Map.entry(0.0, (TUNING.HOOD_MIN_POSITION_ROT + difference) * Math.PI * 2.0), // Temporary value, should be tuned for actual robot
+        Map.entry(3.0, (TUNING.HOOD_MIN_POSITION_ROT + 6 * difference) * Math.PI * 2.0), // Temporary value, should be tuned for actual robot
+        Map.entry(6.0, (TUNING.HOOD_MAX_POSITION_ROT) * Math.PI * 2.0) // Temporary value, should be tuned for actual robot
     );
 
     public static InterpolatingDoubleTreeMap shooterVelocity = InterpolatingDoubleTreeMap.ofEntries(
-        Map.entry(0.0, AimCalc.calculateRequiredVelocity(0.0, (TUNING.HOOD_MIN_POSITION_ROT + difference) * Math.PI * 2.0)),
-        Map.entry(3.0, AimCalc.calculateRequiredVelocity(3.0, (TUNING.HOOD_MIN_POSITION_ROT + 6 * difference) * Math.PI * 2.0)),
-        Map.entry(6.0, AimCalc.calculateRequiredVelocity(5.5, (TUNING.HOOD_MAX_POSITION_ROT) * Math.PI * 2.0)) 
+        Map.entry(0.0, AimCalc.calculateRequiredVelocity(0.0, (TUNING.HOOD_MIN_POSITION_ROT + difference) * Math.PI * 2.0)), // Temporary value, should be tuned for actual robot
+        Map.entry(3.0, AimCalc.calculateRequiredVelocity(3.0, (TUNING.HOOD_MIN_POSITION_ROT + 6 * difference) * Math.PI * 2.0)), // Temporary value, should be tuned for actual robot
+        Map.entry(6.0, AimCalc.calculateRequiredVelocity(5.5, (TUNING.HOOD_MAX_POSITION_ROT) * Math.PI * 2.0)) // Temporary value, should be tuned for actual robot
     );
 
     // TODO decide limit (in degress) of the cone-shape check for climbing calculator
