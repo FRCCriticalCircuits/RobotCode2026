@@ -26,11 +26,43 @@ public class AimCalc {
         this.state = drive.getState();
     }
 
-    private double fastSqrt(float number) {
+    private static double fastSqrt(float number) {
         int i = Float.floatToIntBits(number);
         i = 0x1fbd1df5 + (i >> 1);
         float y = Float.intBitsToFloat(i);
         return y;
+    }
+
+    public static double metersPerSecondToRPM(double velocityMetersPerSec) {
+        double wheelDiameterMeters = 0.1016; // TODO
+        double slipFactor = 0.5; // Typical for single-wheel + hood shooters
+
+        // 1. Calculate the required surface velocity of the wheel
+        double wheelSurfaceVelocity = velocityMetersPerSec / slipFactor;
+
+        // 2. Convert surface velocity to RPM
+        // RPM = (Velocity / Circumference) * 60
+        double rpm = (wheelSurfaceVelocity / (Math.PI * wheelDiameterMeters)) * 60;
+
+        return rpm;
+    }
+
+    public static double calculateRequiredVelocity(double distanceMeters, double angleRadians) {
+        double g = 9.81;
+        double x = distanceMeters;
+        double theta = angleRadians;
+        double y = FIELD_CONSTANTS.HUB_HEIGHT - FIELD_CONSTANTS.SHOOTER_HEIGHT; // The vertical gap
+
+        // The denominator of the trajectory fraction
+        double denominator = 2 * Math.pow(Math.cos(theta), 2) * (x * Math.tan(theta) - y);
+
+        if (denominator <= 0) {
+            // This means the angle is too low to ever reach the height 'y' at that distance
+            return 0.0;
+        }
+
+        double vSquared = (g * Math.pow(x, 2)) / denominator;
+        return metersPerSecondToRPM(fastSqrt((float) vSquared));
     }
 
     public class ShootingParams{
