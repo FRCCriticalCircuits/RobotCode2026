@@ -1,3 +1,4 @@
+#DO NOT COMMIT TO THIS BRANCH WITHOUT ASKING SOMEONE FIRST
 # Robot Code 2026
 
 [Changelog](./changelog.md)
