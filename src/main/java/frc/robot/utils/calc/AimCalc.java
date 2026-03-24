@@ -36,7 +36,7 @@ public class AimCalc {
 
     public static double metersPerSecondToRPM(double velocityMetersPerSec) {
         double wheelDiameterMeters = 0.1016; // TODO
-        double slipFactor = 0.5; // Typical for single-wheel + hood shooters
+        double slipFactor = 0.48; // Typical for single-wheel + hood shooters
 
         // 1. Calculate the required surface velocity of the wheel
         double wheelSurfaceVelocity = velocityMetersPerSec / slipFactor;

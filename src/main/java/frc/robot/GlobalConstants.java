@@ -9,6 +9,7 @@ import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.Units;
 import frc.robot.utils.FlippingUtil.FieldSymmetry;
 
 public class GlobalConstants {
@@ -37,8 +38,8 @@ public class GlobalConstants {
         public static final double FIELD_WIDTH = 8.07;
         public static final double FIELD_LENGTH = 16.54;
         public static final double HUB_HEIGHT = 1.8288; // in meters
-        public static final double SHOOTER_HEIGHT = 0.8; // TODO: Tune for actual robot
-
+        public static final double SHOOTER_HEIGHT = 0.5616; // in meters, from the ground to the shooter
+        
         public static final double BLUE_ALLIANCE_ZONE_X = 4.0284;
         public static final double RED_ALLIANCE_ZONE_X = FIELD_LENGTH - BLUE_ALLIANCE_ZONE_X;
 
